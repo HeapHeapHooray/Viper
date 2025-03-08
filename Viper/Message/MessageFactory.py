@@ -1,4 +1,4 @@
-import BytesPack
+import BytesUtils
 from . import MessageDecoder
 from Messages.UnknownMessage import UnknownMessage
 
@@ -24,7 +24,7 @@ def _get_id_data_type(message_id: bytes) -> str:
 def create_from_bytes(bytes_data: bytes):
     id_data_type = _get_id_data_type(bytes_data)
 
-    unpack_result = BytesPack.unpack_bytes_big_endian([id_data_type],bytes_data)
+    unpack_result = BytesUtils.unpack_bytes_big_endian([id_data_type],bytes_data)
 
     message_id = unpack_result.unpacked_data[0]
     message_blocks_data = unpack_result.remaining_bytes
