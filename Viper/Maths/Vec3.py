@@ -8,4 +8,4 @@ class Vec3:
     def convert_to_string(self) -> str:
         return "Vector3 <X: {}, Y: {}, Z: {}>".format(self.x,self.y,self.z)
     def convert_to_bytes(self) -> bytes:
-        return BytesUtils.pack_bytes(["float","float","float"],self.x,self.y,self.z)
+        return BytesUtils.pack_bytes_big_endian(["float","float","float"],self.x,self.y,self.z)
