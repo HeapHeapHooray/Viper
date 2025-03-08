@@ -5,6 +5,7 @@ import uuid
 import Network
 from Messages.UseCircuitCode import UseCircuitCode
 from Messages.CompleteAgentMovement import CompleteAgentMovement
+from Messages.RegionHandshakeReply import RegionHandshakeReply
 from getpass import getpass
 
 full_name = input("Enter full name: ")
@@ -35,5 +36,15 @@ Network._message_sender.send_message(movement)
 #data = struct.pack('>BLBL',0x00,0x02,00,0xffff00f9) + uuid.UUID(login_result["agent_id"]).bytes + uuid.UUID(login_result["session_id"]).bytes + struct.pack('<L', login_result["circuit_code"])
 #data = struct.pack('>BLBL',0x00,0x02,00,0xffff00f9) + movement.convert_to_bytes()
 #Network._udp_socket.send_data(data)
+
+# We send a RegionHandshakeReply here cause a RegionHandshake message from sim
+# is not needed here.
+
+reply = RegionHandshakeReply(None)
+reply.agent_uuid = uuid.UUID(login_result["agent_id"])
+reply.session_uuid = uuid.UUID(login_result["session_id"])
+reply.region_info_flags = 0
+
+Network._message_sender.send_message(reply)
 
 input()
