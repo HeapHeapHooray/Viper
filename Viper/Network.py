@@ -4,6 +4,7 @@ import threading
 import Packet
 from Messages.UnknownMessage import UnknownMessage
 import MessageSender
+import parse_message_template as MessageTemplate
 
 _udp_socket = None
 _receiving_data = False
@@ -42,8 +43,9 @@ def _receive_data():
         data = _udp_socket.receive_data()
         #print(data)
         packet = Packet.PacketFactory.create_from_bytes(data[0])
+        messages = MessageTemplate.get_messages_by_absolute_id()
         if isinstance(packet.message,UnknownMessage):
-            pass
+            print(messages[packet.message.message_id].get_message_name())
         else:
             print(packet.convert_to_string())
     
