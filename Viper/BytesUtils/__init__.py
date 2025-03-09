@@ -19,7 +19,10 @@ def _pack_unitary_quaternion(quat):
 
 BytesPack._pack_function_dict_be["vector3"] = _pack_vector3
 BytesPack._pack_function_dict_be["vec3"] = _pack_vector3
-BytesPack._pack_function_dict_be["unit_quaternion"] = _pack_unitary_quaternion 
+BytesPack._pack_function_dict_be["unit_quaternion"] = _pack_unitary_quaternion
+BytesPack._pack_function_dict_le["vector3"] = _pack_vector3
+BytesPack._pack_function_dict_le["vec3"] = _pack_vector3
+BytesPack._pack_function_dict_le["unit_quaternion"] = _pack_unitary_quaternion
 
 def _unpack_vector3(data: bytes):
     import Maths
@@ -36,4 +39,8 @@ def _unpack_unitary_quaternion(data: bytes):
 
 BytesPack._unpack_function_dict_be["vector3"] = _unpack_vector3
 BytesPack._unpack_function_dict_be["vec3"] = _unpack_vector3
-BytesPack._unpack_function_dict_be["unit_quaternion"] = _unpack_unitary_quaternion 
+BytesPack._unpack_function_dict_be["unit_quaternion"] = _unpack_unitary_quaternion
+BytesPack._unpack_function_dict_le["vector3"] = _unpack_vector3
+BytesPack._unpack_function_dict_le["vec3"] = _unpack_vector3
+BytesPack._unpack_function_dict_le["unit_quaternion"] = _unpack_unitary_quaternion 
+
