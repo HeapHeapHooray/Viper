@@ -39,7 +39,7 @@ Network._message_sender.send_message(movement)
 #data = struct.pack('>BLBL',0x00,0x02,00,0xffff00f9) + movement.convert_to_bytes()
 #Network._udp_socket.send_data(data)
 
-# We send a RegionHandshakeReply here cause a RegionHandshake message from sim
+# We send a RegionHandshakeReply cause a RegionHandshake message from sim
 # is not needed here.
 
 reply = RegionHandshakeReply(None)
