@@ -11,18 +11,31 @@ calculate_minimum_size = BytesPack.calculate_minimum_size
 BytesPack._type_minimum_sizes["vector3"] = 12
 BytesPack._type_minimum_sizes["vec3"] = 12
 BytesPack._type_minimum_sizes["unit_quaternion"] = 12
+BytesPack._type_minimum_sizes["variable1"] = 1
+BytesPack._type_minimum_sizes["variable2"] = 2
 
 def _pack_vector3(vec3):
     return vec3.convert_to_bytes()
 def _pack_unitary_quaternion(quat):
     return quat.convert_to_bytes()
+def _pack_variable1(data: bytes):
+    return pack_bytes_little_endian(["unsigned byte"],len(data))+data
+def _pack_variable2_be(data: bytes):
+    return pack_bytes_big_endian(["unsigned int16"],len(data))+data
+def _pack_variable2_le(data: bytes):
+    return pack_bytes_little_endian(["unsigned int16"],len(data))+data
+
 
 BytesPack._pack_function_dict_be["vector3"] = _pack_vector3
 BytesPack._pack_function_dict_be["vec3"] = _pack_vector3
 BytesPack._pack_function_dict_be["unit_quaternion"] = _pack_unitary_quaternion
+BytesPack._pack_function_dict_be["variable1"] = _pack_variable1
+BytesPack._pack_function_dict_be["variable2"] = _pack_variable2_be
 BytesPack._pack_function_dict_le["vector3"] = _pack_vector3
 BytesPack._pack_function_dict_le["vec3"] = _pack_vector3
 BytesPack._pack_function_dict_le["unit_quaternion"] = _pack_unitary_quaternion
+BytesPack._pack_function_dict_le["variable1"] = _pack_variable1
+BytesPack._pack_function_dict_le["variable2"] = _pack_variable2_le
 
 def _unpack_vector3(data: bytes):
     import Maths
@@ -35,12 +48,28 @@ def _unpack_unitary_quaternion(data: bytes):
     diff = 1.0 - x * x - y * y - z * z;
     w = 0.0 if diff <= 0.0 else math.sqrt(diff)
     return (Maths.Quaternion(x,y,z,w),unpack_result.remaining_bytes)
+def _unpack_variable1(data: bytes):
+    unpacked_data,remaining = unpack_bytes_little_endian(["unsigned byte"],data)
+    size = unpacked_data[0]
+    return (remaining[0:size],remaining[size:])
+def _unpack_variable2_be(data: bytes):
+    unpacked_data,remaining = unpack_bytes_big_endian(["unsigned int16"],data)
+    size = unpacked_data[0]
+    return (remaining[0:size],remaining[size:])
+def _unpack_variable2_le(data: bytes):
+    unpacked_data,remaining = unpack_bytes_little_endian(["unsigned int16"],data)
+    size = unpacked_data[0]
+    return (remaining[0:size],remaining[size:])
 
 
 BytesPack._unpack_function_dict_be["vector3"] = _unpack_vector3
 BytesPack._unpack_function_dict_be["vec3"] = _unpack_vector3
 BytesPack._unpack_function_dict_be["unit_quaternion"] = _unpack_unitary_quaternion
+BytesPack._unpack_function_dict_be["variable1"] = _unpack_variable1
+BytesPack._unpack_function_dict_be["variable2"] = _unpack_variable2_be
 BytesPack._unpack_function_dict_le["vector3"] = _unpack_vector3
 BytesPack._unpack_function_dict_le["vec3"] = _unpack_vector3
-BytesPack._unpack_function_dict_le["unit_quaternion"] = _unpack_unitary_quaternion 
+BytesPack._unpack_function_dict_le["unit_quaternion"] = _unpack_unitary_quaternion
+BytesPack._unpack_function_dict_le["variable1"] = _unpack_variable1
+BytesPack._unpack_function_dict_le["variable2"] = _unpack_variable2_le
 
