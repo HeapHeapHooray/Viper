@@ -1,6 +1,6 @@
 import BytesUtils
 
-class Vec3:
+class Vec4:
     def __init__(self,x: float,y: float,z: float,w: float):
         self.x = x
         self.y = y
