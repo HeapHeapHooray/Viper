@@ -41,9 +41,12 @@ def _receive_data():
     while _receiving_data:
         data = _udp_socket.receive_data()
         #print(data)
-        packet = Packet.PacketFactory.create_from_bytes(data[0])
-        if isinstance(packet.message,UnknownMessage):
-            print("Umknown Message's ID:",packet.message.message_id)
-        else:
-            print(packet.convert_to_string())
+        try:
+            packet = Packet.PacketFactory.create_from_bytes(data[0])
+            if isinstance(packet.message,UnknownMessage):
+                print("Umknown Message's ID:",packet.message.message_id)
+            else:
+                print(packet.convert_to_string())
+        except Exception as e:
+            print("Network's data receiving loop raised the following exception:",e)
     
