@@ -1,23 +1,50 @@
+# This code is automatically generated for the Viper viewer project, and the generation code can be found at: https://github.com/HeapHeapHooray/Viper
+
 from Message.Message import Message
 import BytesUtils
+from dataclasses import dataclass
+
+@dataclass
+class AgentData:
+	AgentID: "LLUUID"
+	SessionID: "LLUUID"
+	BodyRotation: "LLQuaternion"
+	HeadRotation: "LLQuaternion"
+	State: "U8"
+	CameraCenter: "LLVector3"
+	CameraAtAxis: "LLVector3"
+	CameraLeftAxis: "LLVector3"
+	CameraUpAxis: "LLVector3"
+	Far: "F32"
+	ControlFlags: "U32"
+	Flags: "U8"
+
 
 class AgentUpdate(Message):
-    absolute_id = 4
-    force_zerocode = True
-    def __init__(self,bytes_data: bytes):
-        self.agent_uuid,self.session_uuid,self.body_rotation,self.head_rotation,self.state,self.camera_center,self.camera_at_axis,self.camera_left_axis,self.camera_up_axis,self.far,self.control_flags,self.flags= [None,None,None,None,None,None,None,None,None,None,None,None]
-        if bytes_data is None:
-            return
-        result = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unit_quaternion","unit_quaternion",
-                                                        "unsigned byte","vector3","vector3","vector3"
-                                                        ,"vector3","float","unsigned int32","unsigned byte"],bytes_data)
-        self.agent_uuid,self.session_uuid,self.body_rotation,self.head_rotation,
-        self.state,self.camera_center,self.camera_at_axis,
-        self.camera_left_axis,self.camera_up_axis,self.far,
-        self.control_flags,self.flags = result.unpacked_data
-    def convert_to_string(self) -> str:
-        return "Message Type: AgentUpdate , Message Absolute ID: {} , Agent UUID: {} , Session UUID: {} , Body Rotation: {} , Head Rotation: {} , State: {} , Camera Center: {} , Camera At Axis: {} , Camera Left Axis: {} , Camera Up Axis: {} , Far: {} , Control Flags: {}, Flags: {}".format(AgentUpdate.absolute_id, self.agent_uuid,self.session_uuid,self.body_rotation,self.head_rotation,self.state,self.camera_center,self.camera_at_axis,self.camera_left_axis,self.camera_up_axis,self.far,self.control_flags,self.flags)
-    def convert_to_bytes(self) -> bytes:
-        return BytesUtils.pack_bytes_little_endian(["uuid","uuid","unit_quaternion","unit_quaternion",
-                                                        "unsigned byte","vector3","vector3","vector3"
-                                                        ,"vector3","float","unsigned int32","unsigned byte"],self.agent_uuid,self.session_uuid,self.body_rotation,self.head_rotation,self.state,self.camera_center,self.camera_at_axis,self.camera_left_axis,self.camera_up_axis,self.far,self.control_flags,self.flags)
+
+	absolute_id = 4 # -- The Full ID of the message
+
+	def __init__(self,bytes_data: bytes):
+		self.AgentData = AgentData(*((None,)*12))
+
+		if bytes_data is None:
+			return
+
+		remaining_bytes = bytes_data
+
+		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unit_quaternion","unit_quaternion","unsigned byte","vector3","vector3","vector3","vector3","float","unsigned int32","unsigned byte",],remaining_bytes)
+		self.AgentData = AgentData(*unpacked_data)
+
+
+	def convert_to_string(self) -> str:
+		return f"""Message Type: AgentUpdate, 
+Message Absolute ID: 4
+Blocks:
+{self.AgentData}"""
+
+	def convert_to_bytes(self) -> bytes:
+		output = b""
+
+		output = output + BytesUtils.pack_bytes_little_endian(["uuid","uuid","unit_quaternion","unit_quaternion","unsigned byte","vector3","vector3","vector3","vector3","float","unsigned int32","unsigned byte",],self.AgentData.AgentID,self.AgentData.SessionID,self.AgentData.BodyRotation,self.AgentData.HeadRotation,self.AgentData.State,self.AgentData.CameraCenter,self.AgentData.CameraAtAxis,self.AgentData.CameraLeftAxis,self.AgentData.CameraUpAxis,self.AgentData.Far,self.AgentData.ControlFlags,self.AgentData.Flags)
+
+		return output
