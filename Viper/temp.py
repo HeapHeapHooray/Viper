@@ -18,9 +18,9 @@ login_result = Network._login("https://login.aditi.lindenlab.com/cgi-bin/login.c
 print(login_result)
 
 code = UseCircuitCode(None)
-code.circuit_code = login_result["circuit_code"]
-code.session_uuid = uuid.UUID(login_result["session_id"])
-code.agent_uuid = uuid.UUID(login_result["agent_id"])
+code.CircuitCode.Code = login_result["circuit_code"]
+code.CircuitCode.SessionID = uuid.UUID(login_result["session_id"])
+code.CircuitCode.ID = uuid.UUID(login_result["agent_id"])
 
 Network._message_sender.send_message(code)
 
@@ -29,9 +29,9 @@ Network._message_sender.send_message(code)
 #Network._udp_socket.send_data(data)
 
 movement = CompleteAgentMovement(None)
-movement.agent_uuid = uuid.UUID(login_result["agent_id"])
-movement.session_uuid = uuid.UUID(login_result["session_id"])
-movement.circuit_code = login_result["circuit_code"]
+movement.AgentData.AgentID = uuid.UUID(login_result["agent_id"])
+movement.AgentData.SessionID = uuid.UUID(login_result["session_id"])
+movement.AgentData.CircuitCode = login_result["circuit_code"]
 
 Network._message_sender.send_message(movement)
 
@@ -43,25 +43,25 @@ Network._message_sender.send_message(movement)
 # is not needed here.
 
 reply = RegionHandshakeReply(None)
-reply.agent_uuid = uuid.UUID(login_result["agent_id"])
-reply.session_uuid = uuid.UUID(login_result["session_id"])
-reply.region_info_flags = 0
+reply.AgentData.AgentID = uuid.UUID(login_result["agent_id"])
+reply.AgentData.SessionID = uuid.UUID(login_result["session_id"])
+reply.RegionInfo.Flags = 0
 
 Network._message_sender.send_message(reply)
 
 agent_update = AgentUpdate(None)
-agent_update.agent_uuid = uuid.UUID(login_result["agent_id"])
-agent_update.session_uuid = uuid.UUID(login_result["session_id"])
-agent_update.body_rotation = Maths.Quaternion(0,0,0,1.0)
-agent_update.head_rotation = Maths.Quaternion(0,0,0,1.0)
-agent_update.state = 0
-agent_update.camera_center = Maths.Vec3(0,0,0)
-agent_update.camera_at_axis = Maths.Vec3(0,0,0)
-agent_update.camera_left_axis = Maths.Vec3(0,0,0)
-agent_update.camera_up_axis = Maths.Vec3(0,0,0)
-agent_update.far = 128
-agent_update.control_flags = 0
-agent_update.flags = 0
+agent_update.AgentData.AgentID = uuid.UUID(login_result["agent_id"])
+agent_update.AgentData.SessionID = uuid.UUID(login_result["session_id"])
+agent_update.AgentData.BodyRotation = Maths.Quaternion(0,0,0,1.0)
+agent_update.AgentData.HeadRotation = Maths.Quaternion(0,0,0,1.0)
+agent_update.AgentData.State = 0
+agent_update.AgentData.CameraCenter = Maths.Vec3(0,0,0)
+agent_update.AgentData.CameraAtAxis = Maths.Vec3(0,0,0)
+agent_update.AgentData.CameraLeftAxis = Maths.Vec3(0,0,0)
+agent_update.AgentData.CameraUpAxis = Maths.Vec3(0,0,0)
+agent_update.AgentData.Far = 128
+agent_update.AgentData.ControlFlags = 0
+agent_update.AgentData.Flags = 0
 
 Network._message_sender.send_message(agent_update)
 
