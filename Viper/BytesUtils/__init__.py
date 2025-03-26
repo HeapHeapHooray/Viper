@@ -12,7 +12,9 @@ BytesPack._type_minimum_sizes["vector3"] = 12
 BytesPack._type_minimum_sizes["vec3"] = 12
 BytesPack._type_minimum_sizes["vector3d"] = 24
 BytesPack._type_minimum_sizes["vec3d"] = 24
-BytesPack._type_minimum_sizes["unit_quaternion"] = 12
+BytesPack._type_minimum_sizes["vector4"] = 16
+BytesPack._type_minimum_sizes["vec4"] = 16
+BytesPack._type_minimum_sizes["unit_quaternion"] = 12 # -- Only 12 bytes as unit quaternions can be represented as triples.
 BytesPack._type_minimum_sizes["variable1"] = 1
 BytesPack._type_minimum_sizes["variable2"] = 2
 BytesPack._type_minimum_sizes["fixed32"] = 32
@@ -21,6 +23,8 @@ def _pack_vector3(vec3):
     return vec3.convert_to_bytes()
 def _pack_vector3d(vec3):
     return vec3.convert_as_doubles_to_bytes()
+def _pack_vector4(vec4):
+    return vec4.convert_to_bytes()
 def _pack_unitary_quaternion(quat):
     return quat.convert_to_bytes()
 def _pack_variable1(data: bytes):
@@ -37,6 +41,8 @@ BytesPack._pack_function_dict_be["vector3"] = _pack_vector3
 BytesPack._pack_function_dict_be["vec3"] = _pack_vector3
 BytesPack._pack_function_dict_be["vector3d"] = _pack_vector3d
 BytesPack._pack_function_dict_be["vec3d"] = _pack_vector3d
+BytesPack._pack_function_dict_be["vector4"] = _pack_vector4
+BytesPack._pack_function_dict_be["vec4"] = _pack_vector4
 BytesPack._pack_function_dict_be["unit_quaternion"] = _pack_unitary_quaternion
 BytesPack._pack_function_dict_be["variable1"] = _pack_variable1
 BytesPack._pack_function_dict_be["variable2"] = _pack_variable2_be
@@ -45,6 +51,8 @@ BytesPack._pack_function_dict_le["vector3"] = _pack_vector3
 BytesPack._pack_function_dict_le["vec3"] = _pack_vector3
 BytesPack._pack_function_dict_le["vector3d"] = _pack_vector3d
 BytesPack._pack_function_dict_le["vec3d"] = _pack_vector3d
+BytesPack._pack_function_dict_le["vector4"] = _pack_vector4
+BytesPack._pack_function_dict_le["vec4"] = _pack_vector4
 BytesPack._pack_function_dict_le["unit_quaternion"] = _pack_unitary_quaternion
 BytesPack._pack_function_dict_le["variable1"] = _pack_variable1
 BytesPack._pack_function_dict_le["variable2"] = _pack_variable2_le
@@ -57,6 +65,10 @@ def _unpack_vector3(data: bytes):
 def _unpack_vector3d(data: bytes):
     import Maths
     unpack_result = BytesPack.unpack_bytes_big_endian(["double","double","double"],data)
+    return (Maths.Vec3(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
+def _unpack_vector4(data: bytes):
+    import Maths
+    unpack_result = BytesPack.unpack_bytes_big_endian(["float","float","float","float"],data)
     return (Maths.Vec3(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
 def _unpack_unitary_quaternion(data: bytes):
     import Maths
@@ -85,6 +97,8 @@ BytesPack._unpack_function_dict_be["vector3"] = _unpack_vector3
 BytesPack._unpack_function_dict_be["vec3"] = _unpack_vector3
 BytesPack._unpack_function_dict_be["vector3d"] = _unpack_vector3d
 BytesPack._unpack_function_dict_be["vec3d"] = _unpack_vector3d
+BytesPack._unpack_function_dict_be["vector4"] = _unpack_vector4
+BytesPack._unpack_function_dict_be["vec4"] = _unpack_vector4
 BytesPack._unpack_function_dict_be["unit_quaternion"] = _unpack_unitary_quaternion
 BytesPack._unpack_function_dict_be["variable1"] = _unpack_variable1
 BytesPack._unpack_function_dict_be["variable2"] = _unpack_variable2_be
