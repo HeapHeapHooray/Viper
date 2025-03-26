@@ -69,7 +69,7 @@ def _unpack_vector3d(data: bytes):
 def _unpack_vector4(data: bytes):
     import Maths
     unpack_result = BytesPack.unpack_bytes_big_endian(["float","float","float","float"],data)
-    return (Maths.Vec3(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
+    return (Maths.Vec4(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
 def _unpack_unitary_quaternion(data: bytes):
     import Maths
     unpack_result = BytesPack.unpack_bytes_big_endian(["float","float","float"],data)
