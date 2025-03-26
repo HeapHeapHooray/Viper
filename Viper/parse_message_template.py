@@ -210,7 +210,7 @@ type_mapping_dict = {"U8": "unsigned byte","U16": "unsigned int16",
                      "S8": "signed byte","S16": "signed int16","S32": "signed int32",
                      "S64": "signed int64","F32": "float","LLVector3": "vector3",
                      "LLQuaternion": "unit_quaternion","LLUUID": "uuid","BOOL": "unsigned byte",
-                     "Variable 1": "variable1","Variable 2": "variable2","F64": "double","Fixed 4": "unsigned int32"}
+                     "Variable 1": "variable1","Variable 2": "variable2","F64": "double","Fixed 4": "unsigned int32","Fixed 32":"fixed32"}
 
 def single_unpacking(block,unpacking_body):
     block_unpack_start = f"\n\t\tunpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["
