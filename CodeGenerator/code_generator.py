@@ -1,19 +1,30 @@
-from parse_message_template import *
+from template_parsing import *
+from pathlib import Path
+import os
 
-def tuple_block_definition(block):
-    definition = f"""{block.get_name()} = collections.namedtuple("{block.get_name()}",["""
+#def tuple_block_definition(block):
+#    definition = f"""{block.get_name()} = collections.namedtuple("{block.get_name()}",["""
+#    for variable in block.get_variables():
+#            definition = definition + '"'+variable.name+'"' +","
+#    definition = definition + "])"
+
+#    return definition
+
+
+def block_definition(block):
+    definition = f"""@dataclass\nclass {block.get_name()}:\n"""
     for variable in block.get_variables():
-            definition = definition + '"'+variable.name+'"' +","
-    definition = definition + "])"
+        definition = definition + f"""\t{variable.name}: "{variable.type}"\n"""
 
     return definition
 
 type_mapping_dict = {"U8": "unsigned byte","U16": "unsigned int16",
                      "U32": "unsigned int32","U64": "unsigned int64",
                      "S8": "signed byte","S16": "signed int16","S32": "signed int32",
-                     "S64": "signed int64","F32": "float","LLVector3": "vector3",
-                     "LLQuaternion": "unit_quaternion","LLUUID": "uuid","BOOL": "unsigned byte",
-                     "Variable 1": "variable1","Variable 2": "variable2","F64": "double","Fixed 4": "unsigned int32","Fixed 32":"fixed32"}
+                     "S64": "signed int64","F32": "float","LLVector3": "vector3","LLVector3d": "vector3d",
+                     "LLVector4": "vector4", "LLQuaternion": "unit_quaternion","LLUUID": "uuid","BOOL": "unsigned byte",
+                     "Variable 1": "variable1","Variable 2": "variable2","F64": "double","Fixed 4": "unsigned int32","Fixed 32":"fixed32",
+                     "IPADDR": "unsigned int32","IPPORT": "unsigned int16"}
 
 def single_unpacking(block,unpacking_body):
     block_unpack_start = f"\n\t\tunpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["
@@ -34,16 +45,16 @@ def multiple_unpacking(block,unpacking_body):
 
     return unpacking_body
 def generate_message_class(message):
-    info = """# This code has been automatically generated, the generation code is named "messages_generator.py"."""
+    info = """# This code is automatically generated for the Viper viewer project, and the generation code can be found at: https://github.com/HeapHeapHooray/Viper"""
     
-    imports = "from Message.Message import Message\nimport BytesUtils\nimport collections"
+    imports = "from Message.Message import Message\nimport BytesUtils\nfrom dataclasses import dataclass"
 
     blocks = message.get_message_blocks()
 
     # Creates namedtuples for each block type.
     blocks_definition = ""
     for block in blocks:
-        blocks_definition = blocks_definition + tuple_block_definition(block) + "\n"
+        blocks_definition = blocks_definition + block_definition(block) + "\n"
 
     # Class Header with Absolute ID of the Message.
     class_header = f"class {message.get_message_name()}(Message):\n\n\tabsolute_id = {message.get_message_absolute_id()} # -- The Full ID of the message"
@@ -137,4 +148,50 @@ def generate_message_class(message):
     
     return info+"\n\n"+imports+"\n\n"+blocks_definition+"\n"+class_header+"\n"+init+"\n"+unpacking_body+"\n"+convert_to_string+"\n"+convert_to_bytes
             
+def generate_code():
+    messages = get_messages()
 
+    try:
+        messages_dir = Path("./Messages")
+        os.mkdir(messages_dir)
+    except FileExistsError:
+        pass
+
+
+    messages_init_py_header = "# This code is automatically generated for the Viper viewer project, and the generation code can be found at: https://github.com/HeapHeapHooray/Viper\n"
+    decoder_header = """# This code is automatically generated for the Viper viewer project, and the generation code can be found at: https://github.com/HeapHeapHooray/Viper\nfrom Messages import *
+
+_id_to_class = {}
+
+
+
+def get_message_class_from_id(message_id: int):
+    return _id_to_class.get(message_id,None)
+
+def _load_message_class(message_class):
+    _id_to_class[message_class.absolute_id] = message_class"""
+
+    successful = []
+    for message in messages:
+        try:
+            generated = generate_message_class(message)
+            name = message.get_message_name()
+            with open(Path("./Messages/"+name+".py"),"w") as message_file:
+                message_file.write(generated)
+            successful.append(name)
+        except e:
+            print("Raised exception:",e)
+
+    decoder = decoder_header + "\n\n" + "\n".join("_load_message_class("+name+"."+name+")" for name in successful)
+
+    try:
+        message_dir = Path("./Message")
+        os.mkdir(message_dir)
+    except FileExistsError:
+        pass
+
+    with open(Path("./Message/MessageDecoder.py"),"w") as decoder_file:
+        decoder_file.write(decoder)
+    messages_init_py = messages_init_py_header + "\n" + "\n".join(("from . import "+name) for name in successful)
+    with open(Path("./Messages/__init__.py"),"w") as messages_init_py_file:
+        messages_init_py_file.write(messages_init_py)
