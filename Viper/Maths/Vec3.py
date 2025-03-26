@@ -9,3 +9,5 @@ class Vec3:
         return "Vector3 <X: {}, Y: {}, Z: {}>".format(self.x,self.y,self.z)
     def convert_to_bytes(self) -> bytes:
         return BytesUtils.pack_bytes_big_endian(["float","float","float"],self.x,self.y,self.z)
+    def convert_as_doubles_to_bytes(self) -> bytes:
+        return BytesUtils.pack_bytes_big_endian(["double","double","double"],self.x,self.y,self.z)
