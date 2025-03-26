@@ -149,6 +149,8 @@ def generate_message_class(message):
     return info+"\n\n"+imports+"\n\n"+blocks_definition+"\n"+class_header+"\n"+init+"\n"+unpacking_body+"\n"+convert_to_string+"\n"+convert_to_bytes
             
 def generate_code():
+    print("Generating Code...")
+    
     messages = get_messages()
 
     try:
@@ -195,3 +197,6 @@ def _load_message_class(message_class):
     messages_init_py = messages_init_py_header + "\n" + "\n".join(("from . import "+name) for name in successful)
     with open(Path("./Messages/__init__.py"),"w") as messages_init_py_file:
         messages_init_py_file.write(messages_init_py)
+
+if __name__ == "__main__":
+    generate_code()
