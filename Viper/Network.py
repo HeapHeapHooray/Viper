@@ -3,6 +3,9 @@ import XMLRPCLogin
 import threading
 import Packet
 from Messages.UnknownMessage import UnknownMessage
+from Messages.ImprovedTerseObjectUpdate import ImprovedTerseObjectUpdate
+from Messages.StartPingCheck import StartPingCheck
+from Messages.CompletePingCheck import CompletePingCheck
 import MessageSender
 
 _udp_socket = None
@@ -10,6 +13,8 @@ _receiving_data = False
 _receive_data_thread = None
 
 _message_sender = None
+
+last_ping = 0
 
 class LoginFailed(Exception):
     pass
@@ -44,9 +49,33 @@ def _receive_data():
         try:
             packet = Packet.PacketFactory.create_from_bytes(data[0])
             if isinstance(packet.message,UnknownMessage):
-                print("Umknown Message's ID:",packet.message.message_id)
-            else:
-                print(packet.convert_to_string())
+                print("Unknown Message's ID:",packet.message.message_id)
+            elif isinstance(packet.message,StartPingCheck):
+                complete_ping_check = CompletePingCheck(None)
+                global last_ping
+                if last_ping > 255:
+                    last_ping = 0
+                complete_ping_check.PingID.PingID = last_ping
+                last_ping = last_ping + 1
+
+                _message_sender.send_message(complete_ping_check)
+
+                print("Sent ping check !")
+                print(packet.message.convert_to_string())
+                
+            elif isinstance(packet.message,ImprovedTerseObjectUpdate):
+                data = packet.message.ObjectData[0].Data
+                import BytesUtils
+                udata,remaining = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","unsigned byte"],data)
+                avatar = udata[2]
+                if avatar:
+                    udata,remaining = BytesUtils.unpack_bytes_little_endian(["vector4","vector3"],remaining)
+                    position = udata[1]
+                else:
+                    udata,remaining = BytesUtils.unpack_bytes_little_endian(["vector3"],remaining)
+                    position = udata[0]
+                print("Avatar:",avatar,"\nPosition:",position.convert_to_string())
+                #print(packet.convert_to_string())
         except Exception as e:
-            print("Network's data receiving loop raised the following exception:",e)
+            pass#print("Network's data receiving loop raised the following exception:",e)
     

@@ -55,10 +55,10 @@ agent_update.AgentData.SessionID = uuid.UUID(login_result["session_id"])
 agent_update.AgentData.BodyRotation = Maths.Quaternion(0,0,0,1.0)
 agent_update.AgentData.HeadRotation = Maths.Quaternion(0,0,0,1.0)
 agent_update.AgentData.State = 0
-agent_update.AgentData.CameraCenter = Maths.Vec3(0,0,0)
+agent_update.AgentData.CameraCenter = Maths.Vec3(161,142,25)
 agent_update.AgentData.CameraAtAxis = Maths.Vec3(0,0,0)
-agent_update.AgentData.CameraLeftAxis = Maths.Vec3(0,0,0)
-agent_update.AgentData.CameraUpAxis = Maths.Vec3(0,0,0)
+agent_update.AgentData.CameraLeftAxis = Maths.Vec3(0,-1.0,0)
+agent_update.AgentData.CameraUpAxis = Maths.Vec3(0,0,1.0)
 agent_update.AgentData.Far = 128
 agent_update.AgentData.ControlFlags = 0
 agent_update.AgentData.Flags = 0
@@ -67,4 +67,4 @@ Network._message_sender.send_message(agent_update)
 
 
 
-input()
+#input()

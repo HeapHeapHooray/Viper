@@ -60,19 +60,19 @@ BytesPack._pack_function_dict_le["fixed32"] = _pack_fixed32
 
 def _unpack_vector3(data: bytes):
     import Maths
-    unpack_result = BytesPack.unpack_bytes_big_endian(["float","float","float"],data)
+    unpack_result = BytesPack.unpack_bytes_little_endian(["float","float","float"],data)
     return (Maths.Vec3(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
 def _unpack_vector3d(data: bytes):
     import Maths
-    unpack_result = BytesPack.unpack_bytes_big_endian(["double","double","double"],data)
+    unpack_result = BytesPack.unpack_bytes_little_endian(["double","double","double"],data)
     return (Maths.Vec3(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
 def _unpack_vector4(data: bytes):
     import Maths
-    unpack_result = BytesPack.unpack_bytes_big_endian(["float","float","float","float"],data)
+    unpack_result = BytesPack.unpack_bytes_little_endian(["float","float","float","float"],data)
     return (Maths.Vec4(*unpack_result.unpacked_data),unpack_result.remaining_bytes)
 def _unpack_unitary_quaternion(data: bytes):
     import Maths
-    unpack_result = BytesPack.unpack_bytes_big_endian(["float","float","float"],data)
+    unpack_result = BytesPack.unpack_bytes_little_endian(["float","float","float"],data)
     x,y,z = unpack_result.unpacked_data
     diff = 1.0 - x * x - y * y - z * z;
     w = 0.0 if diff <= 0.0 else math.sqrt(diff)
