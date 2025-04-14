@@ -11,10 +11,7 @@ class LoginFailed(Exception):
 class NetworkManager:
     def on_receive_StartPingCheck(self,message: Message):
         complete_ping_check = CompletePingCheck(None)
-        if self.last_ping > 255:
-            self.last_ping = 0
-        complete_ping_check.PingID.PingID = self.last_ping
-        self.last_ping = self.last_ping + 1
+        complete_ping_check.PingID.PingID = message.PingID.PingID
 
         self._primary_simulator_connection_handler.send_message(complete_ping_check)
 
@@ -37,8 +34,6 @@ class NetworkManager:
         self._primary_incoming_data_runtime = IncomingDataRuntime(self._primary_simulator_connection_handler,self._event_hub)
 
         self._primary_incoming_data_runtime.start()
-
-        self.last_ping = 0
         
         return login_result
     
