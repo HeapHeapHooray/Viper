@@ -1,5 +1,5 @@
-from UDPSocket import UDPSocket
-from MessageSender import MessageSender
+from .UDPSocket import UDPSocket
+from .MessageSender import MessageSender
 from typing import Tuple
 from Message import Message
 

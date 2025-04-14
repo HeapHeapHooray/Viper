@@ -1,4 +1,3 @@
-import UDPSocket
 import XMLRPCLogin
 import threading
 import Packet
@@ -7,7 +6,6 @@ from Messages.ImprovedTerseObjectUpdate import ImprovedTerseObjectUpdate
 from Messages.StartPingCheck import StartPingCheck
 from Messages.CompletePingCheck import CompletePingCheck
 from Messages.ObjectUpdate import ObjectUpdate
-import MessageSender
 from .SimulatorConnectionHandler import SimulatorConnectionHandler
 from .IncomingDataRuntime import IncomingDataRuntime
 
