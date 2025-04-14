@@ -1,5 +1,6 @@
 import threading
 from .SimulatorConnectionHandler import SimulatorConnectionHandler
+from Packet import PacketFactory
 
 class IncomingDataRuntime:
     def __init__(self,connection_handler: SimulatorConnectionHandler):
@@ -16,5 +17,6 @@ class IncomingDataRuntime:
         return self._running
     def _receive_data(self):
         while self._running:
-            print(self._connection_handler.receive_data())
+            #print(self._connection_handler.receive_data())
+            print(PacketFactory.create_from_bytes(self._connection_handler.receive_data()[0]).message.convert_to_string())
         

@@ -28,8 +28,11 @@ class GameControlInput(Message):
 	absolute_id = 32 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.AxisData = [AXISDATA(*((None,)*2))]
+
 		self.ButtonData = [BUTTONDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -60,12 +63,7 @@ class GameControlInput(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GameControlInput, 
-Message Absolute ID: 32
-Blocks:
-{self.AgentData}
-{self.AxisData}
-{self.ButtonData}"""
+		return f"""Message Type: GameControlInput, Message Absolute ID: 32, Blocks: {self.AgentData},{self.AxisData},{self.ButtonData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

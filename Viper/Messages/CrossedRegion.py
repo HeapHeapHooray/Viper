@@ -31,8 +31,11 @@ class CrossedRegion(Message):
 	absolute_id = 65287 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.RegionData = REGIONDATA(*((None,)*4))
+
 		self.Info = INFO(*((None,)*2))
 
 		if bytes_data is None:
@@ -51,12 +54,7 @@ class CrossedRegion(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: CrossedRegion, 
-Message Absolute ID: 65287
-Blocks:
-{self.AgentData}
-{self.RegionData}
-{self.Info}"""
+		return f"""Message Type: CrossedRegion, Message Absolute ID: 65287, Blocks: {self.AgentData},{self.RegionData},{self.Info}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

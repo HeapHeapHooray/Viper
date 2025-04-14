@@ -45,11 +45,17 @@ class AvatarAppearance(Message):
 	absolute_id = 4294901918 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Sender = SENDER(*((None,)*2))
+
 		self.ObjectData = OBJECTDATA(*((None,)*1))
+
 		self.VisualParam = [VISUALPARAM(*((None,)*1))]
+
 		self.AppearanceData = [APPEARANCEDATA(*((None,)*3))]
+
 		self.AppearanceHover = [APPEARANCEHOVER(*((None,)*1))]
+
 		self.AttachmentBlock = [ATTACHMENTBLOCK(*((None,)*2))]
 
 		if bytes_data is None:
@@ -101,15 +107,7 @@ class AvatarAppearance(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AvatarAppearance, 
-Message Absolute ID: 4294901918
-Blocks:
-{self.Sender}
-{self.ObjectData}
-{self.VisualParam}
-{self.AppearanceData}
-{self.AppearanceHover}
-{self.AttachmentBlock}"""
+		return f"""Message Type: AvatarAppearance, Message Absolute ID: 4294901918, Blocks: {self.Sender},{self.ObjectData},{self.VisualParam},{self.AppearanceData},{self.AppearanceHover},{self.AttachmentBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

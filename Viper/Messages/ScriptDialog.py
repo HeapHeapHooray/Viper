@@ -32,8 +32,11 @@ class ScriptDialog(Message):
 	absolute_id = 4294901950 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Data = DATA(*((None,)*7))
+
 		self.Buttons = [BUTTONS(*((None,)*1))]
+
 		self.OwnerData = [OWNERDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -64,12 +67,7 @@ class ScriptDialog(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ScriptDialog, 
-Message Absolute ID: 4294901950
-Blocks:
-{self.Data}
-{self.Buttons}
-{self.OwnerData}"""
+		return f"""Message Type: ScriptDialog, Message Absolute ID: 4294901950, Blocks: {self.Data},{self.Buttons},{self.OwnerData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

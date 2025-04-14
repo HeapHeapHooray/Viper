@@ -17,6 +17,7 @@ class ReportAutosaveCrash(Message):
 	absolute_id = 4294901888 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AutosaveData = AUTOSAVEDATA(*((None,)*2))
 
 		if bytes_data is None:
@@ -29,10 +30,7 @@ class ReportAutosaveCrash(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ReportAutosaveCrash, 
-Message Absolute ID: 4294901888
-Blocks:
-{self.AutosaveData}"""
+		return f"""Message Type: ReportAutosaveCrash, Message Absolute ID: 4294901888, Blocks: {self.AutosaveData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

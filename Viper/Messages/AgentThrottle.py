@@ -24,7 +24,9 @@ class AgentThrottle(Message):
 	absolute_id = 4294901841 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*3))
+
 		self.Throttle = THROTTLE(*((None,)*2))
 
 		if bytes_data is None:
@@ -40,11 +42,7 @@ class AgentThrottle(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentThrottle, 
-Message Absolute ID: 4294901841
-Blocks:
-{self.AgentData}
-{self.Throttle}"""
+		return f"""Message Type: AgentThrottle, Message Absolute ID: 4294901841, Blocks: {self.AgentData},{self.Throttle}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

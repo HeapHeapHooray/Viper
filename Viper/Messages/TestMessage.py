@@ -23,7 +23,9 @@ class TestMessage(Message):
 	absolute_id = 4294901761 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.TestBlock1 = TESTBLOCK1(*((None,)*1))
+
 		self.NeighborBlock = []
 		for i in range(4):
 			self.NeighborBlock.append(NEIGHBORBLOCK(*((None,)*3)))
@@ -46,11 +48,7 @@ class TestMessage(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TestMessage, 
-Message Absolute ID: 4294901761
-Blocks:
-{self.TestBlock1}
-{self.NeighborBlock}"""
+		return f"""Message Type: TestMessage, Message Absolute ID: 4294901761, Blocks: {self.TestBlock1},{self.NeighborBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -32,8 +32,11 @@ class MapItemReply(Message):
 	absolute_id = 4294902171 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.RequestData = REQUESTDATA(*((None,)*1))
+
 		self.Data = [DATA(*((None,)*6))]
 
 		if bytes_data is None:
@@ -58,12 +61,7 @@ class MapItemReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MapItemReply, 
-Message Absolute ID: 4294902171
-Blocks:
-{self.AgentData}
-{self.RequestData}
-{self.Data}"""
+		return f"""Message Type: MapItemReply, Message Absolute ID: 4294902171, Blocks: {self.AgentData},{self.RequestData},{self.Data}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -22,7 +22,9 @@ class SendXferPacket(Message):
 	absolute_id = 18 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.XferID = XFERID(*((None,)*2))
+
 		self.DataPacket = DATAPACKET(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class SendXferPacket(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SendXferPacket, 
-Message Absolute ID: 18
-Blocks:
-{self.XferID}
-{self.DataPacket}"""
+		return f"""Message Type: SendXferPacket, Message Absolute ID: 18, Blocks: {self.XferID},{self.DataPacket}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

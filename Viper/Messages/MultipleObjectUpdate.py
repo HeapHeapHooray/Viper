@@ -24,7 +24,9 @@ class MultipleObjectUpdate(Message):
 	absolute_id = 65282 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ObjectData = [OBJECTDATA(*((None,)*3))]
 
 		if bytes_data is None:
@@ -46,11 +48,7 @@ class MultipleObjectUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MultipleObjectUpdate, 
-Message Absolute ID: 65282
-Blocks:
-{self.AgentData}
-{self.ObjectData}"""
+		return f"""Message Type: MultipleObjectUpdate, Message Absolute ID: 65282, Blocks: {self.AgentData},{self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

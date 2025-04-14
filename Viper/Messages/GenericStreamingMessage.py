@@ -21,7 +21,9 @@ class GenericStreamingMessage(Message):
 	absolute_id = 31 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.MethodData = METHODDATA(*((None,)*1))
+
 		self.DataBlock = DATABLOCK(*((None,)*1))
 
 		if bytes_data is None:
@@ -37,11 +39,7 @@ class GenericStreamingMessage(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GenericStreamingMessage, 
-Message Absolute ID: 31
-Blocks:
-{self.MethodData}
-{self.DataBlock}"""
+		return f"""Message Type: GenericStreamingMessage, Message Absolute ID: 31, Blocks: {self.MethodData},{self.DataBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

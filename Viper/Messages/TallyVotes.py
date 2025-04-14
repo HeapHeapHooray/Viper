@@ -19,9 +19,7 @@ class TallyVotes(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TallyVotes, 
-Message Absolute ID: 4294902125
-Blocks:"""
+		return f"""Message Type: TallyVotes, Message Absolute ID: 4294902125, Blocks: """
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -16,6 +16,7 @@ class RegionHandleRequest(Message):
 	absolute_id = 4294902069 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.RequestBlock = REQUESTBLOCK(*((None,)*1))
 
 		if bytes_data is None:
@@ -28,10 +29,7 @@ class RegionHandleRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RegionHandleRequest, 
-Message Absolute ID: 4294902069
-Blocks:
-{self.RequestBlock}"""
+		return f"""Message Type: RegionHandleRequest, Message Absolute ID: 4294902069, Blocks: {self.RequestBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

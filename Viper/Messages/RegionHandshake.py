@@ -59,9 +59,13 @@ class RegionHandshake(Message):
 	absolute_id = 4294901908 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.RegionInfo = REGIONINFO(*((None,)*24))
+
 		self.RegionInfo2 = REGIONINFO2(*((None,)*1))
+
 		self.RegionInfo3 = REGIONINFO3(*((None,)*5))
+
 		self.RegionInfo4 = [REGIONINFO4(*((None,)*2))]
 
 		if bytes_data is None:
@@ -89,13 +93,7 @@ class RegionHandshake(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RegionHandshake, 
-Message Absolute ID: 4294901908
-Blocks:
-{self.RegionInfo}
-{self.RegionInfo2}
-{self.RegionInfo3}
-{self.RegionInfo4}"""
+		return f"""Message Type: RegionHandshake, Message Absolute ID: 4294901908, Blocks: {self.RegionInfo},{self.RegionInfo2},{self.RegionInfo3},{self.RegionInfo4}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

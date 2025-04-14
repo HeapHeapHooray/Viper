@@ -37,8 +37,11 @@ class GroupActiveProposalItemReply(Message):
 	absolute_id = 4294902120 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.TransactionData = TRANSACTIONDATA(*((None,)*2))
+
 		self.ProposalData = [PROPOSALDATA(*((None,)*10))]
 
 		if bytes_data is None:
@@ -63,12 +66,7 @@ class GroupActiveProposalItemReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupActiveProposalItemReply, 
-Message Absolute ID: 4294902120
-Blocks:
-{self.AgentData}
-{self.TransactionData}
-{self.ProposalData}"""
+		return f"""Message Type: GroupActiveProposalItemReply, Message Absolute ID: 4294902120, Blocks: {self.AgentData},{self.TransactionData},{self.ProposalData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

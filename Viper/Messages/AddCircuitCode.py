@@ -18,6 +18,7 @@ class AddCircuitCode(Message):
 	absolute_id = 4294901762 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.CircuitCode = CIRCUITCODE(*((None,)*3))
 
 		if bytes_data is None:
@@ -30,10 +31,7 @@ class AddCircuitCode(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AddCircuitCode, 
-Message Absolute ID: 4294901762
-Blocks:
-{self.CircuitCode}"""
+		return f"""Message Type: AddCircuitCode, Message Absolute ID: 4294901762, Blocks: {self.CircuitCode}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

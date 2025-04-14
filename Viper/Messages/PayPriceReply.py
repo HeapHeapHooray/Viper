@@ -22,7 +22,9 @@ class PayPriceReply(Message):
 	absolute_id = 4294901922 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ObjectData = OBJECTDATA(*((None,)*2))
+
 		self.ButtonData = [BUTTONDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -44,11 +46,7 @@ class PayPriceReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: PayPriceReply, 
-Message Absolute ID: 4294901922
-Blocks:
-{self.ObjectData}
-{self.ButtonData}"""
+		return f"""Message Type: PayPriceReply, Message Absolute ID: 4294901922, Blocks: {self.ObjectData},{self.ButtonData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -26,7 +26,9 @@ class AvatarSitResponse(Message):
 	absolute_id = 21 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.SitObject = SITOBJECT(*((None,)*1))
+
 		self.SitTransform = SITTRANSFORM(*((None,)*6))
 
 		if bytes_data is None:
@@ -42,11 +44,7 @@ class AvatarSitResponse(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AvatarSitResponse, 
-Message Absolute ID: 21
-Blocks:
-{self.SitObject}
-{self.SitTransform}"""
+		return f"""Message Type: AvatarSitResponse, Message Absolute ID: 21, Blocks: {self.SitObject},{self.SitTransform}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -30,8 +30,11 @@ class TransferInventory(Message):
 	absolute_id = 4294902055 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.InfoBlock = INFOBLOCK(*((None,)*3))
+
 		self.InventoryBlock = [INVENTORYBLOCK(*((None,)*2))]
+
 		self.ValidationBlock = VALIDATIONBLOCK(*((None,)*2))
 
 		if bytes_data is None:
@@ -56,12 +59,7 @@ class TransferInventory(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TransferInventory, 
-Message Absolute ID: 4294902055
-Blocks:
-{self.InfoBlock}
-{self.InventoryBlock}
-{self.ValidationBlock}"""
+		return f"""Message Type: TransferInventory, Message Absolute ID: 4294902055, Blocks: {self.InfoBlock},{self.InventoryBlock},{self.ValidationBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

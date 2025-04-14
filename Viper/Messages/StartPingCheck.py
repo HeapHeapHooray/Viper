@@ -17,6 +17,7 @@ class StartPingCheck(Message):
 	absolute_id = 1 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.PingID = PINGID(*((None,)*2))
 
 		if bytes_data is None:
@@ -29,10 +30,7 @@ class StartPingCheck(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: StartPingCheck, 
-Message Absolute ID: 1
-Blocks:
-{self.PingID}"""
+		return f"""Message Type: StartPingCheck, Message Absolute ID: 1, Blocks: {self.PingID}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

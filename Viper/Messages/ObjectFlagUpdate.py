@@ -31,7 +31,9 @@ class ObjectFlagUpdate(Message):
 	absolute_id = 4294901854 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*7))
+
 		self.ExtraPhysics = [EXTRAPHYSICS(*((None,)*5))]
 
 		if bytes_data is None:
@@ -53,11 +55,7 @@ class ObjectFlagUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ObjectFlagUpdate, 
-Message Absolute ID: 4294901854
-Blocks:
-{self.AgentData}
-{self.ExtraPhysics}"""
+		return f"""Message Type: ObjectFlagUpdate, Message Absolute ID: 4294901854, Blocks: {self.AgentData},{self.ExtraPhysics}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

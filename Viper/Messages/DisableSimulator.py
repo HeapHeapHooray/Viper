@@ -19,9 +19,7 @@ class DisableSimulator(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DisableSimulator, 
-Message Absolute ID: 4294901912
-Blocks:"""
+		return f"""Message Type: DisableSimulator, Message Absolute ID: 4294901912, Blocks: """
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

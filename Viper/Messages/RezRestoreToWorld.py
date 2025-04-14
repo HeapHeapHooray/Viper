@@ -42,7 +42,9 @@ class RezRestoreToWorld(Message):
 	absolute_id = 4294902185 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.InventoryData = INVENTORYDATA(*((None,)*21))
 
 		if bytes_data is None:
@@ -58,11 +60,7 @@ class RezRestoreToWorld(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RezRestoreToWorld, 
-Message Absolute ID: 4294902185
-Blocks:
-{self.AgentData}
-{self.InventoryData}"""
+		return f"""Message Type: RezRestoreToWorld, Message Absolute ID: 4294902185, Blocks: {self.AgentData},{self.InventoryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

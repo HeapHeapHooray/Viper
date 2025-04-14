@@ -25,7 +25,9 @@ class GroupTitlesReply(Message):
 	absolute_id = 4294902136 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*3))
+
 		self.GroupData = [GROUPDATA(*((None,)*3))]
 
 		if bytes_data is None:
@@ -47,11 +49,7 @@ class GroupTitlesReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupTitlesReply, 
-Message Absolute ID: 4294902136
-Blocks:
-{self.AgentData}
-{self.GroupData}"""
+		return f"""Message Type: GroupTitlesReply, Message Absolute ID: 4294902136, Blocks: {self.AgentData},{self.GroupData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -22,7 +22,9 @@ class ImagePacket(Message):
 	absolute_id = 10 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ImageID = IMAGEID(*((None,)*2))
+
 		self.ImageData = IMAGEDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class ImagePacket(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ImagePacket, 
-Message Absolute ID: 10
-Blocks:
-{self.ImageID}
-{self.ImageData}"""
+		return f"""Message Type: ImagePacket, Message Absolute ID: 10, Blocks: {self.ImageID},{self.ImageData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

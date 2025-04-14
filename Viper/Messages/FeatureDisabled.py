@@ -18,6 +18,7 @@ class FeatureDisabled(Message):
 	absolute_id = 4294901779 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.FailureInfo = FAILUREINFO(*((None,)*3))
 
 		if bytes_data is None:
@@ -30,10 +31,7 @@ class FeatureDisabled(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: FeatureDisabled, 
-Message Absolute ID: 4294901779
-Blocks:
-{self.FailureInfo}"""
+		return f"""Message Type: FeatureDisabled, Message Absolute ID: 4294901779, Blocks: {self.FailureInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

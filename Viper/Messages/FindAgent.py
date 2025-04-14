@@ -24,7 +24,9 @@ class FindAgent(Message):
 	absolute_id = 4294902016 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentBlock = AGENTBLOCK(*((None,)*3))
+
 		self.LocationBlock = [LOCATIONBLOCK(*((None,)*2))]
 
 		if bytes_data is None:
@@ -46,11 +48,7 @@ class FindAgent(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: FindAgent, 
-Message Absolute ID: 4294902016
-Blocks:
-{self.AgentBlock}
-{self.LocationBlock}"""
+		return f"""Message Type: FindAgent, Message Absolute ID: 4294902016, Blocks: {self.AgentBlock},{self.LocationBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

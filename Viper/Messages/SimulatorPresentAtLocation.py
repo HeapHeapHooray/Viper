@@ -41,11 +41,15 @@ class SimulatorPresentAtLocation(Message):
 	absolute_id = 4294901771 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.SimulatorPublicHostBlock = SIMULATORPUBLICHOSTBLOCK(*((None,)*4))
+
 		self.NeighborBlock = []
 		for i in range(4):
 			self.NeighborBlock.append(NEIGHBORBLOCK(*((None,)*2)))
+
 		self.SimulatorBlock = SIMULATORBLOCK(*((None,)*6))
+
 		self.TelehubBlock = [TELEHUBBLOCK(*((None,)*2))]
 
 		if bytes_data is None:
@@ -78,13 +82,7 @@ class SimulatorPresentAtLocation(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SimulatorPresentAtLocation, 
-Message Absolute ID: 4294901771
-Blocks:
-{self.SimulatorPublicHostBlock}
-{self.NeighborBlock}
-{self.SimulatorBlock}
-{self.TelehubBlock}"""
+		return f"""Message Type: SimulatorPresentAtLocation, Message Absolute ID: 4294901771, Blocks: {self.SimulatorPublicHostBlock},{self.NeighborBlock},{self.SimulatorBlock},{self.TelehubBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -39,8 +39,11 @@ class PlacesReply(Message):
 	absolute_id = 4294901790 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.TransactionData = TRANSACTIONDATA(*((None,)*1))
+
 		self.QueryData = [QUERYDATA(*((None,)*13))]
 
 		if bytes_data is None:
@@ -65,12 +68,7 @@ class PlacesReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: PlacesReply, 
-Message Absolute ID: 4294901790
-Blocks:
-{self.AgentData}
-{self.TransactionData}
-{self.QueryData}"""
+		return f"""Message Type: PlacesReply, Message Absolute ID: 4294901790, Blocks: {self.AgentData},{self.TransactionData},{self.QueryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

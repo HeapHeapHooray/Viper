@@ -27,7 +27,9 @@ class ViewerEffect(Message):
 	absolute_id = 65297 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.Effect = [EFFECT(*((None,)*6))]
 
 		if bytes_data is None:
@@ -49,11 +51,7 @@ class ViewerEffect(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ViewerEffect, 
-Message Absolute ID: 65297
-Blocks:
-{self.AgentData}
-{self.Effect}"""
+		return f"""Message Type: ViewerEffect, Message Absolute ID: 65297, Blocks: {self.AgentData},{self.Effect}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -22,7 +22,9 @@ class TrackAgent(Message):
 	absolute_id = 4294901890 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.TargetData = TARGETDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class TrackAgent(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TrackAgent, 
-Message Absolute ID: 4294901890
-Blocks:
-{self.AgentData}
-{self.TargetData}"""
+		return f"""Message Type: TrackAgent, Message Absolute ID: 4294901890, Blocks: {self.AgentData},{self.TargetData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

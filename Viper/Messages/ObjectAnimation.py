@@ -22,7 +22,9 @@ class ObjectAnimation(Message):
 	absolute_id = 30 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Sender = SENDER(*((None,)*1))
+
 		self.AnimationList = [ANIMATIONLIST(*((None,)*2))]
 
 		if bytes_data is None:
@@ -44,11 +46,7 @@ class ObjectAnimation(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ObjectAnimation, 
-Message Absolute ID: 30
-Blocks:
-{self.Sender}
-{self.AnimationList}"""
+		return f"""Message Type: ObjectAnimation, Message Absolute ID: 30, Blocks: {self.Sender},{self.AnimationList}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

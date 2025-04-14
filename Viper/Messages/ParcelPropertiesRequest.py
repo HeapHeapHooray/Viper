@@ -27,7 +27,9 @@ class ParcelPropertiesRequest(Message):
 	absolute_id = 65291 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ParcelData = PARCELDATA(*((None,)*6))
 
 		if bytes_data is None:
@@ -43,11 +45,7 @@ class ParcelPropertiesRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ParcelPropertiesRequest, 
-Message Absolute ID: 65291
-Blocks:
-{self.AgentData}
-{self.ParcelData}"""
+		return f"""Message Type: ParcelPropertiesRequest, Message Absolute ID: 65291, Blocks: {self.AgentData},{self.ParcelData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

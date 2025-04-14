@@ -25,7 +25,9 @@ class SimulatorLoad(Message):
 	absolute_id = 4294901772 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.SimulatorLoad = SIMULATORLOAD(*((None,)*3))
+
 		self.AgentList = [AGENTLIST(*((None,)*3))]
 
 		if bytes_data is None:
@@ -47,11 +49,7 @@ class SimulatorLoad(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SimulatorLoad, 
-Message Absolute ID: 4294901772
-Blocks:
-{self.SimulatorLoad}
-{self.AgentList}"""
+		return f"""Message Type: SimulatorLoad, Message Absolute ID: 4294901772, Blocks: {self.SimulatorLoad},{self.AgentList}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

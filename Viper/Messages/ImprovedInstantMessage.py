@@ -43,9 +43,13 @@ class ImprovedInstantMessage(Message):
 	absolute_id = 4294902014 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.MessageBlock = MESSAGEBLOCK(*((None,)*12))
+
 		self.EstateBlock = ESTATEBLOCK(*((None,)*1))
+
 		self.MetaData = [METADATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -73,13 +77,7 @@ class ImprovedInstantMessage(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ImprovedInstantMessage, 
-Message Absolute ID: 4294902014
-Blocks:
-{self.AgentData}
-{self.MessageBlock}
-{self.EstateBlock}
-{self.MetaData}"""
+		return f"""Message Type: ImprovedInstantMessage, Message Absolute ID: 4294902014, Blocks: {self.AgentData},{self.MessageBlock},{self.EstateBlock},{self.MetaData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

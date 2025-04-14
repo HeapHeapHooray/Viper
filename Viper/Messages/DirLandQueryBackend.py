@@ -28,7 +28,9 @@ class DirLandQueryBackend(Message):
 	absolute_id = 4294901809 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.QueryData = QUERYDATA(*((None,)*8))
 
 		if bytes_data is None:
@@ -44,11 +46,7 @@ class DirLandQueryBackend(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DirLandQueryBackend, 
-Message Absolute ID: 4294901809
-Blocks:
-{self.AgentData}
-{self.QueryData}"""
+		return f"""Message Type: DirLandQueryBackend, Message Absolute ID: 4294901809, Blocks: {self.AgentData},{self.QueryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

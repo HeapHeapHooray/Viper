@@ -18,6 +18,7 @@ class InventoryAssetResponse(Message):
 	absolute_id = 4294902043 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.QueryData = QUERYDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -30,10 +31,7 @@ class InventoryAssetResponse(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: InventoryAssetResponse, 
-Message Absolute ID: 4294902043
-Blocks:
-{self.QueryData}"""
+		return f"""Message Type: InventoryAssetResponse, Message Absolute ID: 4294902043, Blocks: {self.QueryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

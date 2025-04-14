@@ -17,6 +17,7 @@ class AbortXfer(Message):
 	absolute_id = 4294901917 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.XferID = XFERID(*((None,)*2))
 
 		if bytes_data is None:
@@ -29,10 +30,7 @@ class AbortXfer(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AbortXfer, 
-Message Absolute ID: 4294901917
-Blocks:
-{self.XferID}"""
+		return f"""Message Type: AbortXfer, Message Absolute ID: 4294901917, Blocks: {self.XferID}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

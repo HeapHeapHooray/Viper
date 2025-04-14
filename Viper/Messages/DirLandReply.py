@@ -31,8 +31,11 @@ class DirLandReply(Message):
 	absolute_id = 4294901810 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.QueryData = QUERYDATA(*((None,)*1))
+
 		self.QueryReplies = [QUERYREPLIES(*((None,)*6))]
 
 		if bytes_data is None:
@@ -57,12 +60,7 @@ class DirLandReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DirLandReply, 
-Message Absolute ID: 4294901810
-Blocks:
-{self.AgentData}
-{self.QueryData}
-{self.QueryReplies}"""
+		return f"""Message Type: DirLandReply, Message Absolute ID: 4294901810, Blocks: {self.AgentData},{self.QueryData},{self.QueryReplies}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

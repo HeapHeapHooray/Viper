@@ -24,7 +24,9 @@ class SetScriptRunning(Message):
 	absolute_id = 4294902005 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.Script = SCRIPT(*((None,)*3))
 
 		if bytes_data is None:
@@ -40,11 +42,7 @@ class SetScriptRunning(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SetScriptRunning, 
-Message Absolute ID: 4294902005
-Blocks:
-{self.AgentData}
-{self.Script}"""
+		return f"""Message Type: SetScriptRunning, Message Absolute ID: 4294902005, Blocks: {self.AgentData},{self.Script}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

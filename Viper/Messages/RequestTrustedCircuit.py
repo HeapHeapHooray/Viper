@@ -19,9 +19,7 @@ class RequestTrustedCircuit(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RequestTrustedCircuit, 
-Message Absolute ID: 4294902154
-Blocks:"""
+		return f"""Message Type: RequestTrustedCircuit, Message Absolute ID: 4294902154, Blocks: """
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

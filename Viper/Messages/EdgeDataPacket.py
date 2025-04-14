@@ -18,6 +18,7 @@ class EdgeDataPacket(Message):
 	absolute_id = 24 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.EdgeData = EDGEDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -30,10 +31,7 @@ class EdgeDataPacket(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: EdgeDataPacket, 
-Message Absolute ID: 24
-Blocks:
-{self.EdgeData}"""
+		return f"""Message Type: EdgeDataPacket, Message Absolute ID: 24, Blocks: {self.EdgeData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

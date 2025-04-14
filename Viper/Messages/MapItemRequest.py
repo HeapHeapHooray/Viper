@@ -26,7 +26,9 @@ class MapItemRequest(Message):
 	absolute_id = 4294902170 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*5))
+
 		self.RequestData = REQUESTDATA(*((None,)*2))
 
 		if bytes_data is None:
@@ -42,11 +44,7 @@ class MapItemRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MapItemRequest, 
-Message Absolute ID: 4294902170
-Blocks:
-{self.AgentData}
-{self.RequestData}"""
+		return f"""Message Type: MapItemRequest, Message Absolute ID: 4294902170, Blocks: {self.AgentData},{self.RequestData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

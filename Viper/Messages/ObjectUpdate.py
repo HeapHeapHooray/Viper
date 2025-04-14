@@ -67,7 +67,9 @@ class ObjectUpdate(Message):
 	absolute_id = 12 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.RegionData = REGIONDATA(*((None,)*2))
+
 		self.ObjectData = [OBJECTDATA(*((None,)*46))]
 
 		if bytes_data is None:
@@ -89,11 +91,7 @@ class ObjectUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ObjectUpdate, 
-Message Absolute ID: 12
-Blocks:
-{self.RegionData}
-{self.ObjectData}"""
+		return f"""Message Type: ObjectUpdate, Message Absolute ID: 12, Blocks: {self.RegionData},{self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

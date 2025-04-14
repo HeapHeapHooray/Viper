@@ -22,7 +22,9 @@ class SetFollowCamProperties(Message):
 	absolute_id = 4294901919 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ObjectData = OBJECTDATA(*((None,)*1))
+
 		self.CameraProperty = [CAMERAPROPERTY(*((None,)*2))]
 
 		if bytes_data is None:
@@ -44,11 +46,7 @@ class SetFollowCamProperties(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SetFollowCamProperties, 
-Message Absolute ID: 4294901919
-Blocks:
-{self.ObjectData}
-{self.CameraProperty}"""
+		return f"""Message Type: SetFollowCamProperties, Message Absolute ID: 4294901919, Blocks: {self.ObjectData},{self.CameraProperty}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -8,6 +8,10 @@ class Quaternion:
         self.w = w
     def convert_to_string(self) -> str:
         return "Quaternion <X: {}, Y: {}, Z: {}, W: {}>".format(self.x,self.y,self.z,self.w)
+    def __str__(self) -> str:
+        return self.convert_to_string()
+    def __repr__(self) -> str:
+        return self.convert_to_string()
     def convert_to_bytes(self) -> bytes:
         # Since this will always be an unit quaternion we omit the w value from the
         # representation in bytes, since it can be inferred from the other values.

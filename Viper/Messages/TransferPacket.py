@@ -20,6 +20,7 @@ class TransferPacket(Message):
 	absolute_id = 17 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.TransferData = TRANSFERDATA(*((None,)*5))
 
 		if bytes_data is None:
@@ -32,10 +33,7 @@ class TransferPacket(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TransferPacket, 
-Message Absolute ID: 17
-Blocks:
-{self.TransferData}"""
+		return f"""Message Type: TransferPacket, Message Absolute ID: 17, Blocks: {self.TransferData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -26,7 +26,9 @@ class RpcScriptRequestInbound(Message):
 	absolute_id = 4294902175 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.TargetBlock = TARGETBLOCK(*((None,)*2))
+
 		self.DataBlock = DATABLOCK(*((None,)*5))
 
 		if bytes_data is None:
@@ -42,11 +44,7 @@ class RpcScriptRequestInbound(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RpcScriptRequestInbound, 
-Message Absolute ID: 4294902175
-Blocks:
-{self.TargetBlock}
-{self.DataBlock}"""
+		return f"""Message Type: RpcScriptRequestInbound, Message Absolute ID: 4294902175, Blocks: {self.TargetBlock},{self.DataBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

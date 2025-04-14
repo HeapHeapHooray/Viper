@@ -24,7 +24,9 @@ class TelehubInfo(Message):
 	absolute_id = 4294901770 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.TelehubBlock = TELEHUBBLOCK(*((None,)*4))
+
 		self.SpawnPointBlock = [SPAWNPOINTBLOCK(*((None,)*1))]
 
 		if bytes_data is None:
@@ -46,11 +48,7 @@ class TelehubInfo(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TelehubInfo, 
-Message Absolute ID: 4294901770
-Blocks:
-{self.TelehubBlock}
-{self.SpawnPointBlock}"""
+		return f"""Message Type: TelehubInfo, Message Absolute ID: 4294901770, Blocks: {self.TelehubBlock},{self.SpawnPointBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

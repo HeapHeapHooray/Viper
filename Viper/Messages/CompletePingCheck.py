@@ -16,6 +16,7 @@ class CompletePingCheck(Message):
 	absolute_id = 2 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.PingID = PINGID(*((None,)*1))
 
 		if bytes_data is None:
@@ -28,10 +29,7 @@ class CompletePingCheck(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: CompletePingCheck, 
-Message Absolute ID: 2
-Blocks:
-{self.PingID}"""
+		return f"""Message Type: CompletePingCheck, Message Absolute ID: 2, Blocks: {self.PingID}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

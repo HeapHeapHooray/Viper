@@ -28,8 +28,11 @@ class InviteGroupRequest(Message):
 	absolute_id = 4294902109 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.GroupData = GROUPDATA(*((None,)*1))
+
 		self.InviteData = [INVITEDATA(*((None,)*2))]
 
 		if bytes_data is None:
@@ -54,12 +57,7 @@ class InviteGroupRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: InviteGroupRequest, 
-Message Absolute ID: 4294902109
-Blocks:
-{self.AgentData}
-{self.GroupData}
-{self.InviteData}"""
+		return f"""Message Type: InviteGroupRequest, Message Absolute ID: 4294902109, Blocks: {self.AgentData},{self.GroupData},{self.InviteData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

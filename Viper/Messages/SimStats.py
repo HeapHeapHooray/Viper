@@ -35,9 +35,13 @@ class SimStats(Message):
 	absolute_id = 4294901900 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Region = REGION(*((None,)*4))
+
 		self.Stat = [STAT(*((None,)*2))]
+
 		self.PidStat = PIDSTAT(*((None,)*1))
+
 		self.RegionInfo = [REGIONINFO(*((None,)*1))]
 
 		if bytes_data is None:
@@ -71,13 +75,7 @@ class SimStats(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SimStats, 
-Message Absolute ID: 4294901900
-Blocks:
-{self.Region}
-{self.Stat}
-{self.PidStat}
-{self.RegionInfo}"""
+		return f"""Message Type: SimStats, Message Absolute ID: 4294901900, Blocks: {self.Region},{self.Stat},{self.PidStat},{self.RegionInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

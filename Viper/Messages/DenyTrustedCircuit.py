@@ -16,6 +16,7 @@ class DenyTrustedCircuit(Message):
 	absolute_id = 4294902153 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.DataBlock = DATABLOCK(*((None,)*1))
 
 		if bytes_data is None:
@@ -28,10 +29,7 @@ class DenyTrustedCircuit(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DenyTrustedCircuit, 
-Message Absolute ID: 4294902153
-Blocks:
-{self.DataBlock}"""
+		return f"""Message Type: DenyTrustedCircuit, Message Absolute ID: 4294902153, Blocks: {self.DataBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

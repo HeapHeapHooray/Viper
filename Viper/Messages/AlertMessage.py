@@ -27,8 +27,11 @@ class AlertMessage(Message):
 	absolute_id = 4294901894 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AlertData = ALERTDATA(*((None,)*1))
+
 		self.AlertInfo = [ALERTINFO(*((None,)*2))]
+
 		self.AgentInfo = [AGENTINFO(*((None,)*1))]
 
 		if bytes_data is None:
@@ -59,12 +62,7 @@ class AlertMessage(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AlertMessage, 
-Message Absolute ID: 4294901894
-Blocks:
-{self.AlertData}
-{self.AlertInfo}
-{self.AgentInfo}"""
+		return f"""Message Type: AlertMessage, Message Absolute ID: 4294901894, Blocks: {self.AlertData},{self.AlertInfo},{self.AgentInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

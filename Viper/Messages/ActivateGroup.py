@@ -18,6 +18,7 @@ class ActivateGroup(Message):
 	absolute_id = 4294902128 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -30,10 +31,7 @@ class ActivateGroup(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ActivateGroup, 
-Message Absolute ID: 4294902128
-Blocks:
-{self.AgentData}"""
+		return f"""Message Type: ActivateGroup, Message Absolute ID: 4294902128, Blocks: {self.AgentData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

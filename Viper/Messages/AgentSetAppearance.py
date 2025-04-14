@@ -35,9 +35,13 @@ class AgentSetAppearance(Message):
 	absolute_id = 4294901844 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*4))
+
 		self.WearableData = [WEARABLEDATA(*((None,)*2))]
+
 		self.ObjectData = OBJECTDATA(*((None,)*1))
+
 		self.VisualParam = [VISUALPARAM(*((None,)*1))]
 
 		if bytes_data is None:
@@ -71,13 +75,7 @@ class AgentSetAppearance(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentSetAppearance, 
-Message Absolute ID: 4294901844
-Blocks:
-{self.AgentData}
-{self.WearableData}
-{self.ObjectData}
-{self.VisualParam}"""
+		return f"""Message Type: AgentSetAppearance, Message Absolute ID: 4294901844, Blocks: {self.AgentData},{self.WearableData},{self.ObjectData},{self.VisualParam}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

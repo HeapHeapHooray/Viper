@@ -20,6 +20,7 @@ class MeanCollisionAlert(Message):
 	absolute_id = 4294901896 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.MeanCollision = [MEANCOLLISION(*((None,)*5))]
 
 		if bytes_data is None:
@@ -38,10 +39,7 @@ class MeanCollisionAlert(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MeanCollisionAlert, 
-Message Absolute ID: 4294901896
-Blocks:
-{self.MeanCollision}"""
+		return f"""Message Type: MeanCollisionAlert, Message Absolute ID: 4294901896, Blocks: {self.MeanCollision}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -21,6 +21,7 @@ class TransferInfo(Message):
 	absolute_id = 4294901914 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.TransferInfo = TRANSFERINFO(*((None,)*6))
 
 		if bytes_data is None:
@@ -33,10 +34,7 @@ class TransferInfo(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TransferInfo, 
-Message Absolute ID: 4294901914
-Blocks:
-{self.TransferInfo}"""
+		return f"""Message Type: TransferInfo, Message Absolute ID: 4294901914, Blocks: {self.TransferInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

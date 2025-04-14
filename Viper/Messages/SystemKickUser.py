@@ -16,6 +16,7 @@ class SystemKickUser(Message):
 	absolute_id = 4294901926 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentInfo = [AGENTINFO(*((None,)*1))]
 
 		if bytes_data is None:
@@ -34,10 +35,7 @@ class SystemKickUser(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SystemKickUser, 
-Message Absolute ID: 4294901926
-Blocks:
-{self.AgentInfo}"""
+		return f"""Message Type: SystemKickUser, Message Absolute ID: 4294901926, Blocks: {self.AgentInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

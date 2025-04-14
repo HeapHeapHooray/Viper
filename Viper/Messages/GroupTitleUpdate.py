@@ -19,6 +19,7 @@ class GroupTitleUpdate(Message):
 	absolute_id = 4294902137 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*4))
 
 		if bytes_data is None:
@@ -31,10 +32,7 @@ class GroupTitleUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupTitleUpdate, 
-Message Absolute ID: 4294902137
-Blocks:
-{self.AgentData}"""
+		return f"""Message Type: GroupTitleUpdate, Message Absolute ID: 4294902137, Blocks: {self.AgentData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

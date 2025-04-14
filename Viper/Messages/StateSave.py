@@ -22,7 +22,9 @@ class StateSave(Message):
 	absolute_id = 4294901887 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.DataBlock = DATABLOCK(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class StateSave(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: StateSave, 
-Message Absolute ID: 4294901887
-Blocks:
-{self.AgentData}
-{self.DataBlock}"""
+		return f"""Message Type: StateSave, Message Absolute ID: 4294901887, Blocks: {self.AgentData},{self.DataBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

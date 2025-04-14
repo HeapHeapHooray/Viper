@@ -17,6 +17,7 @@ class TransferInventoryAck(Message):
 	absolute_id = 4294902056 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.InfoBlock = INFOBLOCK(*((None,)*2))
 
 		if bytes_data is None:
@@ -29,10 +30,7 @@ class TransferInventoryAck(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TransferInventoryAck, 
-Message Absolute ID: 4294902056
-Blocks:
-{self.InfoBlock}"""
+		return f"""Message Type: TransferInventoryAck, Message Absolute ID: 4294902056, Blocks: {self.InfoBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

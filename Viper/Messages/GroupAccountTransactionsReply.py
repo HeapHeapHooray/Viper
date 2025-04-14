@@ -34,8 +34,11 @@ class GroupAccountTransactionsReply(Message):
 	absolute_id = 4294902118 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.MoneyData = MONEYDATA(*((None,)*4))
+
 		self.HistoryData = [HISTORYDATA(*((None,)*5))]
 
 		if bytes_data is None:
@@ -60,12 +63,7 @@ class GroupAccountTransactionsReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupAccountTransactionsReply, 
-Message Absolute ID: 4294902118
-Blocks:
-{self.AgentData}
-{self.MoneyData}
-{self.HistoryData}"""
+		return f"""Message Type: GroupAccountTransactionsReply, Message Absolute ID: 4294902118, Blocks: {self.AgentData},{self.MoneyData},{self.HistoryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

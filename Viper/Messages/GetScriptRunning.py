@@ -17,6 +17,7 @@ class GetScriptRunning(Message):
 	absolute_id = 4294902003 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Script = SCRIPT(*((None,)*2))
 
 		if bytes_data is None:
@@ -29,10 +30,7 @@ class GetScriptRunning(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GetScriptRunning, 
-Message Absolute ID: 4294902003
-Blocks:
-{self.Script}"""
+		return f"""Message Type: GetScriptRunning, Message Absolute ID: 4294902003, Blocks: {self.Script}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -18,6 +18,7 @@ class UUIDNameReply(Message):
 	absolute_id = 4294901996 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.UUIDNameBlock = [UUIDNAMEBLOCK(*((None,)*3))]
 
 		if bytes_data is None:
@@ -36,10 +37,7 @@ class UUIDNameReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: UUIDNameReply, 
-Message Absolute ID: 4294901996
-Blocks:
-{self.UUIDNameBlock}"""
+		return f"""Message Type: UUIDNameReply, Message Absolute ID: 4294901996, Blocks: {self.UUIDNameBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

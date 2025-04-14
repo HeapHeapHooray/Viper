@@ -22,7 +22,9 @@ class ChangeUserRights(Message):
 	absolute_id = 4294902081 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.Rights = [RIGHTS(*((None,)*2))]
 
 		if bytes_data is None:
@@ -44,11 +46,7 @@ class ChangeUserRights(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ChangeUserRights, 
-Message Absolute ID: 4294902081
-Blocks:
-{self.AgentData}
-{self.Rights}"""
+		return f"""Message Type: ChangeUserRights, Message Absolute ID: 4294902081, Blocks: {self.AgentData},{self.Rights}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

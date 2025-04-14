@@ -16,6 +16,7 @@ class OnlineNotification(Message):
 	absolute_id = 4294902082 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentBlock = [AGENTBLOCK(*((None,)*1))]
 
 		if bytes_data is None:
@@ -34,10 +35,7 @@ class OnlineNotification(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: OnlineNotification, 
-Message Absolute ID: 4294902082
-Blocks:
-{self.AgentBlock}"""
+		return f"""Message Type: OnlineNotification, Message Absolute ID: 4294902082, Blocks: {self.AgentBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

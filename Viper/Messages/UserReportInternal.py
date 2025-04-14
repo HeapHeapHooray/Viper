@@ -32,6 +32,7 @@ class UserReportInternal(Message):
 	absolute_id = 4294901781 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ReportData = REPORTDATA(*((None,)*17))
 
 		if bytes_data is None:
@@ -44,10 +45,7 @@ class UserReportInternal(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: UserReportInternal, 
-Message Absolute ID: 4294901781
-Blocks:
-{self.ReportData}"""
+		return f"""Message Type: UserReportInternal, Message Absolute ID: 4294901781, Blocks: {self.ReportData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""
