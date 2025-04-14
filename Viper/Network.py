@@ -81,5 +81,5 @@ class Network:
                     #print(packet.convert_to_string())
             except Exception as e:
                 print("Network's data receiving loop raised the following exception:",e)
-                raise e
+                #raise e
     
