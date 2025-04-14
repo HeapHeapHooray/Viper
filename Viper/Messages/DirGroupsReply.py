@@ -29,8 +29,11 @@ class DirGroupsReply(Message):
 	absolute_id = 4294901798 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.QueryData = QUERYDATA(*((None,)*1))
+
 		self.QueryReplies = [QUERYREPLIES(*((None,)*4))]
 
 		if bytes_data is None:
@@ -55,12 +58,7 @@ class DirGroupsReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DirGroupsReply, 
-Message Absolute ID: 4294901798
-Blocks:
-{self.AgentData}
-{self.QueryData}
-{self.QueryReplies}"""
+		return f"""Message Type: DirGroupsReply, Message Absolute ID: 4294901798, Blocks: {self.AgentData},{self.QueryData},{self.QueryReplies}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

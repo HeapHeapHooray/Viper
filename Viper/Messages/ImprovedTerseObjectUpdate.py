@@ -23,7 +23,9 @@ class ImprovedTerseObjectUpdate(Message):
 	absolute_id = 15 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.RegionData = REGIONDATA(*((None,)*2))
+
 		self.ObjectData = [OBJECTDATA(*((None,)*2))]
 
 		if bytes_data is None:
@@ -45,11 +47,7 @@ class ImprovedTerseObjectUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ImprovedTerseObjectUpdate, 
-Message Absolute ID: 15
-Blocks:
-{self.RegionData}
-{self.ObjectData}"""
+		return f"""Message Type: ImprovedTerseObjectUpdate, Message Absolute ID: 15, Blocks: {self.RegionData},{self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

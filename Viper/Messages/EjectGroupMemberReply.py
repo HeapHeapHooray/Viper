@@ -26,8 +26,11 @@ class EjectGroupMemberReply(Message):
 	absolute_id = 4294902106 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.GroupData = GROUPDATA(*((None,)*1))
+
 		self.EjectData = EJECTDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -46,12 +49,7 @@ class EjectGroupMemberReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: EjectGroupMemberReply, 
-Message Absolute ID: 4294902106
-Blocks:
-{self.AgentData}
-{self.GroupData}
-{self.EjectData}"""
+		return f"""Message Type: EjectGroupMemberReply, Message Absolute ID: 4294902106, Blocks: {self.AgentData},{self.GroupData},{self.EjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

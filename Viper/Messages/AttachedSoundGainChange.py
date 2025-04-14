@@ -17,6 +17,7 @@ class AttachedSoundGainChange(Message):
 	absolute_id = 65294 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.DataBlock = DATABLOCK(*((None,)*2))
 
 		if bytes_data is None:
@@ -29,10 +30,7 @@ class AttachedSoundGainChange(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AttachedSoundGainChange, 
-Message Absolute ID: 65294
-Blocks:
-{self.DataBlock}"""
+		return f"""Message Type: AttachedSoundGainChange, Message Absolute ID: 65294, Blocks: {self.DataBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

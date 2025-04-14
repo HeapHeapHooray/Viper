@@ -25,7 +25,9 @@ class SetStartLocationRequest(Message):
 	absolute_id = 4294902084 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.StartLocationData = STARTLOCATIONDATA(*((None,)*4))
 
 		if bytes_data is None:
@@ -41,11 +43,7 @@ class SetStartLocationRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SetStartLocationRequest, 
-Message Absolute ID: 4294902084
-Blocks:
-{self.AgentData}
-{self.StartLocationData}"""
+		return f"""Message Type: SetStartLocationRequest, Message Absolute ID: 4294902084, Blocks: {self.AgentData},{self.StartLocationData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

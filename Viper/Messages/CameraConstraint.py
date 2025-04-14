@@ -16,6 +16,7 @@ class CameraConstraint(Message):
 	absolute_id = 22 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.CameraCollidePlane = CAMERACOLLIDEPLANE(*((None,)*1))
 
 		if bytes_data is None:
@@ -28,10 +29,7 @@ class CameraConstraint(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: CameraConstraint, 
-Message Absolute ID: 22
-Blocks:
-{self.CameraCollidePlane}"""
+		return f"""Message Type: CameraConstraint, Message Absolute ID: 22, Blocks: {self.CameraCollidePlane}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

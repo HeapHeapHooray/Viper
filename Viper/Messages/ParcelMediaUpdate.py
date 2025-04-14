@@ -27,7 +27,9 @@ class ParcelMediaUpdate(Message):
 	absolute_id = 4294902180 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.DataBlock = DATABLOCK(*((None,)*3))
+
 		self.DataBlockExtended = DATABLOCKEXTENDED(*((None,)*5))
 
 		if bytes_data is None:
@@ -43,11 +45,7 @@ class ParcelMediaUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ParcelMediaUpdate, 
-Message Absolute ID: 4294902180
-Blocks:
-{self.DataBlock}
-{self.DataBlockExtended}"""
+		return f"""Message Type: ParcelMediaUpdate, Message Absolute ID: 4294902180, Blocks: {self.DataBlock},{self.DataBlockExtended}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

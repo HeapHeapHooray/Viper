@@ -18,6 +18,7 @@ class ReplyTaskInventory(Message):
 	absolute_id = 4294902050 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.InventoryData = INVENTORYDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -30,10 +31,7 @@ class ReplyTaskInventory(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ReplyTaskInventory, 
-Message Absolute ID: 4294902050
-Blocks:
-{self.InventoryData}"""
+		return f"""Message Type: ReplyTaskInventory, Message Absolute ID: 4294902050, Blocks: {self.InventoryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

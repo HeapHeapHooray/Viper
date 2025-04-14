@@ -28,7 +28,9 @@ class MapBlockRequest(Message):
 	absolute_id = 4294902167 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*5))
+
 		self.PositionData = POSITIONDATA(*((None,)*4))
 
 		if bytes_data is None:
@@ -44,11 +46,7 @@ class MapBlockRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MapBlockRequest, 
-Message Absolute ID: 4294902167
-Blocks:
-{self.AgentData}
-{self.PositionData}"""
+		return f"""Message Type: MapBlockRequest, Message Absolute ID: 4294902167, Blocks: {self.AgentData},{self.PositionData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

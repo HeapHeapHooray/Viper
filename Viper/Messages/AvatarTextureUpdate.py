@@ -29,8 +29,11 @@ class AvatarTextureUpdate(Message):
 	absolute_id = 4294901764 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.WearableData = [WEARABLEDATA(*((None,)*3))]
+
 		self.TextureData = [TEXTUREDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -61,12 +64,7 @@ class AvatarTextureUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AvatarTextureUpdate, 
-Message Absolute ID: 4294901764
-Blocks:
-{self.AgentData}
-{self.WearableData}
-{self.TextureData}"""
+		return f"""Message Type: AvatarTextureUpdate, Message Absolute ID: 4294901764, Blocks: {self.AgentData},{self.WearableData},{self.TextureData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

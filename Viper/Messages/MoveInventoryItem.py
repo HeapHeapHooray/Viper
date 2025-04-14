@@ -25,7 +25,9 @@ class MoveInventoryItem(Message):
 	absolute_id = 4294902028 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*3))
+
 		self.InventoryData = [INVENTORYDATA(*((None,)*3))]
 
 		if bytes_data is None:
@@ -47,11 +49,7 @@ class MoveInventoryItem(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MoveInventoryItem, 
-Message Absolute ID: 4294902028
-Blocks:
-{self.AgentData}
-{self.InventoryData}"""
+		return f"""Message Type: MoveInventoryItem, Message Absolute ID: 4294902028, Blocks: {self.AgentData},{self.InventoryData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

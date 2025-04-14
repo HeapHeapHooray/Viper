@@ -44,9 +44,13 @@ class GroupVoteHistoryItemReply(Message):
 	absolute_id = 4294902122 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.TransactionData = TRANSACTIONDATA(*((None,)*2))
+
 		self.HistoryItemData = HISTORYITEMDATA(*((None,)*10))
+
 		self.VoteItem = [VOTEITEM(*((None,)*3))]
 
 		if bytes_data is None:
@@ -74,13 +78,7 @@ class GroupVoteHistoryItemReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupVoteHistoryItemReply, 
-Message Absolute ID: 4294902122
-Blocks:
-{self.AgentData}
-{self.TransactionData}
-{self.HistoryItemData}
-{self.VoteItem}"""
+		return f"""Message Type: GroupVoteHistoryItemReply, Message Absolute ID: 4294902122, Blocks: {self.AgentData},{self.TransactionData},{self.HistoryItemData},{self.VoteItem}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

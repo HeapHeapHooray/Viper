@@ -24,7 +24,9 @@ class GroupProposalBallot(Message):
 	absolute_id = 4294902124 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ProposalData = PROPOSALDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -40,11 +42,7 @@ class GroupProposalBallot(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupProposalBallot, 
-Message Absolute ID: 4294902124
-Blocks:
-{self.AgentData}
-{self.ProposalData}"""
+		return f"""Message Type: GroupProposalBallot, Message Absolute ID: 4294902124, Blocks: {self.AgentData},{self.ProposalData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -23,7 +23,9 @@ class EventLocationReply(Message):
 	absolute_id = 4294902068 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.QueryData = QUERYDATA(*((None,)*1))
+
 		self.EventData = EVENTDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -39,11 +41,7 @@ class EventLocationReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: EventLocationReply, 
-Message Absolute ID: 4294902068
-Blocks:
-{self.QueryData}
-{self.EventData}"""
+		return f"""Message Type: EventLocationReply, Message Absolute ID: 4294902068, Blocks: {self.QueryData},{self.EventData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

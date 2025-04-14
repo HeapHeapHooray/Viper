@@ -19,9 +19,7 @@ class SubscribeLoad(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SubscribeLoad, 
-Message Absolute ID: 4294901767
-Blocks:"""
+		return f"""Message Type: SubscribeLoad, Message Absolute ID: 4294901767, Blocks: """
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -25,7 +25,9 @@ class GroupAccountSummaryRequest(Message):
 	absolute_id = 4294902113 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*3))
+
 		self.MoneyData = MONEYDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -41,11 +43,7 @@ class GroupAccountSummaryRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GroupAccountSummaryRequest, 
-Message Absolute ID: 4294902113
-Blocks:
-{self.AgentData}
-{self.MoneyData}"""
+		return f"""Message Type: GroupAccountSummaryRequest, Message Absolute ID: 4294902113, Blocks: {self.AgentData},{self.MoneyData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

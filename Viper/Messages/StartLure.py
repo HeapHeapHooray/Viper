@@ -28,8 +28,11 @@ class StartLure(Message):
 	absolute_id = 4294901830 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.Info = INFO(*((None,)*2))
+
 		self.TargetData = [TARGETDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -54,12 +57,7 @@ class StartLure(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: StartLure, 
-Message Absolute ID: 4294901830
-Blocks:
-{self.AgentData}
-{self.Info}
-{self.TargetData}"""
+		return f"""Message Type: StartLure, Message Absolute ID: 4294901830, Blocks: {self.AgentData},{self.Info},{self.TargetData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

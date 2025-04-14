@@ -27,6 +27,7 @@ class AgentUpdate(Message):
 	absolute_id = 4 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*12))
 
 		if bytes_data is None:
@@ -39,10 +40,7 @@ class AgentUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentUpdate, 
-Message Absolute ID: 4
-Blocks:
-{self.AgentData}"""
+		return f"""Message Type: AgentUpdate, Message Absolute ID: 4, Blocks: {self.AgentData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

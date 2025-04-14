@@ -72,11 +72,17 @@ class RegionInfo(Message):
 	absolute_id = 4294901902 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.RegionInfo = REGIONINFO(*((None,)*16))
+
 		self.RegionInfo2 = REGIONINFO2(*((None,)*5))
+
 		self.RegionInfo3 = [REGIONINFO3(*((None,)*1))]
+
 		self.RegionInfo5 = [REGIONINFO5(*((None,)*7))]
+
 		self.CombatSettings = [COMBATSETTINGS(*((None,)*6))]
 
 		if bytes_data is None:
@@ -122,15 +128,7 @@ class RegionInfo(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RegionInfo, 
-Message Absolute ID: 4294901902
-Blocks:
-{self.AgentData}
-{self.RegionInfo}
-{self.RegionInfo2}
-{self.RegionInfo3}
-{self.RegionInfo5}
-{self.CombatSettings}"""
+		return f"""Message Type: RegionInfo, Message Absolute ID: 4294901902, Blocks: {self.AgentData},{self.RegionInfo},{self.RegionInfo2},{self.RegionInfo3},{self.RegionInfo5},{self.CombatSettings}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

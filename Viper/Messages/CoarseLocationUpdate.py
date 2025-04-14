@@ -29,8 +29,11 @@ class CoarseLocationUpdate(Message):
 	absolute_id = 65286 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Location = [LOCATION(*((None,)*3))]
+
 		self.Index = INDEX(*((None,)*2))
+
 		self.AgentData = [AGENTDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -61,12 +64,7 @@ class CoarseLocationUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: CoarseLocationUpdate, 
-Message Absolute ID: 65286
-Blocks:
-{self.Location}
-{self.Index}
-{self.AgentData}"""
+		return f"""Message Type: CoarseLocationUpdate, Message Absolute ID: 65286, Blocks: {self.Location},{self.Index},{self.AgentData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -31,8 +31,11 @@ class LogParcelChanges(Message):
 	absolute_id = 4294901984 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.RegionData = REGIONDATA(*((None,)*1))
+
 		self.ParcelData = [PARCELDATA(*((None,)*6))]
 
 		if bytes_data is None:
@@ -57,12 +60,7 @@ class LogParcelChanges(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: LogParcelChanges, 
-Message Absolute ID: 4294901984
-Blocks:
-{self.AgentData}
-{self.RegionData}
-{self.ParcelData}"""
+		return f"""Message Type: LogParcelChanges, Message Absolute ID: 4294901984, Blocks: {self.AgentData},{self.RegionData},{self.ParcelData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

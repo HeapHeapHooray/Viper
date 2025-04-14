@@ -23,7 +23,9 @@ class AgentRequestSit(Message):
 	absolute_id = 6 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.TargetObject = TARGETOBJECT(*((None,)*2))
 
 		if bytes_data is None:
@@ -39,11 +41,7 @@ class AgentRequestSit(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentRequestSit, 
-Message Absolute ID: 6
-Blocks:
-{self.AgentData}
-{self.TargetObject}"""
+		return f"""Message Type: AgentRequestSit, Message Absolute ID: 6, Blocks: {self.AgentData},{self.TargetObject}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -16,6 +16,7 @@ class SimulatorMapUpdate(Message):
 	absolute_id = 4294901765 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.MapData = MAPDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -28,10 +29,7 @@ class SimulatorMapUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SimulatorMapUpdate, 
-Message Absolute ID: 4294901765
-Blocks:
-{self.MapData}"""
+		return f"""Message Type: SimulatorMapUpdate, Message Absolute ID: 4294901765, Blocks: {self.MapData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

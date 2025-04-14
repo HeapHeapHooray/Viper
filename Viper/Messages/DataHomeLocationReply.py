@@ -19,6 +19,7 @@ class DataHomeLocationReply(Message):
 	absolute_id = 4294901828 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Info = INFO(*((None,)*4))
 
 		if bytes_data is None:
@@ -31,10 +32,7 @@ class DataHomeLocationReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DataHomeLocationReply, 
-Message Absolute ID: 4294901828
-Blocks:
-{self.Info}"""
+		return f"""Message Type: DataHomeLocationReply, Message Absolute ID: 4294901828, Blocks: {self.Info}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

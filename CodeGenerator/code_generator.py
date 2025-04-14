@@ -74,12 +74,12 @@ def generate_message_class(message):
             MultipleBlock = True
             amount = int(block.get_quantity().split(" ")[1])
         if VariableBlock:
-            init = init + f"\n\t\tself.{block.get_name()} = [{block.get_name().upper()}(*((None,)*{len(block.get_variables())}))]"
+            init = init + f"\n\n\t\tself.{block.get_name()} = [{block.get_name().upper()}(*((None,)*{len(block.get_variables())}))]"
         elif MultipleBlock and amount:
-            init = init + f"\n\t\tself.{block.get_name()} = []"
+            init = init + f"\n\n\t\tself.{block.get_name()} = []"
             init = init + f"\n\t\tfor i in range({amount}):\n\t\t\tself.{block.get_name()}.append({block.get_name().upper()}(*((None,)*{len(block.get_variables())})))"
         else:
-            init = init + f"\n\t\tself.{block.get_name()} = {block.get_name().upper()}(*((None,)*{len(block.get_variables())}))"
+            init = init + f"\n\n\t\tself.{block.get_name()} = {block.get_name().upper()}(*((None,)*{len(block.get_variables())}))"
 
     # Return if bytes_data is None, i.e. there is nothing to load, and since everything is initialized to None we can return already.
     init = init + "\n\n\t\tif bytes_data is None:\n\t\t\treturn"
@@ -107,13 +107,13 @@ def generate_message_class(message):
         
     convert_to_string = "\n\tdef convert_to_string(self) -> str:"
 
-    convert_to_string = convert_to_string + f'\n\t\treturn f"""Message Type: {message.get_message_name()}, \nMessage Absolute ID: {message.get_message_absolute_id()}\nBlocks:'
+    convert_to_string = convert_to_string + f'\n\t\treturn f"""Message Type: {message.get_message_name()}, Message Absolute ID: {message.get_message_absolute_id()}, Blocks: '
 
-
+    blocks_list = []
     for block in blocks:
-        convert_to_string = convert_to_string + f'\n{"{"+"self."+block.get_name()+"}"}'
+        blocks_list.append(f'{"{"+"self."+block.get_name()+"}"}')
 
-    convert_to_string = convert_to_string + '"""'
+    convert_to_string = convert_to_string + ",".join(blocks_list) + '"""'
 
     convert_to_bytes = "\n\tdef convert_to_bytes(self) -> bytes:"
 

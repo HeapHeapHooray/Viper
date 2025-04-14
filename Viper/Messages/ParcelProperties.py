@@ -80,9 +80,13 @@ class ParcelProperties(Message):
 	absolute_id = 23 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ParcelData = PARCELDATA(*((None,)*49))
+
 		self.AgeVerificationBlock = AGEVERIFICATIONBLOCK(*((None,)*1))
+
 		self.RegionAllowAccessBlock = REGIONALLOWACCESSBLOCK(*((None,)*1))
+
 		self.ParcelEnvironmentBlock = PARCELENVIRONMENTBLOCK(*((None,)*2))
 
 		if bytes_data is None:
@@ -104,13 +108,7 @@ class ParcelProperties(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ParcelProperties, 
-Message Absolute ID: 23
-Blocks:
-{self.ParcelData}
-{self.AgeVerificationBlock}
-{self.RegionAllowAccessBlock}
-{self.ParcelEnvironmentBlock}"""
+		return f"""Message Type: ParcelProperties, Message Absolute ID: 23, Blocks: {self.ParcelData},{self.AgeVerificationBlock},{self.RegionAllowAccessBlock},{self.ParcelEnvironmentBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

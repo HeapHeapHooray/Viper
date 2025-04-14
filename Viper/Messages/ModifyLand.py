@@ -39,9 +39,13 @@ class ModifyLand(Message):
 	absolute_id = 4294901884 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ModifyBlock = MODIFYBLOCK(*((None,)*4))
+
 		self.ParcelData = [PARCELDATA(*((None,)*5))]
+
 		self.ModifyBlockExtended = [MODIFYBLOCKEXTENDED(*((None,)*1))]
 
 		if bytes_data is None:
@@ -75,13 +79,7 @@ class ModifyLand(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ModifyLand, 
-Message Absolute ID: 4294901884
-Blocks:
-{self.AgentData}
-{self.ModifyBlock}
-{self.ParcelData}
-{self.ModifyBlockExtended}"""
+		return f"""Message Type: ModifyLand, Message Absolute ID: 4294901884, Blocks: {self.AgentData},{self.ModifyBlock},{self.ParcelData},{self.ModifyBlockExtended}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

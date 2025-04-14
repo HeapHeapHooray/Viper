@@ -26,7 +26,9 @@ class StartGroupProposal(Message):
 	absolute_id = 4294902123 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ProposalData = PROPOSALDATA(*((None,)*5))
 
 		if bytes_data is None:
@@ -42,11 +44,7 @@ class StartGroupProposal(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: StartGroupProposal, 
-Message Absolute ID: 4294902123
-Blocks:
-{self.AgentData}
-{self.ProposalData}"""
+		return f"""Message Type: StartGroupProposal, Message Absolute ID: 4294902123, Blocks: {self.AgentData},{self.ProposalData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

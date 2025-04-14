@@ -22,6 +22,7 @@ class NeighborList(Message):
 	absolute_id = 3 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.NeighborBlock = []
 		for i in range(4):
 			self.NeighborBlock.append(NEIGHBORBLOCK(*((None,)*7)))
@@ -41,10 +42,7 @@ class NeighborList(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: NeighborList, 
-Message Absolute ID: 3
-Blocks:
-{self.NeighborBlock}"""
+		return f"""Message Type: NeighborList, Message Absolute ID: 3, Blocks: {self.NeighborBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -19,9 +19,7 @@ class CloseCircuit(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: CloseCircuit, 
-Message Absolute ID: 4294967293
-Blocks:"""
+		return f"""Message Type: CloseCircuit, Message Absolute ID: 4294967293, Blocks: """
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

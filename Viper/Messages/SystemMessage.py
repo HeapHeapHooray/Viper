@@ -23,7 +23,9 @@ class SystemMessage(Message):
 	absolute_id = 4294902164 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.MethodData = METHODDATA(*((None,)*3))
+
 		self.ParamList = [PARAMLIST(*((None,)*1))]
 
 		if bytes_data is None:
@@ -45,11 +47,7 @@ class SystemMessage(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SystemMessage, 
-Message Absolute ID: 4294902164
-Blocks:
-{self.MethodData}
-{self.ParamList}"""
+		return f"""Message Type: SystemMessage, Message Absolute ID: 4294902164, Blocks: {self.MethodData},{self.ParamList}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

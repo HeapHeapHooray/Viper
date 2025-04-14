@@ -16,6 +16,7 @@ class KillObject(Message):
 	absolute_id = 16 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ObjectData = [OBJECTDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -34,10 +35,7 @@ class KillObject(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: KillObject, 
-Message Absolute ID: 16
-Blocks:
-{self.ObjectData}"""
+		return f"""Message Type: KillObject, Message Absolute ID: 16, Blocks: {self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

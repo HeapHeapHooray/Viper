@@ -28,8 +28,11 @@ class CreateLandmarkForEvent(Message):
 	absolute_id = 4294902066 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.EventData = EVENTDATA(*((None,)*1))
+
 		self.InventoryBlock = INVENTORYBLOCK(*((None,)*2))
 
 		if bytes_data is None:
@@ -48,12 +51,7 @@ class CreateLandmarkForEvent(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: CreateLandmarkForEvent, 
-Message Absolute ID: 4294902066
-Blocks:
-{self.AgentData}
-{self.EventData}
-{self.InventoryBlock}"""
+		return f"""Message Type: CreateLandmarkForEvent, Message Absolute ID: 4294902066, Blocks: {self.AgentData},{self.EventData},{self.InventoryBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

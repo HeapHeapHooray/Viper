@@ -25,7 +25,9 @@ class ParcelDivide(Message):
 	absolute_id = 4294901971 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ParcelData = PARCELDATA(*((None,)*4))
 
 		if bytes_data is None:
@@ -41,11 +43,7 @@ class ParcelDivide(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ParcelDivide, 
-Message Absolute ID: 4294901971
-Blocks:
-{self.AgentData}
-{self.ParcelData}"""
+		return f"""Message Type: ParcelDivide, Message Absolute ID: 4294901971, Blocks: {self.AgentData},{self.ParcelData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

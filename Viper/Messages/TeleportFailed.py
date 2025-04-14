@@ -23,7 +23,9 @@ class TeleportFailed(Message):
 	absolute_id = 4294901834 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Info = INFO(*((None,)*2))
+
 		self.AlertInfo = [ALERTINFO(*((None,)*2))]
 
 		if bytes_data is None:
@@ -45,11 +47,7 @@ class TeleportFailed(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: TeleportFailed, 
-Message Absolute ID: 4294901834
-Blocks:
-{self.Info}
-{self.AlertInfo}"""
+		return f"""Message Type: TeleportFailed, Message Absolute ID: 4294901834, Blocks: {self.Info},{self.AlertInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

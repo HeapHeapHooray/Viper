@@ -42,6 +42,7 @@ class ObjectProperties(Message):
 	absolute_id = 65289 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.ObjectData = [OBJECTDATA(*((None,)*27))]
 
 		if bytes_data is None:
@@ -60,10 +61,7 @@ class ObjectProperties(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ObjectProperties, 
-Message Absolute ID: 65289
-Blocks:
-{self.ObjectData}"""
+		return f"""Message Type: ObjectProperties, Message Absolute ID: 65289, Blocks: {self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

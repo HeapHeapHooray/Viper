@@ -22,6 +22,7 @@ class RegionPresenceResponse(Message):
 	absolute_id = 4294901776 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.RegionData = [REGIONDATA(*((None,)*7))]
 
 		if bytes_data is None:
@@ -40,10 +41,7 @@ class RegionPresenceResponse(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RegionPresenceResponse, 
-Message Absolute ID: 4294901776
-Blocks:
-{self.RegionData}"""
+		return f"""Message Type: RegionPresenceResponse, Message Absolute ID: 4294901776, Blocks: {self.RegionData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

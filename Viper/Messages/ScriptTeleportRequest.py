@@ -24,7 +24,9 @@ class ScriptTeleportRequest(Message):
 	absolute_id = 4294901955 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Data = DATA(*((None,)*4))
+
 		self.Options = [OPTIONS(*((None,)*1))]
 
 		if bytes_data is None:
@@ -46,11 +48,7 @@ class ScriptTeleportRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ScriptTeleportRequest, 
-Message Absolute ID: 4294901955
-Blocks:
-{self.Data}
-{self.Options}"""
+		return f"""Message Type: ScriptTeleportRequest, Message Absolute ID: 4294901955, Blocks: {self.Data},{self.Options}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

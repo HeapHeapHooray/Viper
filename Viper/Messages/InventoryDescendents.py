@@ -53,8 +53,11 @@ class InventoryDescendents(Message):
 	absolute_id = 4294902038 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*5))
+
 		self.FolderData = [FOLDERDATA(*((None,)*4))]
+
 		self.ItemData = [ITEMDATA(*((None,)*21))]
 
 		if bytes_data is None:
@@ -85,12 +88,7 @@ class InventoryDescendents(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: InventoryDescendents, 
-Message Absolute ID: 4294902038
-Blocks:
-{self.AgentData}
-{self.FolderData}
-{self.ItemData}"""
+		return f"""Message Type: InventoryDescendents, Message Absolute ID: 4294902038, Blocks: {self.AgentData},{self.FolderData},{self.ItemData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

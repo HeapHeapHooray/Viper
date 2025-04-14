@@ -34,8 +34,11 @@ class GodUpdateRegionInfo(Message):
 	absolute_id = 4294901903 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.RegionInfo = REGIONINFO(*((None,)*8))
+
 		self.RegionInfo2 = [REGIONINFO2(*((None,)*1))]
 
 		if bytes_data is None:
@@ -60,12 +63,7 @@ class GodUpdateRegionInfo(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GodUpdateRegionInfo, 
-Message Absolute ID: 4294901903
-Blocks:
-{self.AgentData}
-{self.RegionInfo}
-{self.RegionInfo2}"""
+		return f"""Message Type: GodUpdateRegionInfo, Message Absolute ID: 4294901903, Blocks: {self.AgentData},{self.RegionInfo},{self.RegionInfo2}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

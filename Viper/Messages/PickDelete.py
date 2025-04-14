@@ -22,7 +22,9 @@ class PickDelete(Message):
 	absolute_id = 4294901946 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.Data = DATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class PickDelete(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: PickDelete, 
-Message Absolute ID: 4294901946
-Blocks:
-{self.AgentData}
-{self.Data}"""
+		return f"""Message Type: PickDelete, Message Absolute ID: 4294901946, Blocks: {self.AgentData},{self.Data}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

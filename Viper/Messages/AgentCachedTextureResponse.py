@@ -25,7 +25,9 @@ class AgentCachedTextureResponse(Message):
 	absolute_id = 4294902145 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*3))
+
 		self.WearableData = [WEARABLEDATA(*((None,)*3))]
 
 		if bytes_data is None:
@@ -47,11 +49,7 @@ class AgentCachedTextureResponse(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentCachedTextureResponse, 
-Message Absolute ID: 4294902145
-Blocks:
-{self.AgentData}
-{self.WearableData}"""
+		return f"""Message Type: AgentCachedTextureResponse, Message Absolute ID: 4294902145, Blocks: {self.AgentData},{self.WearableData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

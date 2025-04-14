@@ -39,8 +39,11 @@ class RoutedMoneyBalanceReply(Message):
 	absolute_id = 4294902075 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.TargetBlock = TARGETBLOCK(*((None,)*2))
+
 		self.MoneyData = MONEYDATA(*((None,)*7))
+
 		self.TransactionInfo = TRANSACTIONINFO(*((None,)*7))
 
 		if bytes_data is None:
@@ -59,12 +62,7 @@ class RoutedMoneyBalanceReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RoutedMoneyBalanceReply, 
-Message Absolute ID: 4294902075
-Blocks:
-{self.TargetBlock}
-{self.MoneyData}
-{self.TransactionInfo}"""
+		return f"""Message Type: RoutedMoneyBalanceReply, Message Absolute ID: 4294902075, Blocks: {self.TargetBlock},{self.MoneyData},{self.TransactionInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -26,6 +26,7 @@ class ScriptSensorRequest(Message):
 	absolute_id = 4294902007 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Requester = REQUESTER(*((None,)*11))
 
 		if bytes_data is None:
@@ -38,10 +39,7 @@ class ScriptSensorRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ScriptSensorRequest, 
-Message Absolute ID: 4294902007
-Blocks:
-{self.Requester}"""
+		return f"""Message Type: ScriptSensorRequest, Message Absolute ID: 4294902007, Blocks: {self.Requester}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

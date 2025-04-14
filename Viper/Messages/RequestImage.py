@@ -26,7 +26,9 @@ class RequestImage(Message):
 	absolute_id = 8 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.RequestImage = [REQUESTIMAGE(*((None,)*5))]
 
 		if bytes_data is None:
@@ -48,11 +50,7 @@ class RequestImage(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RequestImage, 
-Message Absolute ID: 8
-Blocks:
-{self.AgentData}
-{self.RequestImage}"""
+		return f"""Message Type: RequestImage, Message Absolute ID: 8, Blocks: {self.AgentData},{self.RequestImage}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

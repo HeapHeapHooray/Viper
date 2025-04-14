@@ -32,8 +32,11 @@ class DeRezObject(Message):
 	absolute_id = 4294902051 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.AgentBlock = AGENTBLOCK(*((None,)*6))
+
 		self.ObjectData = [OBJECTDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -58,12 +61,7 @@ class DeRezObject(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DeRezObject, 
-Message Absolute ID: 4294902051
-Blocks:
-{self.AgentData}
-{self.AgentBlock}
-{self.ObjectData}"""
+		return f"""Message Type: DeRezObject, Message Absolute ID: 4294902051, Blocks: {self.AgentData},{self.AgentBlock},{self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

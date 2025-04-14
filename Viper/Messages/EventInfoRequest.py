@@ -22,7 +22,9 @@ class EventInfoRequest(Message):
 	absolute_id = 4294901939 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.EventData = EVENTDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class EventInfoRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: EventInfoRequest, 
-Message Absolute ID: 4294901939
-Blocks:
-{self.AgentData}
-{self.EventData}"""
+		return f"""Message Type: EventInfoRequest, Message Absolute ID: 4294901939, Blocks: {self.AgentData},{self.EventData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

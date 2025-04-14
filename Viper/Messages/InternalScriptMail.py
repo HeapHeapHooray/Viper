@@ -19,6 +19,7 @@ class InternalScriptMail(Message):
 	absolute_id = 65296 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.DataBlock = DATABLOCK(*((None,)*4))
 
 		if bytes_data is None:
@@ -31,10 +32,7 @@ class InternalScriptMail(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: InternalScriptMail, 
-Message Absolute ID: 65296
-Blocks:
-{self.DataBlock}"""
+		return f"""Message Type: InternalScriptMail, Message Absolute ID: 65296, Blocks: {self.DataBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

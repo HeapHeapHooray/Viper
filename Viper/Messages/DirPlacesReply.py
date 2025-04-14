@@ -35,9 +35,13 @@ class DirPlacesReply(Message):
 	absolute_id = 4294901795 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.QueryData = [QUERYDATA(*((None,)*1))]
+
 		self.QueryReplies = [QUERYREPLIES(*((None,)*5))]
+
 		self.StatusData = [STATUSDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -77,13 +81,7 @@ class DirPlacesReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DirPlacesReply, 
-Message Absolute ID: 4294901795
-Blocks:
-{self.AgentData}
-{self.QueryData}
-{self.QueryReplies}
-{self.StatusData}"""
+		return f"""Message Type: DirPlacesReply, Message Absolute ID: 4294901795, Blocks: {self.AgentData},{self.QueryData},{self.QueryReplies},{self.StatusData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

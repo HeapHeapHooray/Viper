@@ -28,8 +28,11 @@ class ParcelSelectObjects(Message):
 	absolute_id = 4294901962 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.ParcelData = PARCELDATA(*((None,)*2))
+
 		self.ReturnIDs = [RETURNIDS(*((None,)*1))]
 
 		if bytes_data is None:
@@ -54,12 +57,7 @@ class ParcelSelectObjects(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ParcelSelectObjects, 
-Message Absolute ID: 4294901962
-Blocks:
-{self.AgentData}
-{self.ParcelData}
-{self.ReturnIDs}"""
+		return f"""Message Type: ParcelSelectObjects, Message Absolute ID: 4294901962, Blocks: {self.AgentData},{self.ParcelData},{self.ReturnIDs}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

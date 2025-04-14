@@ -32,9 +32,13 @@ class AvatarAnimation(Message):
 	absolute_id = 20 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.Sender = SENDER(*((None,)*1))
+
 		self.AnimationList = [ANIMATIONLIST(*((None,)*2))]
+
 		self.AnimationSourceList = [ANIMATIONSOURCELIST(*((None,)*1))]
+
 		self.PhysicalAvatarEventList = [PHYSICALAVATAREVENTLIST(*((None,)*1))]
 
 		if bytes_data is None:
@@ -74,13 +78,7 @@ class AvatarAnimation(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AvatarAnimation, 
-Message Absolute ID: 20
-Blocks:
-{self.Sender}
-{self.AnimationList}
-{self.AnimationSourceList}
-{self.PhysicalAvatarEventList}"""
+		return f"""Message Type: AvatarAnimation, Message Absolute ID: 20, Blocks: {self.Sender},{self.AnimationList},{self.AnimationSourceList},{self.PhysicalAvatarEventList}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

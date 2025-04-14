@@ -21,7 +21,9 @@ class EventLocationRequest(Message):
 	absolute_id = 4294902067 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.QueryData = QUERYDATA(*((None,)*1))
+
 		self.EventData = EVENTDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -37,11 +39,7 @@ class EventLocationRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: EventLocationRequest, 
-Message Absolute ID: 4294902067
-Blocks:
-{self.QueryData}
-{self.EventData}"""
+		return f"""Message Type: EventLocationRequest, Message Absolute ID: 4294902067, Blocks: {self.QueryData},{self.EventData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

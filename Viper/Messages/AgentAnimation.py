@@ -28,8 +28,11 @@ class AgentAnimation(Message):
 	absolute_id = 5 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.AnimationList = [ANIMATIONLIST(*((None,)*2))]
+
 		self.PhysicalAvatarEventList = [PHYSICALAVATAREVENTLIST(*((None,)*1))]
 
 		if bytes_data is None:
@@ -60,12 +63,7 @@ class AgentAnimation(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentAnimation, 
-Message Absolute ID: 5
-Blocks:
-{self.AgentData}
-{self.AnimationList}
-{self.PhysicalAvatarEventList}"""
+		return f"""Message Type: AgentAnimation, Message Absolute ID: 5, Blocks: {self.AgentData},{self.AnimationList},{self.PhysicalAvatarEventList}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

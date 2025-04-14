@@ -21,7 +21,9 @@ class LayerData(Message):
 	absolute_id = 11 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.LayerID = LAYERID(*((None,)*1))
+
 		self.LayerData = LAYERDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -37,11 +39,7 @@ class LayerData(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: LayerData, 
-Message Absolute ID: 11
-Blocks:
-{self.LayerID}
-{self.LayerData}"""
+		return f"""Message Type: LayerData, Message Absolute ID: 11, Blocks: {self.LayerID},{self.LayerData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

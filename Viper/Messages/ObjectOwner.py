@@ -29,8 +29,11 @@ class ObjectOwner(Message):
 	absolute_id = 4294901860 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.HeaderData = HEADERDATA(*((None,)*3))
+
 		self.ObjectData = [OBJECTDATA(*((None,)*1))]
 
 		if bytes_data is None:
@@ -55,12 +58,7 @@ class ObjectOwner(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ObjectOwner, 
-Message Absolute ID: 4294901860
-Blocks:
-{self.AgentData}
-{self.HeaderData}
-{self.ObjectData}"""
+		return f"""Message Type: ObjectOwner, Message Absolute ID: 4294901860, Blocks: {self.AgentData},{self.HeaderData},{self.ObjectData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -28,6 +28,7 @@ class MoneyTransferBackend(Message):
 	absolute_id = 4294902072 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.MoneyData = MONEYDATA(*((None,)*13))
 
 		if bytes_data is None:
@@ -40,10 +41,7 @@ class MoneyTransferBackend(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: MoneyTransferBackend, 
-Message Absolute ID: 4294902072
-Blocks:
-{self.MoneyData}"""
+		return f"""Message Type: MoneyTransferBackend, Message Absolute ID: 4294902072, Blocks: {self.MoneyData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

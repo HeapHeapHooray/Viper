@@ -23,7 +23,9 @@ class UserInfoReply(Message):
 	absolute_id = 4294902160 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.UserData = USERDATA(*((None,)*3))
 
 		if bytes_data is None:
@@ -39,11 +41,7 @@ class UserInfoReply(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: UserInfoReply, 
-Message Absolute ID: 4294902160
-Blocks:
-{self.AgentData}
-{self.UserData}"""
+		return f"""Message Type: UserInfoReply, Message Absolute ID: 4294902160, Blocks: {self.AgentData},{self.UserData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

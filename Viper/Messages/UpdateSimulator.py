@@ -19,6 +19,7 @@ class UpdateSimulator(Message):
 	absolute_id = 4294901777 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.SimulatorInfo = SIMULATORINFO(*((None,)*4))
 
 		if bytes_data is None:
@@ -31,10 +32,7 @@ class UpdateSimulator(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: UpdateSimulator, 
-Message Absolute ID: 4294901777
-Blocks:
-{self.SimulatorInfo}"""
+		return f"""Message Type: UpdateSimulator, Message Absolute ID: 4294901777, Blocks: {self.SimulatorInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

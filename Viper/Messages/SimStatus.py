@@ -22,7 +22,9 @@ class SimStatus(Message):
 	absolute_id = 65292 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.SimStatus = SIMSTATUS(*((None,)*2))
+
 		self.SimFlags = SIMFLAGS(*((None,)*1))
 
 		if bytes_data is None:
@@ -38,11 +40,7 @@ class SimStatus(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SimStatus, 
-Message Absolute ID: 65292
-Blocks:
-{self.SimStatus}
-{self.SimFlags}"""
+		return f"""Message Type: SimStatus, Message Absolute ID: 65292, Blocks: {self.SimStatus},{self.SimFlags}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

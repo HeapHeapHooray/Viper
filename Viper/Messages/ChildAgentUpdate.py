@@ -85,14 +85,23 @@ class ChildAgentUpdate(Message):
 	absolute_id = 25 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*26))
+
 		self.GroupData = [GROUPDATA(*((None,)*3))]
+
 		self.AnimationData = [ANIMATIONDATA(*((None,)*2))]
+
 		self.GranterBlock = [GRANTERBLOCK(*((None,)*1))]
+
 		self.NVPairData = [NVPAIRDATA(*((None,)*1))]
+
 		self.VisualParam = [VISUALPARAM(*((None,)*1))]
+
 		self.AgentAccess = [AGENTACCESS(*((None,)*2))]
+
 		self.AgentInfo = [AGENTINFO(*((None,)*1))]
+
 		self.AgentInventoryHost = [AGENTINVENTORYHOST(*((None,)*1))]
 
 		if bytes_data is None:
@@ -177,18 +186,7 @@ class ChildAgentUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: ChildAgentUpdate, 
-Message Absolute ID: 25
-Blocks:
-{self.AgentData}
-{self.GroupData}
-{self.AnimationData}
-{self.GranterBlock}
-{self.NVPairData}
-{self.VisualParam}
-{self.AgentAccess}
-{self.AgentInfo}
-{self.AgentInventoryHost}"""
+		return f"""Message Type: ChildAgentUpdate, Message Absolute ID: 25, Blocks: {self.AgentData},{self.GroupData},{self.AnimationData},{self.GranterBlock},{self.NVPairData},{self.VisualParam},{self.AgentAccess},{self.AgentInfo},{self.AgentInventoryHost}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

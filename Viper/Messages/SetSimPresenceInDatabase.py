@@ -23,6 +23,7 @@ class SetSimPresenceInDatabase(Message):
 	absolute_id = 4294901783 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.SimData = SIMDATA(*((None,)*8))
 
 		if bytes_data is None:
@@ -35,10 +36,7 @@ class SetSimPresenceInDatabase(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: SetSimPresenceInDatabase, 
-Message Absolute ID: 4294901783
-Blocks:
-{self.SimData}"""
+		return f"""Message Type: SetSimPresenceInDatabase, Message Absolute ID: 4294901783, Blocks: {self.SimData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

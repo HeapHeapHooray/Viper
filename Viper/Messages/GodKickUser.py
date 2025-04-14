@@ -20,6 +20,7 @@ class GodKickUser(Message):
 	absolute_id = 4294901925 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.UserInfo = USERINFO(*((None,)*5))
 
 		if bytes_data is None:
@@ -32,10 +33,7 @@ class GodKickUser(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: GodKickUser, 
-Message Absolute ID: 4294901925
-Blocks:
-{self.UserInfo}"""
+		return f"""Message Type: GodKickUser, Message Absolute ID: 4294901925, Blocks: {self.UserInfo}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -30,8 +30,11 @@ class AgentMovementComplete(Message):
 	absolute_id = 4294902010 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.Data = DATA(*((None,)*4))
+
 		self.SimData = SIMDATA(*((None,)*1))
 
 		if bytes_data is None:
@@ -50,12 +53,7 @@ class AgentMovementComplete(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentMovementComplete, 
-Message Absolute ID: 4294902010
-Blocks:
-{self.AgentData}
-{self.Data}
-{self.SimData}"""
+		return f"""Message Type: AgentMovementComplete, Message Absolute ID: 4294902010, Blocks: {self.AgentData},{self.Data},{self.SimData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

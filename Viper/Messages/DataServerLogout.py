@@ -19,6 +19,7 @@ class DataServerLogout(Message):
 	absolute_id = 4294902011 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.UserData = USERDATA(*((None,)*4))
 
 		if bytes_data is None:
@@ -31,10 +32,7 @@ class DataServerLogout(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: DataServerLogout, 
-Message Absolute ID: 4294902011
-Blocks:
-{self.UserData}"""
+		return f"""Message Type: DataServerLogout, Message Absolute ID: 4294902011, Blocks: {self.UserData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

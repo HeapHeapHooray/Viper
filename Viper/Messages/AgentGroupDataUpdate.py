@@ -26,7 +26,9 @@ class AgentGroupDataUpdate(Message):
 	absolute_id = 4294902149 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*1))
+
 		self.GroupData = [GROUPDATA(*((None,)*6))]
 
 		if bytes_data is None:
@@ -48,11 +50,7 @@ class AgentGroupDataUpdate(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AgentGroupDataUpdate, 
-Message Absolute ID: 4294902149
-Blocks:
-{self.AgentData}
-{self.GroupData}"""
+		return f"""Message Type: AgentGroupDataUpdate, Message Absolute ID: 4294902149, Blocks: {self.AgentData},{self.GroupData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

@@ -23,7 +23,9 @@ class RemoveMuteListEntry(Message):
 	absolute_id = 4294902024 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AgentData = AGENTDATA(*((None,)*2))
+
 		self.MuteData = MUTEDATA(*((None,)*2))
 
 		if bytes_data is None:
@@ -39,11 +41,7 @@ class RemoveMuteListEntry(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: RemoveMuteListEntry, 
-Message Absolute ID: 4294902024
-Blocks:
-{self.AgentData}
-{self.MuteData}"""
+		return f"""Message Type: RemoveMuteListEntry, Message Absolute ID: 4294902024, Blocks: {self.AgentData},{self.MuteData}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""

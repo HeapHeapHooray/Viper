@@ -20,6 +20,7 @@ class AssetUploadRequest(Message):
 	absolute_id = 4294902093 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
+
 		self.AssetBlock = ASSETBLOCK(*((None,)*5))
 
 		if bytes_data is None:
@@ -32,10 +33,7 @@ class AssetUploadRequest(Message):
 
 
 	def convert_to_string(self) -> str:
-		return f"""Message Type: AssetUploadRequest, 
-Message Absolute ID: 4294902093
-Blocks:
-{self.AssetBlock}"""
+		return f"""Message Type: AssetUploadRequest, Message Absolute ID: 4294902093, Blocks: {self.AssetBlock}"""
 
 	def convert_to_bytes(self) -> bytes:
 		output = b""
