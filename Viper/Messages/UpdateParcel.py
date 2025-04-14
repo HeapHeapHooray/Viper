@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -40,7 +41,7 @@ class UpdateParcel(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64","uuid","unsigned byte","unsigned byte","variable1","variable1","variable1","float","float","signed int32","signed int32","unsigned byte","unsigned byte","unsigned byte","uuid","vector3","signed int32","uuid","unsigned byte","unsigned byte",],remaining_bytes)
 		self.ParcelData = PARCELDATA(*unpacked_data)

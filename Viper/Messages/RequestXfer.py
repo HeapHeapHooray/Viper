@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -26,7 +27,7 @@ class RequestXfer(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","variable1","unsigned byte","unsigned byte","unsigned byte","uuid","signed int16",],remaining_bytes)
 		self.XferID = XFERID(*unpacked_data)

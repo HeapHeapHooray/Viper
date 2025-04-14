@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -97,7 +98,7 @@ class ChildAgentUpdate(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int32","uuid","uuid","vector3","vector3","vector3","vector3","vector3","vector3","vector3","unsigned byte","float","float","variable1","unsigned int32","unit_quaternion","unit_quaternion","unsigned int32","float","unsigned byte","unsigned byte","uuid","unsigned byte","variable2","uuid",],remaining_bytes)
 		self.AgentData = AGENTDATA(*unpacked_data)

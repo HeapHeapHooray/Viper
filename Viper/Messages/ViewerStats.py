@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -71,7 +72,7 @@ class ViewerStats(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","unsigned int32","float","float","float","unsigned byte","float","double","signed int32","unsigned int32","variable1","variable1","variable1",],remaining_bytes)
 		self.AgentData = AGENTDATA(*unpacked_data)

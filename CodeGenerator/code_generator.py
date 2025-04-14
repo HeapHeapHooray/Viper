@@ -48,7 +48,7 @@ def multiple_unpacking(block,unpacking_body):
 def generate_message_class(message):
     info = """# This code is automatically generated for the Viper viewer project, and the generation code can be found at: https://github.com/HeapHeapHooray/Viper"""
     
-    imports = "from Message.Message import Message\nimport BytesUtils\nfrom dataclasses import dataclass"
+    imports = "from Message.Message import Message\nimport BytesUtils\nimport Utils\nfrom dataclasses import dataclass"
 
     blocks = message.get_message_blocks()
 
@@ -85,6 +85,8 @@ def generate_message_class(message):
     init = init + "\n\n\t\tif bytes_data is None:\n\t\t\treturn"
 
     unpacking_body = "\n\t\tremaining_bytes = bytes_data\n"
+    if message.get_message_encoding() == "Zerocoded":
+        unpacking_body = "\n\t\tremaining_bytes = Utils.zero_decode(bytes_data)\n"
     for block in blocks:
         amount = 0
         VariableBlock = False

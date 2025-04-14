@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -65,7 +66,7 @@ class RezObject(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
 		self.AgentData = AGENTDATA(*unpacked_data)

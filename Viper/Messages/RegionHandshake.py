@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -66,7 +67,7 @@ class RegionHandshake(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","variable1","uuid","unsigned byte","float","float","uuid","uuid","uuid","uuid","uuid","uuid","uuid","uuid","uuid","float","float","float","float","float","float","float","float",],remaining_bytes)
 		self.RegionInfo = REGIONINFO(*unpacked_data)

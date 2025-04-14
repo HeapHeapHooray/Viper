@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -87,7 +88,7 @@ class ParcelProperties(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","signed int32","unsigned byte","signed int32","signed int32","signed int32","signed int32","uuid","unsigned byte","unsigned int32","signed int32","signed int32","signed int32","vector3","vector3","variable2","signed int32","unsigned byte","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","float","signed int32","unsigned int32","signed int32","variable1","variable1","variable1","variable1","uuid","unsigned byte","uuid","signed int32","float","unsigned byte","uuid","uuid","vector3","vector3","unsigned byte","unsigned byte","unsigned byte","unsigned byte","unsigned byte",],remaining_bytes)
 		self.ParcelData = PARCELDATA(*unpacked_data)

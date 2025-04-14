@@ -106,6 +106,8 @@ class Message:
             relative_id = int(raw_relative_id,10)
 
         return relative_id
+    def get_message_encoding(self):
+        return self.get_message_signature_as_list()[4]
     def get_message_absolute_id(self):
         frequency = self.get_message_frequency()
         relative_id = self.get_message_relative_id()

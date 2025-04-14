@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -38,7 +39,7 @@ class RequestParcelTransfer(Message):
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","uuid","uuid","uuid","unsigned byte","signed int32","signed int32","signed int32","signed int32","unsigned byte",],remaining_bytes)
 		self.Data = DATA(*unpacked_data)
