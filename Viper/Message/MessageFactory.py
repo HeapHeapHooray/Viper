@@ -34,7 +34,11 @@ def create_from_bytes(bytes_data: bytes):
     if message_class is None:
         message_instance = UnknownMessage(message_id,message_blocks_data)
     else:
-        message_instance = message_class(message_blocks_data)
+        try:
+            message_instance = message_class(message_blocks_data)
+        except Exception as e:
+            print("Exception when processing message:",message_class,"Exception:",e)
+            raise e
 
     return message_instance
         
