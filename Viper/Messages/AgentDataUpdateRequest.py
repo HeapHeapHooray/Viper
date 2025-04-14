@@ -3,6 +3,7 @@
 from Message.Message import Message
 import BytesUtils
 from dataclasses import dataclass
+import Utils
 
 @dataclass
 class AgentData:

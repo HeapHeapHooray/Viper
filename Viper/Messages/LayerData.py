@@ -9,7 +9,7 @@ class LayerID:
 	Type: "U8"
 
 @dataclass
-class LayerData:
+class LayerDataBlock:
 	Data: "Variable 2"
 
 
@@ -19,7 +19,7 @@ class LayerData(Message):
 
 	def __init__(self,bytes_data: bytes):
 		self.LayerID = LayerID(*((None,)*1))
-		self.LayerData = LayerData(*((None,)*1))
+		self.LayerData = LayerDataBlock(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -30,7 +30,7 @@ class LayerData(Message):
 		self.LayerID = LayerID(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-		self.LayerData = LayerData(*unpacked_data)
+		self.LayerData = LayerDataBlock(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

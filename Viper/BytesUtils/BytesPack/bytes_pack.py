@@ -25,6 +25,7 @@ class FoundEndOfDataUnpackingString(Exception):
     pass
 
 def _unpack_unsigned_byte_le(data: bytes):
+    print("Data:",data)
     unpacked = struct.unpack("<B",bytes([data[0]]))
     return (unpacked[0],data[1::])
 def _unpack_signed_byte_le(data: bytes):
@@ -95,6 +96,7 @@ def _unpack_string(data: bytes):
     unpacked = data[0:end_index].decode("utf-8")
     return (unpacked,data[end_index+1::])
 def _unpack_uuid(data: bytes):
+    print("UUID:",data)
     return (uuid.UUID(bytes=data[0:16]),data[16::])
 
 def _pack_unsigned_byte_le(byte: int):
