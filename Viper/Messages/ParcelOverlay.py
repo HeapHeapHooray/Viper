@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class ParcelData:
 	SequenceID: "S32"
 	Data: "Variable 2"
+PARCELDATA = ParcelData
 
 
 class ParcelOverlay(Message):
@@ -15,7 +16,7 @@ class ParcelOverlay(Message):
 	absolute_id = 4294901956 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ParcelData = ParcelData(*((None,)*2))
+		self.ParcelData = PARCELDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class ParcelOverlay(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","variable2",],remaining_bytes)
-		self.ParcelData = ParcelData(*unpacked_data)
+		self.ParcelData = PARCELDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

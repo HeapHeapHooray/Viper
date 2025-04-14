@@ -8,29 +8,35 @@ from dataclasses import dataclass
 class Sender:
 	ID: "LLUUID"
 	IsTrial: "BOOL"
+SENDER = Sender
 
 @dataclass
 class ObjectData:
 	TextureEntry: "Variable 2"
+OBJECTDATA = ObjectData
 
 @dataclass
 class VisualParam:
 	ParamValue: "U8"
+VISUALPARAM = VisualParam
 
 @dataclass
 class AppearanceData:
 	AppearanceVersion: "U8"
 	CofVersion: "S32"
 	Flags: "U32"
+APPEARANCEDATA = AppearanceData
 
 @dataclass
 class AppearanceHover:
 	HoverHeight: "LLVector3"
+APPEARANCEHOVER = AppearanceHover
 
 @dataclass
 class AttachmentBlock:
 	ID: "LLUUID"
 	AttachmentPoint: "U8"
+ATTACHMENTBLOCK = AttachmentBlock
 
 
 class AvatarAppearance(Message):
@@ -38,12 +44,12 @@ class AvatarAppearance(Message):
 	absolute_id = 4294901918 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Sender = Sender(*((None,)*2))
-		self.ObjectData = ObjectData(*((None,)*1))
-		self.VisualParam = [VisualParam(*((None,)*1))]
-		self.AppearanceData = [AppearanceData(*((None,)*3))]
-		self.AppearanceHover = [AppearanceHover(*((None,)*1))]
-		self.AttachmentBlock = [AttachmentBlock(*((None,)*2))]
+		self.Sender = SENDER(*((None,)*2))
+		self.ObjectData = OBJECTDATA(*((None,)*1))
+		self.VisualParam = [VISUALPARAM(*((None,)*1))]
+		self.AppearanceData = [APPEARANCEDATA(*((None,)*3))]
+		self.AppearanceHover = [APPEARANCEHOVER(*((None,)*1))]
+		self.AttachmentBlock = [ATTACHMENTBLOCK(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -51,10 +57,10 @@ class AvatarAppearance(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte",],remaining_bytes)
-		self.Sender = Sender(*unpacked_data)
+		self.Sender = SENDER(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -63,7 +69,7 @@ class AvatarAppearance(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-			self.VisualParam.append(VisualParam(*unpacked_data))
+			self.VisualParam.append(VISUALPARAM(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -72,7 +78,7 @@ class AvatarAppearance(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","signed int32","unsigned int32",],remaining_bytes)
-			self.AppearanceData.append(AppearanceData(*unpacked_data))
+			self.AppearanceData.append(APPEARANCEDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -81,7 +87,7 @@ class AvatarAppearance(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["vector3",],remaining_bytes)
-			self.AppearanceHover.append(AppearanceHover(*unpacked_data))
+			self.AppearanceHover.append(APPEARANCEHOVER(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -90,7 +96,7 @@ class AvatarAppearance(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte",],remaining_bytes)
-			self.AttachmentBlock.append(AttachmentBlock(*unpacked_data))
+			self.AttachmentBlock.append(ATTACHMENTBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

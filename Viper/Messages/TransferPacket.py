@@ -11,6 +11,7 @@ class TransferData:
 	Packet: "S32"
 	Status: "S32"
 	Data: "Variable 2"
+TRANSFERDATA = TransferData
 
 
 class TransferPacket(Message):
@@ -18,7 +19,7 @@ class TransferPacket(Message):
 	absolute_id = 17 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TransferData = TransferData(*((None,)*5))
+		self.TransferData = TRANSFERDATA(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -26,7 +27,7 @@ class TransferPacket(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32","signed int32","signed int32","variable2",],remaining_bytes)
-		self.TransferData = TransferData(*unpacked_data)
+		self.TransferData = TRANSFERDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

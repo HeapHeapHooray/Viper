@@ -9,11 +9,13 @@ class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
 	CircuitCode: "U32"
+AGENTDATA = AgentData
 
 @dataclass
 class FOVBlock:
 	GenCounter: "U32"
 	VerticalAngle: "F32"
+FOVBLOCK = FOVBlock
 
 
 class AgentFOV(Message):
@@ -21,8 +23,8 @@ class AgentFOV(Message):
 	absolute_id = 4294901842 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*3))
-		self.FOVBlock = FOVBlock(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*3))
+		self.FOVBlock = FOVBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -30,10 +32,10 @@ class AgentFOV(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","float",],remaining_bytes)
-		self.FOVBlock = FOVBlock(*unpacked_data)
+		self.FOVBlock = FOVBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

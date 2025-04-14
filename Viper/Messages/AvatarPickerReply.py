@@ -8,12 +8,14 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	QueryID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
 	AvatarID: "LLUUID"
 	FirstName: "Variable 1"
 	LastName: "Variable 1"
+DATA = Data
 
 
 class AvatarPickerReply(Message):
@@ -21,8 +23,8 @@ class AvatarPickerReply(Message):
 	absolute_id = 4294901788 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = [Data(*((None,)*3))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = [DATA(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -30,7 +32,7 @@ class AvatarPickerReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -39,7 +41,7 @@ class AvatarPickerReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable1",],remaining_bytes)
-			self.Data.append(Data(*unpacked_data))
+			self.Data.append(DATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

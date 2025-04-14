@@ -30,10 +30,12 @@ class RegionInfo:
 	TerrainHeightRange01: "F32"
 	TerrainHeightRange10: "F32"
 	TerrainHeightRange11: "F32"
+REGIONINFO = RegionInfo
 
 @dataclass
 class RegionInfo2:
 	RegionID: "LLUUID"
+REGIONINFO2 = RegionInfo2
 
 @dataclass
 class RegionInfo3:
@@ -42,11 +44,13 @@ class RegionInfo3:
 	ColoName: "Variable 1"
 	ProductSKU: "Variable 1"
 	ProductName: "Variable 1"
+REGIONINFO3 = RegionInfo3
 
 @dataclass
 class RegionInfo4:
 	RegionFlagsExtended: "U64"
 	RegionProtocols: "U64"
+REGIONINFO4 = RegionInfo4
 
 
 class RegionHandshake(Message):
@@ -54,10 +58,10 @@ class RegionHandshake(Message):
 	absolute_id = 4294901908 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RegionInfo = RegionInfo(*((None,)*24))
-		self.RegionInfo2 = RegionInfo2(*((None,)*1))
-		self.RegionInfo3 = RegionInfo3(*((None,)*5))
-		self.RegionInfo4 = [RegionInfo4(*((None,)*2))]
+		self.RegionInfo = REGIONINFO(*((None,)*24))
+		self.RegionInfo2 = REGIONINFO2(*((None,)*1))
+		self.RegionInfo3 = REGIONINFO3(*((None,)*5))
+		self.RegionInfo4 = [REGIONINFO4(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -65,13 +69,13 @@ class RegionHandshake(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","variable1","uuid","unsigned byte","float","float","uuid","uuid","uuid","uuid","uuid","uuid","uuid","uuid","uuid","float","float","float","float","float","float","float","float",],remaining_bytes)
-		self.RegionInfo = RegionInfo(*unpacked_data)
+		self.RegionInfo = REGIONINFO(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.RegionInfo2 = RegionInfo2(*unpacked_data)
+		self.RegionInfo2 = REGIONINFO2(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","signed int32","variable1","variable1","variable1",],remaining_bytes)
-		self.RegionInfo3 = RegionInfo3(*unpacked_data)
+		self.RegionInfo3 = REGIONINFO3(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -80,7 +84,7 @@ class RegionHandshake(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int64",],remaining_bytes)
-			self.RegionInfo4.append(RegionInfo4(*unpacked_data))
+			self.RegionInfo4.append(REGIONINFO4(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

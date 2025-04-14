@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AuctionData:
 	ParcelID: "LLUUID"
 	AuctionID: "U32"
+AUCTIONDATA = AuctionData
 
 
 class ConfirmAuctionStart(Message):
@@ -15,7 +16,7 @@ class ConfirmAuctionStart(Message):
 	absolute_id = 4294901990 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AuctionData = AuctionData(*((None,)*2))
+		self.AuctionData = AUCTIONDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class ConfirmAuctionStart(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.AuctionData = AuctionData(*unpacked_data)
+		self.AuctionData = AUCTIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

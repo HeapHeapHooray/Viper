@@ -55,19 +55,23 @@ class ParcelData:
 	RegionDenyAnonymous: "BOOL"
 	RegionDenyIdentified: "BOOL"
 	RegionDenyTransacted: "BOOL"
+PARCELDATA = ParcelData
 
 @dataclass
 class AgeVerificationBlock:
 	RegionDenyAgeUnverified: "BOOL"
+AGEVERIFICATIONBLOCK = AgeVerificationBlock
 
 @dataclass
 class RegionAllowAccessBlock:
 	RegionAllowAccessOverride: "BOOL"
+REGIONALLOWACCESSBLOCK = RegionAllowAccessBlock
 
 @dataclass
 class ParcelEnvironmentBlock:
 	ParcelEnvironmentVersion: "S32"
 	RegionAllowEnvironmentOverride: "BOOL"
+PARCELENVIRONMENTBLOCK = ParcelEnvironmentBlock
 
 
 class ParcelProperties(Message):
@@ -75,10 +79,10 @@ class ParcelProperties(Message):
 	absolute_id = 23 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ParcelData = ParcelData(*((None,)*49))
-		self.AgeVerificationBlock = AgeVerificationBlock(*((None,)*1))
-		self.RegionAllowAccessBlock = RegionAllowAccessBlock(*((None,)*1))
-		self.ParcelEnvironmentBlock = ParcelEnvironmentBlock(*((None,)*2))
+		self.ParcelData = PARCELDATA(*((None,)*49))
+		self.AgeVerificationBlock = AGEVERIFICATIONBLOCK(*((None,)*1))
+		self.RegionAllowAccessBlock = REGIONALLOWACCESSBLOCK(*((None,)*1))
+		self.ParcelEnvironmentBlock = PARCELENVIRONMENTBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -86,16 +90,16 @@ class ParcelProperties(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","signed int32","unsigned byte","signed int32","signed int32","signed int32","signed int32","uuid","unsigned byte","unsigned int32","signed int32","signed int32","signed int32","vector3","vector3","variable2","signed int32","unsigned byte","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","float","signed int32","unsigned int32","signed int32","variable1","variable1","variable1","variable1","uuid","unsigned byte","uuid","signed int32","float","unsigned byte","uuid","uuid","vector3","vector3","unsigned byte","unsigned byte","unsigned byte","unsigned byte","unsigned byte",],remaining_bytes)
-		self.ParcelData = ParcelData(*unpacked_data)
+		self.ParcelData = PARCELDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.AgeVerificationBlock = AgeVerificationBlock(*unpacked_data)
+		self.AgeVerificationBlock = AGEVERIFICATIONBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.RegionAllowAccessBlock = RegionAllowAccessBlock(*unpacked_data)
+		self.RegionAllowAccessBlock = REGIONALLOWACCESSBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","unsigned byte",],remaining_bytes)
-		self.ParcelEnvironmentBlock = ParcelEnvironmentBlock(*unpacked_data)
+		self.ParcelEnvironmentBlock = PARCELENVIRONMENTBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

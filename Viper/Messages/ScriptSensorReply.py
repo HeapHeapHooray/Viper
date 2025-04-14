@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class Requester:
 	SourceID: "LLUUID"
+REQUESTER = Requester
 
 @dataclass
 class SensedData:
@@ -19,6 +20,7 @@ class SensedData:
 	Name: "Variable 1"
 	Type: "S32"
 	Range: "F32"
+SENSEDDATA = SensedData
 
 
 class ScriptSensorReply(Message):
@@ -26,8 +28,8 @@ class ScriptSensorReply(Message):
 	absolute_id = 4294902008 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Requester = Requester(*((None,)*1))
-		self.SensedData = [SensedData(*((None,)*9))]
+		self.Requester = REQUESTER(*((None,)*1))
+		self.SensedData = [SENSEDDATA(*((None,)*9))]
 
 		if bytes_data is None:
 			return
@@ -35,7 +37,7 @@ class ScriptSensorReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.Requester = Requester(*unpacked_data)
+		self.Requester = REQUESTER(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -44,7 +46,7 @@ class ScriptSensorReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","vector3","vector3","unit_quaternion","variable1","signed int32","float",],remaining_bytes)
-			self.SensedData.append(SensedData(*unpacked_data))
+			self.SensedData.append(SENSEDDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

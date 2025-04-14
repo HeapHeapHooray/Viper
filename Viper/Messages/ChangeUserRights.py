@@ -7,11 +7,13 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Rights:
 	AgentRelated: "LLUUID"
 	RelatedRights: "S32"
+RIGHTS = Rights
 
 
 class ChangeUserRights(Message):
@@ -19,8 +21,8 @@ class ChangeUserRights(Message):
 	absolute_id = 4294902081 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.Rights = [Rights(*((None,)*2))]
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.Rights = [RIGHTS(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class ChangeUserRights(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -37,7 +39,7 @@ class ChangeUserRights(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32",],remaining_bytes)
-			self.Rights.append(Rights(*unpacked_data))
+			self.Rights.append(RIGHTS(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

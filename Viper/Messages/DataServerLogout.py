@@ -10,6 +10,7 @@ class UserData:
 	ViewerIP: "IPADDR"
 	Disconnect: "BOOL"
 	SessionID: "LLUUID"
+USERDATA = UserData
 
 
 class DataServerLogout(Message):
@@ -17,7 +18,7 @@ class DataServerLogout(Message):
 	absolute_id = 4294902011 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.UserData = UserData(*((None,)*4))
+		self.UserData = USERDATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +26,7 @@ class DataServerLogout(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","unsigned byte","uuid",],remaining_bytes)
-		self.UserData = UserData(*unpacked_data)
+		self.UserData = USERDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

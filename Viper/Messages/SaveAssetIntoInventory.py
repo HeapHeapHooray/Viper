@@ -7,11 +7,13 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class InventoryData:
 	ItemID: "LLUUID"
 	NewAssetID: "LLUUID"
+INVENTORYDATA = InventoryData
 
 
 class SaveAssetIntoInventory(Message):
@@ -19,8 +21,8 @@ class SaveAssetIntoInventory(Message):
 	absolute_id = 4294902032 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.InventoryData = InventoryData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.InventoryData = INVENTORYDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -28,10 +30,10 @@ class SaveAssetIntoInventory(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.InventoryData = InventoryData(*unpacked_data)
+		self.InventoryData = INVENTORYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

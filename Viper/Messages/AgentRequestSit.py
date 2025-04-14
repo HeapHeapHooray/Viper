@@ -8,11 +8,13 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class TargetObject:
 	TargetID: "LLUUID"
 	Offset: "LLVector3"
+TARGETOBJECT = TargetObject
 
 
 class AgentRequestSit(Message):
@@ -20,8 +22,8 @@ class AgentRequestSit(Message):
 	absolute_id = 6 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.TargetObject = TargetObject(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.TargetObject = TARGETOBJECT(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -29,10 +31,10 @@ class AgentRequestSit(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","vector3",],remaining_bytes)
-		self.TargetObject = TargetObject(*unpacked_data)
+		self.TargetObject = TARGETOBJECT(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

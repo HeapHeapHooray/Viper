@@ -7,10 +7,12 @@ from dataclasses import dataclass
 @dataclass
 class Header:
 	ResetList: "BOOL"
+HEADER = Header
 
 @dataclass
 class Data:
 	LocalID: "U32"
+DATA = Data
 
 
 class ForceObjectSelect(Message):
@@ -18,8 +20,8 @@ class ForceObjectSelect(Message):
 	absolute_id = 4294901965 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Header = Header(*((None,)*1))
-		self.Data = [Data(*((None,)*1))]
+		self.Header = HEADER(*((None,)*1))
+		self.Data = [DATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -27,7 +29,7 @@ class ForceObjectSelect(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.Header = Header(*unpacked_data)
+		self.Header = HEADER(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -36,7 +38,7 @@ class ForceObjectSelect(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-			self.Data.append(Data(*unpacked_data))
+			self.Data.append(DATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

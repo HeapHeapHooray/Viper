@@ -7,12 +7,14 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GroupData:
 	GroupID: "LLUUID"
 	RequestID: "LLUUID"
 	RoleCount: "S32"
+GROUPDATA = GroupData
 
 @dataclass
 class RoleData:
@@ -22,6 +24,7 @@ class RoleData:
 	Description: "Variable 1"
 	Powers: "U64"
 	Members: "U32"
+ROLEDATA = RoleData
 
 
 class GroupRoleDataReply(Message):
@@ -29,9 +32,9 @@ class GroupRoleDataReply(Message):
 	absolute_id = 4294902132 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.GroupData = GroupData(*((None,)*3))
-		self.RoleData = [RoleData(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.GroupData = GROUPDATA(*((None,)*3))
+		self.RoleData = [ROLEDATA(*((None,)*6))]
 
 		if bytes_data is None:
 			return
@@ -39,10 +42,10 @@ class GroupRoleDataReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","signed int32",],remaining_bytes)
-		self.GroupData = GroupData(*unpacked_data)
+		self.GroupData = GROUPDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -51,7 +54,7 @@ class GroupRoleDataReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable1","variable1","unsigned int64","unsigned int32",],remaining_bytes)
-			self.RoleData.append(RoleData(*unpacked_data))
+			self.RoleData.append(ROLEDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

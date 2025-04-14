@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class CameraCollidePlane:
 	Plane: "LLVector4"
+CAMERACOLLIDEPLANE = CameraCollidePlane
 
 
 class CameraConstraint(Message):
@@ -14,7 +15,7 @@ class CameraConstraint(Message):
 	absolute_id = 22 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.CameraCollidePlane = CameraCollidePlane(*((None,)*1))
+		self.CameraCollidePlane = CAMERACOLLIDEPLANE(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class CameraConstraint(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["vector4",],remaining_bytes)
-		self.CameraCollidePlane = CameraCollidePlane(*unpacked_data)
+		self.CameraCollidePlane = CAMERACOLLIDEPLANE(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

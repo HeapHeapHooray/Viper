@@ -7,10 +7,12 @@ from dataclasses import dataclass
 @dataclass
 class MethodData:
 	Method: "U16"
+METHODDATA = MethodData
 
 @dataclass
 class DataBlock:
 	Data: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class GenericStreamingMessage(Message):
@@ -18,8 +20,8 @@ class GenericStreamingMessage(Message):
 	absolute_id = 31 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MethodData = MethodData(*((None,)*1))
-		self.DataBlock = DataBlock(*((None,)*1))
+		self.MethodData = METHODDATA(*((None,)*1))
+		self.DataBlock = DATABLOCK(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -27,10 +29,10 @@ class GenericStreamingMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int16",],remaining_bytes)
-		self.MethodData = MethodData(*unpacked_data)
+		self.MethodData = METHODDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

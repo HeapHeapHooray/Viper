@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GroupData:
@@ -16,6 +17,7 @@ class GroupData:
 	GroupInsigniaID: "LLUUID"
 	Contribution: "S32"
 	GroupName: "Variable 1"
+GROUPDATA = GroupData
 
 
 class AgentGroupDataUpdate(Message):
@@ -23,8 +25,8 @@ class AgentGroupDataUpdate(Message):
 	absolute_id = 4294902149 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.GroupData = [GroupData(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.GroupData = [GROUPDATA(*((None,)*6))]
 
 		if bytes_data is None:
 			return
@@ -32,7 +34,7 @@ class AgentGroupDataUpdate(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -41,7 +43,7 @@ class AgentGroupDataUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64","unsigned byte","uuid","signed int32","variable1",],remaining_bytes)
-			self.GroupData.append(GroupData(*unpacked_data))
+			self.GroupData.append(GROUPDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

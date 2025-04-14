@@ -18,6 +18,7 @@ class AgentData:
 	Far: "F32"
 	ControlFlags: "U32"
 	Flags: "U8"
+AGENTDATA = AgentData
 
 
 class AgentUpdate(Message):
@@ -25,7 +26,7 @@ class AgentUpdate(Message):
 	absolute_id = 4 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*12))
+		self.AgentData = AGENTDATA(*((None,)*12))
 
 		if bytes_data is None:
 			return
@@ -33,7 +34,7 @@ class AgentUpdate(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unit_quaternion","unit_quaternion","unsigned byte","vector3","vector3","vector3","vector3","float","unsigned int32","unsigned byte",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

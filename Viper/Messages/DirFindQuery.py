@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class QueryData:
@@ -15,6 +16,7 @@ class QueryData:
 	QueryText: "Variable 1"
 	QueryFlags: "U32"
 	QueryStart: "S32"
+QUERYDATA = QueryData
 
 
 class DirFindQuery(Message):
@@ -22,8 +24,8 @@ class DirFindQuery(Message):
 	absolute_id = 4294901791 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.QueryData = QueryData(*((None,)*4))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.QueryData = QUERYDATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -31,10 +33,10 @@ class DirFindQuery(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","unsigned int32","signed int32",],remaining_bytes)
-		self.QueryData = QueryData(*unpacked_data)
+		self.QueryData = QUERYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

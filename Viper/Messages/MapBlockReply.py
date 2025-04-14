@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	Flags: "U32"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
@@ -19,6 +20,7 @@ class Data:
 	WaterHeight: "U8"
 	Agents: "U8"
 	MapImageID: "LLUUID"
+DATA = Data
 
 
 class MapBlockReply(Message):
@@ -26,8 +28,8 @@ class MapBlockReply(Message):
 	absolute_id = 4294902169 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = [Data(*((None,)*8))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = [DATA(*((None,)*8))]
 
 		if bytes_data is None:
 			return
@@ -35,7 +37,7 @@ class MapBlockReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -44,7 +46,7 @@ class MapBlockReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int16","unsigned int16","variable1","unsigned byte","unsigned int32","unsigned byte","unsigned byte","uuid",],remaining_bytes)
-			self.Data.append(Data(*unpacked_data))
+			self.Data.append(DATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

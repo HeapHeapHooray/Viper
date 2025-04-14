@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ObjectData:
 	LocalID: "U32"
+OBJECTDATA = ObjectData
 
 @dataclass
 class SurfaceInfo:
@@ -21,6 +23,7 @@ class SurfaceInfo:
 	Position: "LLVector3"
 	Normal: "LLVector3"
 	Binormal: "LLVector3"
+SURFACEINFO = SurfaceInfo
 
 
 class ObjectDeGrab(Message):
@@ -28,9 +31,9 @@ class ObjectDeGrab(Message):
 	absolute_id = 4294901879 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ObjectData = ObjectData(*((None,)*1))
-		self.SurfaceInfo = [SurfaceInfo(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ObjectData = OBJECTDATA(*((None,)*1))
+		self.SurfaceInfo = [SURFACEINFO(*((None,)*6))]
 
 		if bytes_data is None:
 			return
@@ -38,10 +41,10 @@ class ObjectDeGrab(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -50,7 +53,7 @@ class ObjectDeGrab(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["vector3","vector3","signed int32","vector3","vector3","vector3",],remaining_bytes)
-			self.SurfaceInfo.append(SurfaceInfo(*unpacked_data))
+			self.SurfaceInfo.append(SURFACEINFO(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

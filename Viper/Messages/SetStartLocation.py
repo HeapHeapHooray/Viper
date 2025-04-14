@@ -12,6 +12,7 @@ class StartLocationData:
 	RegionHandle: "U64"
 	LocationPos: "LLVector3"
 	LocationLookAt: "LLVector3"
+STARTLOCATIONDATA = StartLocationData
 
 
 class SetStartLocation(Message):
@@ -19,7 +20,7 @@ class SetStartLocation(Message):
 	absolute_id = 4294902085 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.StartLocationData = StartLocationData(*((None,)*6))
+		self.StartLocationData = STARTLOCATIONDATA(*((None,)*6))
 
 		if bytes_data is None:
 			return
@@ -27,7 +28,7 @@ class SetStartLocation(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","unsigned int64","vector3","vector3",],remaining_bytes)
-		self.StartLocationData = StartLocationData(*unpacked_data)
+		self.StartLocationData = STARTLOCATIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

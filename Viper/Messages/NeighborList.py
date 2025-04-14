@@ -13,6 +13,7 @@ class NeighborBlock:
 	RegionID: "LLUUID"
 	Name: "Variable 1"
 	SimAccess: "U8"
+NEIGHBORBLOCK = NeighborBlock
 
 
 class NeighborList(Message):
@@ -22,7 +23,7 @@ class NeighborList(Message):
 	def __init__(self,bytes_data: bytes):
 		self.NeighborBlock = []
 		for i in range(4):
-			self.NeighborBlock.append(NeighborBlock(*((None,)*7)))
+			self.NeighborBlock.append(NEIGHBORBLOCK(*((None,)*7)))
 
 		if bytes_data is None:
 			return
@@ -35,7 +36,7 @@ class NeighborList(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int16","unsigned int32","unsigned int16","uuid","variable1","unsigned byte",],remaining_bytes)
-			self.NeighborBlock.append(NeighborBlock(*unpacked_data))
+			self.NeighborBlock.append(NEIGHBORBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

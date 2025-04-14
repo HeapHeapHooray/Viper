@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class NetBlock:
 	Port: "IPPORT"
+NETBLOCK = NetBlock
 
 
 class NetTest(Message):
@@ -14,7 +15,7 @@ class NetTest(Message):
 	absolute_id = 4294902086 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.NetBlock = NetBlock(*((None,)*1))
+		self.NetBlock = NETBLOCK(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class NetTest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int16",],remaining_bytes)
-		self.NetBlock = NetBlock(*unpacked_data)
+		self.NetBlock = NETBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

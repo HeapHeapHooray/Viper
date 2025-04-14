@@ -9,6 +9,7 @@ class DataBlock:
 	MediaURL: "Variable 1"
 	MediaID: "LLUUID"
 	MediaAutoScale: "U8"
+DATABLOCK = DataBlock
 
 @dataclass
 class DataBlockExtended:
@@ -17,6 +18,7 @@ class DataBlockExtended:
 	MediaWidth: "S32"
 	MediaHeight: "S32"
 	MediaLoop: "U8"
+DATABLOCKEXTENDED = DataBlockExtended
 
 
 class ParcelMediaUpdate(Message):
@@ -24,8 +26,8 @@ class ParcelMediaUpdate(Message):
 	absolute_id = 4294902180 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*3))
-		self.DataBlockExtended = DataBlockExtended(*((None,)*5))
+		self.DataBlock = DATABLOCK(*((None,)*3))
+		self.DataBlockExtended = DATABLOCKEXTENDED(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -33,10 +35,10 @@ class ParcelMediaUpdate(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid","unsigned byte",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","variable1","signed int32","signed int32","unsigned byte",],remaining_bytes)
-		self.DataBlockExtended = DataBlockExtended(*unpacked_data)
+		self.DataBlockExtended = DATABLOCKEXTENDED(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

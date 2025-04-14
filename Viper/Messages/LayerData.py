@@ -7,10 +7,12 @@ from dataclasses import dataclass
 @dataclass
 class LayerID:
 	Type: "U8"
+LAYERID = LayerID
 
 @dataclass
 class LayerData:
 	Data: "Variable 2"
+LAYERDATA = LayerData
 
 
 class LayerData(Message):
@@ -18,8 +20,8 @@ class LayerData(Message):
 	absolute_id = 11 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.LayerID = LayerID(*((None,)*1))
-		self.LayerData = LayerData(*((None,)*1))
+		self.LayerID = LAYERID(*((None,)*1))
+		self.LayerData = LAYERDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -27,10 +29,10 @@ class LayerData(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.LayerID = LayerID(*unpacked_data)
+		self.LayerID = LAYERID(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-		self.LayerData = LayerData(*unpacked_data)
+		self.LayerData = LAYERDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

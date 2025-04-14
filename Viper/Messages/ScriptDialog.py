@@ -13,14 +13,17 @@ class Data:
 	Message: "Variable 2"
 	ChatChannel: "S32"
 	ImageID: "LLUUID"
+DATA = Data
 
 @dataclass
 class Buttons:
 	ButtonLabel: "Variable 1"
+BUTTONS = Buttons
 
 @dataclass
 class OwnerData:
 	OwnerID: "LLUUID"
+OWNERDATA = OwnerData
 
 
 class ScriptDialog(Message):
@@ -28,9 +31,9 @@ class ScriptDialog(Message):
 	absolute_id = 4294901950 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*7))
-		self.Buttons = [Buttons(*((None,)*1))]
-		self.OwnerData = [OwnerData(*((None,)*1))]
+		self.Data = DATA(*((None,)*7))
+		self.Buttons = [BUTTONS(*((None,)*1))]
+		self.OwnerData = [OWNERDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -38,7 +41,7 @@ class ScriptDialog(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable1","variable1","variable2","signed int32","uuid",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -47,7 +50,7 @@ class ScriptDialog(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-			self.Buttons.append(Buttons(*unpacked_data))
+			self.Buttons.append(BUTTONS(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -56,7 +59,7 @@ class ScriptDialog(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.OwnerData.append(OwnerData(*unpacked_data))
+			self.OwnerData.append(OWNERDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

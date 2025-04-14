@@ -8,11 +8,13 @@ from dataclasses import dataclass
 class RegionData:
 	RegionHandle: "U64"
 	TimeDilation: "U16"
+REGIONDATA = RegionData
 
 @dataclass
 class ObjectData:
 	UpdateFlags: "U32"
 	Data: "Variable 2"
+OBJECTDATA = ObjectData
 
 
 class ObjectUpdateCompressed(Message):
@@ -20,8 +22,8 @@ class ObjectUpdateCompressed(Message):
 	absolute_id = 13 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RegionData = RegionData(*((None,)*2))
-		self.ObjectData = [ObjectData(*((None,)*2))]
+		self.RegionData = REGIONDATA(*((None,)*2))
+		self.ObjectData = [OBJECTDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -29,7 +31,7 @@ class ObjectUpdateCompressed(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int16",],remaining_bytes)
-		self.RegionData = RegionData(*unpacked_data)
+		self.RegionData = REGIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -38,7 +40,7 @@ class ObjectUpdateCompressed(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","variable2",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

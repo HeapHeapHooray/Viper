@@ -9,15 +9,18 @@ class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
 	TransactionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class MethodData:
 	Method: "Variable 1"
 	Invoice: "LLUUID"
+METHODDATA = MethodData
 
 @dataclass
 class ParamList:
 	Parameter: "Variable 2"
+PARAMLIST = ParamList
 
 
 class LargeGenericMessage(Message):
@@ -25,9 +28,9 @@ class LargeGenericMessage(Message):
 	absolute_id = 4294902190 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*3))
-		self.MethodData = MethodData(*((None,)*2))
-		self.ParamList = [ParamList(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*3))
+		self.MethodData = METHODDATA(*((None,)*2))
+		self.ParamList = [PARAMLIST(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -35,10 +38,10 @@ class LargeGenericMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid",],remaining_bytes)
-		self.MethodData = MethodData(*unpacked_data)
+		self.MethodData = METHODDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -47,7 +50,7 @@ class LargeGenericMessage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-			self.ParamList.append(ParamList(*unpacked_data))
+			self.ParamList.append(PARAMLIST(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -8,11 +8,13 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class QueryData:
 	QueryID: "LLUUID"
 	QueryFlags: "U32"
+QUERYDATA = QueryData
 
 
 class DirPopularQuery(Message):
@@ -20,8 +22,8 @@ class DirPopularQuery(Message):
 	absolute_id = 4294901811 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.QueryData = QueryData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.QueryData = QUERYDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -29,10 +31,10 @@ class DirPopularQuery(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.QueryData = QueryData(*unpacked_data)
+		self.QueryData = QUERYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

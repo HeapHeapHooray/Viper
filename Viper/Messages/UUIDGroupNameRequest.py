@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class UUIDNameBlock:
 	ID: "LLUUID"
+UUIDNAMEBLOCK = UUIDNameBlock
 
 
 class UUIDGroupNameRequest(Message):
@@ -14,7 +15,7 @@ class UUIDGroupNameRequest(Message):
 	absolute_id = 4294901997 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.UUIDNameBlock = [UUIDNameBlock(*((None,)*1))]
+		self.UUIDNameBlock = [UUIDNAMEBLOCK(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +29,7 @@ class UUIDGroupNameRequest(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.UUIDNameBlock.append(UUIDNameBlock(*unpacked_data))
+			self.UUIDNameBlock.append(UUIDNAMEBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

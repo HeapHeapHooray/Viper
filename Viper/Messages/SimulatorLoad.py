@@ -9,12 +9,14 @@ class SimulatorLoad:
 	TimeDilation: "F32"
 	AgentCount: "S32"
 	CanAcceptAgents: "BOOL"
+SIMULATORLOAD = SimulatorLoad
 
 @dataclass
 class AgentList:
 	CircuitCode: "U32"
 	X: "U8"
 	Y: "U8"
+AGENTLIST = AgentList
 
 
 class SimulatorLoad(Message):
@@ -22,8 +24,8 @@ class SimulatorLoad(Message):
 	absolute_id = 4294901772 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.SimulatorLoad = SimulatorLoad(*((None,)*3))
-		self.AgentList = [AgentList(*((None,)*3))]
+		self.SimulatorLoad = SIMULATORLOAD(*((None,)*3))
+		self.AgentList = [AGENTLIST(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -31,7 +33,7 @@ class SimulatorLoad(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["float","signed int32","unsigned byte",],remaining_bytes)
-		self.SimulatorLoad = SimulatorLoad(*unpacked_data)
+		self.SimulatorLoad = SIMULATORLOAD(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -40,7 +42,7 @@ class SimulatorLoad(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","unsigned byte",],remaining_bytes)
-			self.AgentList.append(AgentList(*unpacked_data))
+			self.AgentList.append(AGENTLIST(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

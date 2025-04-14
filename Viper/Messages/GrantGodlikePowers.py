@@ -8,11 +8,13 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GrantData:
 	GodLevel: "U8"
 	Token: "LLUUID"
+GRANTDATA = GrantData
 
 
 class GrantGodlikePowers(Message):
@@ -20,8 +22,8 @@ class GrantGodlikePowers(Message):
 	absolute_id = 4294902018 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.GrantData = GrantData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.GrantData = GRANTDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -29,10 +31,10 @@ class GrantGodlikePowers(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","uuid",],remaining_bytes)
-		self.GrantData = GrantData(*unpacked_data)
+		self.GrantData = GRANTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

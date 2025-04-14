@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentBlock:
 	SourceID: "LLUUID"
 	DestID: "LLUUID"
+AGENTBLOCK = AgentBlock
 
 
 class FormFriendship(Message):
@@ -15,7 +16,7 @@ class FormFriendship(Message):
 	absolute_id = 4294902059 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentBlock = AgentBlock(*((None,)*2))
+		self.AgentBlock = AGENTBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class FormFriendship(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentBlock = AgentBlock(*unpacked_data)
+		self.AgentBlock = AGENTBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -9,12 +9,14 @@ class AgentData:
 	AgentID: "LLUUID"
 	GroupID: "LLUUID"
 	RequestID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GroupData:
 	Title: "Variable 1"
 	RoleID: "LLUUID"
 	Selected: "BOOL"
+GROUPDATA = GroupData
 
 
 class GroupTitlesReply(Message):
@@ -22,8 +24,8 @@ class GroupTitlesReply(Message):
 	absolute_id = 4294902136 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*3))
-		self.GroupData = [GroupData(*((None,)*3))]
+		self.AgentData = AGENTDATA(*((None,)*3))
+		self.GroupData = [GROUPDATA(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -31,7 +33,7 @@ class GroupTitlesReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -40,7 +42,7 @@ class GroupTitlesReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid","unsigned byte",],remaining_bytes)
-			self.GroupData.append(GroupData(*unpacked_data))
+			self.GroupData.append(GROUPDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

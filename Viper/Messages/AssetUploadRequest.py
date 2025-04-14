@@ -11,6 +11,7 @@ class AssetBlock:
 	Tempfile: "BOOL"
 	StoreLocal: "BOOL"
 	AssetData: "Variable 2"
+ASSETBLOCK = AssetBlock
 
 
 class AssetUploadRequest(Message):
@@ -18,7 +19,7 @@ class AssetUploadRequest(Message):
 	absolute_id = 4294902093 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AssetBlock = AssetBlock(*((None,)*5))
+		self.AssetBlock = ASSETBLOCK(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -26,7 +27,7 @@ class AssetUploadRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed byte","unsigned byte","unsigned byte","variable2",],remaining_bytes)
-		self.AssetBlock = AssetBlock(*unpacked_data)
+		self.AssetBlock = ASSETBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

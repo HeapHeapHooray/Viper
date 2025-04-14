@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class TransferInfo:
 	TransferID: "LLUUID"
 	ChannelType: "S32"
+TRANSFERINFO = TransferInfo
 
 
 class TransferAbort(Message):
@@ -15,7 +16,7 @@ class TransferAbort(Message):
 	absolute_id = 4294901915 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TransferInfo = TransferInfo(*((None,)*2))
+		self.TransferInfo = TRANSFERINFO(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class TransferAbort(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32",],remaining_bytes)
-		self.TransferInfo = TransferInfo(*unpacked_data)
+		self.TransferInfo = TRANSFERINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -11,6 +11,7 @@ class TransferInfo:
 	SourceType: "S32"
 	Priority: "F32"
 	Params: "Variable 2"
+TRANSFERINFO = TransferInfo
 
 
 class TransferRequest(Message):
@@ -18,7 +19,7 @@ class TransferRequest(Message):
 	absolute_id = 4294901913 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TransferInfo = TransferInfo(*((None,)*5))
+		self.TransferInfo = TRANSFERINFO(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -26,7 +27,7 @@ class TransferRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32","signed int32","float","variable2",],remaining_bytes)
-		self.TransferInfo = TransferInfo(*unpacked_data)
+		self.TransferInfo = TRANSFERINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

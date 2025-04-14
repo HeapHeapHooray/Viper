@@ -13,6 +13,7 @@ class MoneyData:
 	SquareMetersCredit: "S32"
 	SquareMetersCommitted: "S32"
 	Description: "Variable 1"
+MONEYDATA = MoneyData
 
 @dataclass
 class TransactionInfo:
@@ -23,6 +24,7 @@ class TransactionInfo:
 	IsDestGroup: "BOOL"
 	Amount: "S32"
 	ItemDescription: "Variable 1"
+TRANSACTIONINFO = TransactionInfo
 
 
 class MoneyBalanceReply(Message):
@@ -30,8 +32,8 @@ class MoneyBalanceReply(Message):
 	absolute_id = 4294902074 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MoneyData = MoneyData(*((None,)*7))
-		self.TransactionInfo = TransactionInfo(*((None,)*7))
+		self.MoneyData = MONEYDATA(*((None,)*7))
+		self.TransactionInfo = TRANSACTIONINFO(*((None,)*7))
 
 		if bytes_data is None:
 			return
@@ -39,10 +41,10 @@ class MoneyBalanceReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned byte","signed int32","signed int32","signed int32","variable1",],remaining_bytes)
-		self.MoneyData = MoneyData(*unpacked_data)
+		self.MoneyData = MONEYDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","uuid","unsigned byte","uuid","unsigned byte","signed int32","variable1",],remaining_bytes)
-		self.TransactionInfo = TransactionInfo(*unpacked_data)
+		self.TransactionInfo = TRANSACTIONINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

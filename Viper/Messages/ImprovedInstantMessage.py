@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class MessageBlock:
@@ -23,14 +24,17 @@ class MessageBlock:
 	FromAgentName: "Variable 1"
 	Message: "Variable 2"
 	BinaryBucket: "Variable 2"
+MESSAGEBLOCK = MessageBlock
 
 @dataclass
 class EstateBlock:
 	EstateID: "U32"
+ESTATEBLOCK = EstateBlock
 
 @dataclass
 class MetaData:
 	Data: "Variable 2"
+METADATA = MetaData
 
 
 class ImprovedInstantMessage(Message):
@@ -38,10 +42,10 @@ class ImprovedInstantMessage(Message):
 	absolute_id = 4294902014 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.MessageBlock = MessageBlock(*((None,)*12))
-		self.EstateBlock = EstateBlock(*((None,)*1))
-		self.MetaData = [MetaData(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.MessageBlock = MESSAGEBLOCK(*((None,)*12))
+		self.EstateBlock = ESTATEBLOCK(*((None,)*1))
+		self.MetaData = [METADATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -49,13 +53,13 @@ class ImprovedInstantMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","uuid","unsigned int32","uuid","vector3","unsigned byte","unsigned byte","uuid","unsigned int32","variable1","variable2","variable2",],remaining_bytes)
-		self.MessageBlock = MessageBlock(*unpacked_data)
+		self.MessageBlock = MESSAGEBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-		self.EstateBlock = EstateBlock(*unpacked_data)
+		self.EstateBlock = ESTATEBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -64,7 +68,7 @@ class ImprovedInstantMessage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-			self.MetaData.append(MetaData(*unpacked_data))
+			self.MetaData.append(METADATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

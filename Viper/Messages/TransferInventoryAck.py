@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class InfoBlock:
 	TransactionID: "LLUUID"
 	InventoryID: "LLUUID"
+INFOBLOCK = InfoBlock
 
 
 class TransferInventoryAck(Message):
@@ -15,7 +16,7 @@ class TransferInventoryAck(Message):
 	absolute_id = 4294902056 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.InfoBlock = InfoBlock(*((None,)*2))
+		self.InfoBlock = INFOBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class TransferInventoryAck(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.InfoBlock = InfoBlock(*unpacked_data)
+		self.InfoBlock = INFOBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

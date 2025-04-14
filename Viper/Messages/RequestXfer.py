@@ -13,6 +13,7 @@ class XferID:
 	UseBigPackets: "BOOL"
 	VFileID: "LLUUID"
 	VFileType: "S16"
+XFERID = XferID
 
 
 class RequestXfer(Message):
@@ -20,7 +21,7 @@ class RequestXfer(Message):
 	absolute_id = 4294901916 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.XferID = XferID(*((None,)*7))
+		self.XferID = XFERID(*((None,)*7))
 
 		if bytes_data is None:
 			return
@@ -28,7 +29,7 @@ class RequestXfer(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","variable1","unsigned byte","unsigned byte","unsigned byte","uuid","signed int16",],remaining_bytes)
-		self.XferID = XferID(*unpacked_data)
+		self.XferID = XFERID(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

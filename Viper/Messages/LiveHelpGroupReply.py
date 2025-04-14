@@ -9,6 +9,7 @@ class ReplyData:
 	RequestID: "LLUUID"
 	GroupID: "LLUUID"
 	Selection: "Variable 1"
+REPLYDATA = ReplyData
 
 
 class LiveHelpGroupReply(Message):
@@ -16,7 +17,7 @@ class LiveHelpGroupReply(Message):
 	absolute_id = 4294902140 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ReplyData = ReplyData(*((None,)*3))
+		self.ReplyData = REPLYDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +25,7 @@ class LiveHelpGroupReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","variable1",],remaining_bytes)
-		self.ReplyData = ReplyData(*unpacked_data)
+		self.ReplyData = REPLYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -8,15 +8,18 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class AxisData:
 	Index: "U8"
 	Value: "S16"
+AXISDATA = AxisData
 
 @dataclass
 class ButtonData:
 	Data: "Variable 1"
+BUTTONDATA = ButtonData
 
 
 class GameControlInput(Message):
@@ -24,9 +27,9 @@ class GameControlInput(Message):
 	absolute_id = 32 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.AxisData = [AxisData(*((None,)*2))]
-		self.ButtonData = [ButtonData(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.AxisData = [AXISDATA(*((None,)*2))]
+		self.ButtonData = [BUTTONDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -34,7 +37,7 @@ class GameControlInput(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -43,7 +46,7 @@ class GameControlInput(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","signed int16",],remaining_bytes)
-			self.AxisData.append(AxisData(*unpacked_data))
+			self.AxisData.append(AXISDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -52,7 +55,7 @@ class GameControlInput(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-			self.ButtonData.append(ButtonData(*unpacked_data))
+			self.ButtonData.append(BUTTONDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

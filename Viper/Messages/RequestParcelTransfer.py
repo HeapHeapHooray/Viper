@@ -17,12 +17,14 @@ class Data:
 	BillableArea: "S32"
 	ActualArea: "S32"
 	Final: "BOOL"
+DATA = Data
 
 @dataclass
 class RegionData:
 	RegionID: "LLUUID"
 	GridX: "U32"
 	GridY: "U32"
+REGIONDATA = RegionData
 
 
 class RequestParcelTransfer(Message):
@@ -30,8 +32,8 @@ class RequestParcelTransfer(Message):
 	absolute_id = 4294901980 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*11))
-		self.RegionData = RegionData(*((None,)*3))
+		self.Data = DATA(*((None,)*11))
+		self.RegionData = REGIONDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -39,10 +41,10 @@ class RequestParcelTransfer(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","uuid","uuid","uuid","unsigned byte","signed int32","signed int32","signed int32","signed int32","unsigned byte",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","unsigned int32",],remaining_bytes)
-		self.RegionData = RegionData(*unpacked_data)
+		self.RegionData = REGIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

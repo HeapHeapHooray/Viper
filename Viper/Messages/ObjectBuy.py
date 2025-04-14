@@ -10,12 +10,14 @@ class AgentData:
 	SessionID: "LLUUID"
 	GroupID: "LLUUID"
 	CategoryID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ObjectData:
 	ObjectLocalID: "U32"
 	SaleType: "U8"
 	SalePrice: "S32"
+OBJECTDATA = ObjectData
 
 
 class ObjectBuy(Message):
@@ -23,8 +25,8 @@ class ObjectBuy(Message):
 	absolute_id = 4294901862 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*4))
-		self.ObjectData = [ObjectData(*((None,)*3))]
+		self.AgentData = AGENTDATA(*((None,)*4))
+		self.ObjectData = [OBJECTDATA(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -32,7 +34,7 @@ class ObjectBuy(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -41,7 +43,7 @@ class ObjectBuy(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","signed int32",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

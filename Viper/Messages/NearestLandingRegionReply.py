@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class LandingRegionData:
 	RegionHandle: "U64"
+LANDINGREGIONDATA = LandingRegionData
 
 
 class NearestLandingRegionReply(Message):
@@ -14,7 +15,7 @@ class NearestLandingRegionReply(Message):
 	absolute_id = 4294901905 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.LandingRegionData = LandingRegionData(*((None,)*1))
+		self.LandingRegionData = LANDINGREGIONDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class NearestLandingRegionReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-		self.LandingRegionData = LandingRegionData(*unpacked_data)
+		self.LandingRegionData = LANDINGREGIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

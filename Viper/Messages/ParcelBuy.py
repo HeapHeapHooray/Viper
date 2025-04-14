@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
@@ -16,11 +17,13 @@ class Data:
 	RemoveContribution: "BOOL"
 	LocalID: "S32"
 	Final: "BOOL"
+DATA = Data
 
 @dataclass
 class ParcelData:
 	Price: "S32"
 	Area: "S32"
+PARCELDATA = ParcelData
 
 
 class ParcelBuy(Message):
@@ -28,9 +31,9 @@ class ParcelBuy(Message):
 	absolute_id = 4294901973 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = Data(*((None,)*5))
-		self.ParcelData = ParcelData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = DATA(*((None,)*5))
+		self.ParcelData = PARCELDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -38,13 +41,13 @@ class ParcelBuy(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte","unsigned byte","signed int32","unsigned byte",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","signed int32",],remaining_bytes)
-		self.ParcelData = ParcelData(*unpacked_data)
+		self.ParcelData = PARCELDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

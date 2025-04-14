@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class Data:
 	RegionX: "U32"
 	RegionY: "U32"
+DATA = Data
 
 @dataclass
 class Users:
 	AgentID: "LLUUID"
+USERS = Users
 
 
 class SimCrashed(Message):
@@ -19,8 +21,8 @@ class SimCrashed(Message):
 	absolute_id = 4294902088 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*2))
-		self.Users = [Users(*((None,)*1))]
+		self.Data = DATA(*((None,)*2))
+		self.Users = [USERS(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class SimCrashed(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -37,7 +39,7 @@ class SimCrashed(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.Users.append(Users(*unpacked_data))
+			self.Users.append(USERS(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

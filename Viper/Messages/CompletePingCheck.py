@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class PingID:
 	PingID: "U8"
+PINGID = PingID
 
 
 class CompletePingCheck(Message):
@@ -14,7 +15,7 @@ class CompletePingCheck(Message):
 	absolute_id = 2 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.PingID = PingID(*((None,)*1))
+		self.PingID = PINGID(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class CompletePingCheck(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.PingID = PingID(*unpacked_data)
+		self.PingID = PINGID(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

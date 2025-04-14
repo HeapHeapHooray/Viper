@@ -9,6 +9,7 @@ class InventoryData:
 	TaskID: "LLUUID"
 	Serial: "S16"
 	Filename: "Variable 1"
+INVENTORYDATA = InventoryData
 
 
 class ReplyTaskInventory(Message):
@@ -16,7 +17,7 @@ class ReplyTaskInventory(Message):
 	absolute_id = 4294902050 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.InventoryData = InventoryData(*((None,)*3))
+		self.InventoryData = INVENTORYDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +25,7 @@ class ReplyTaskInventory(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int16","variable1",],remaining_bytes)
-		self.InventoryData = InventoryData(*unpacked_data)
+		self.InventoryData = INVENTORYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

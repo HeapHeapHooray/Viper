@@ -13,6 +13,7 @@ class RegionData:
 	RegionPort: "IPPORT"
 	ValidUntil: "F64"
 	Message: "Variable 1"
+REGIONDATA = RegionData
 
 
 class RegionPresenceResponse(Message):
@@ -20,7 +21,7 @@ class RegionPresenceResponse(Message):
 	absolute_id = 4294901776 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RegionData = [RegionData(*((None,)*7))]
+		self.RegionData = [REGIONDATA(*((None,)*7))]
 
 		if bytes_data is None:
 			return
@@ -34,7 +35,7 @@ class RegionPresenceResponse(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64","unsigned int32","unsigned int32","unsigned int16","double","variable1",],remaining_bytes)
-			self.RegionData.append(RegionData(*unpacked_data))
+			self.RegionData.append(REGIONDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

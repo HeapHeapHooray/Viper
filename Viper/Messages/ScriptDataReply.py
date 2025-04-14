@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class DataBlock:
 	Hash: "U64"
 	Reply: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class ScriptDataReply(Message):
@@ -15,7 +16,7 @@ class ScriptDataReply(Message):
 	absolute_id = 4294902098 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = [DataBlock(*((None,)*2))]
+		self.DataBlock = [DATABLOCK(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -29,7 +30,7 @@ class ScriptDataReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","variable2",],remaining_bytes)
-			self.DataBlock.append(DataBlock(*unpacked_data))
+			self.DataBlock.append(DATABLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -10,6 +10,7 @@ class AgentGroupData:
 	GroupID: "LLUUID"
 	AgentPowers: "U64"
 	GroupTitle: "Variable 1"
+AGENTGROUPDATA = AgentGroupData
 
 
 class GroupDataUpdate(Message):
@@ -17,7 +18,7 @@ class GroupDataUpdate(Message):
 	absolute_id = 4294902148 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentGroupData = [AgentGroupData(*((None,)*4))]
+		self.AgentGroupData = [AGENTGROUPDATA(*((None,)*4))]
 
 		if bytes_data is None:
 			return
@@ -31,7 +32,7 @@ class GroupDataUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int64","variable1",],remaining_bytes)
-			self.AgentGroupData.append(AgentGroupData(*unpacked_data))
+			self.AgentGroupData.append(AGENTGROUPDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

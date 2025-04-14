@@ -9,12 +9,14 @@ class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
 	SerialNum: "S32"
+AGENTDATA = AgentData
 
 @dataclass
 class WearableData:
 	TextureID: "LLUUID"
 	TextureIndex: "U8"
 	HostName: "Variable 1"
+WEARABLEDATA = WearableData
 
 
 class AgentCachedTextureResponse(Message):
@@ -22,8 +24,8 @@ class AgentCachedTextureResponse(Message):
 	absolute_id = 4294902145 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*3))
-		self.WearableData = [WearableData(*((None,)*3))]
+		self.AgentData = AGENTDATA(*((None,)*3))
+		self.WearableData = [WEARABLEDATA(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -31,7 +33,7 @@ class AgentCachedTextureResponse(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","signed int32",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -40,7 +42,7 @@ class AgentCachedTextureResponse(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte","variable1",],remaining_bytes)
-			self.WearableData.append(WearableData(*unpacked_data))
+			self.WearableData.append(WEARABLEDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

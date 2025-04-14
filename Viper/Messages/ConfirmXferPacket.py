@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class XferID:
 	ID: "U64"
 	Packet: "U32"
+XFERID = XferID
 
 
 class ConfirmXferPacket(Message):
@@ -15,7 +16,7 @@ class ConfirmXferPacket(Message):
 	absolute_id = 19 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.XferID = XferID(*((None,)*2))
+		self.XferID = XFERID(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class ConfirmXferPacket(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int32",],remaining_bytes)
-		self.XferID = XferID(*unpacked_data)
+		self.XferID = XFERID(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

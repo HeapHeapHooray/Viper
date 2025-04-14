@@ -17,6 +17,7 @@ class Requester:
 	Arc: "F32"
 	RegionHandle: "U64"
 	SearchRegions: "U8"
+REQUESTER = Requester
 
 
 class ScriptSensorRequest(Message):
@@ -24,7 +25,7 @@ class ScriptSensorRequest(Message):
 	absolute_id = 4294902007 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Requester = Requester(*((None,)*11))
+		self.Requester = REQUESTER(*((None,)*11))
 
 		if bytes_data is None:
 			return
@@ -32,7 +33,7 @@ class ScriptSensorRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","vector3","unit_quaternion","variable1","signed int32","float","float","unsigned int64","unsigned byte",],remaining_bytes)
-		self.Requester = Requester(*unpacked_data)
+		self.Requester = REQUESTER(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

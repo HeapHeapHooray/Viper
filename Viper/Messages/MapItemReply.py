@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	Flags: "U32"
+AGENTDATA = AgentData
 
 @dataclass
 class RequestData:
 	ItemType: "U32"
+REQUESTDATA = RequestData
 
 @dataclass
 class Data:
@@ -21,6 +23,7 @@ class Data:
 	Extra: "S32"
 	Extra2: "S32"
 	Name: "Variable 1"
+DATA = Data
 
 
 class MapItemReply(Message):
@@ -28,9 +31,9 @@ class MapItemReply(Message):
 	absolute_id = 4294902171 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.RequestData = RequestData(*((None,)*1))
-		self.Data = [Data(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.RequestData = REQUESTDATA(*((None,)*1))
+		self.Data = [DATA(*((None,)*6))]
 
 		if bytes_data is None:
 			return
@@ -38,10 +41,10 @@ class MapItemReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-		self.RequestData = RequestData(*unpacked_data)
+		self.RequestData = REQUESTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -50,7 +53,7 @@ class MapItemReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","uuid","signed int32","signed int32","variable1",],remaining_bytes)
-			self.Data.append(Data(*unpacked_data))
+			self.Data.append(DATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

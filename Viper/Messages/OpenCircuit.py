@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class CircuitInfo:
 	IP: "IPADDR"
 	Port: "IPPORT"
+CIRCUITINFO = CircuitInfo
 
 
 class OpenCircuit(Message):
@@ -15,7 +16,7 @@ class OpenCircuit(Message):
 	absolute_id = 4294967292 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.CircuitInfo = CircuitInfo(*((None,)*2))
+		self.CircuitInfo = CIRCUITINFO(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class OpenCircuit(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int16",],remaining_bytes)
-		self.CircuitInfo = CircuitInfo(*unpacked_data)
+		self.CircuitInfo = CIRCUITINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

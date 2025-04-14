@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GroupData:
@@ -26,6 +27,7 @@ class GroupData:
 	AllowPublish: "BOOL"
 	MaturePublish: "BOOL"
 	OwnerRole: "LLUUID"
+GROUPDATA = GroupData
 
 
 class GroupProfileReply(Message):
@@ -33,8 +35,8 @@ class GroupProfileReply(Message):
 	absolute_id = 4294902112 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.GroupData = GroupData(*((None,)*16))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.GroupData = GROUPDATA(*((None,)*16))
 
 		if bytes_data is None:
 			return
@@ -42,10 +44,10 @@ class GroupProfileReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable2","unsigned byte","variable1","unsigned int64","uuid","uuid","signed int32","unsigned byte","signed int32","signed int32","signed int32","unsigned byte","unsigned byte","uuid",],remaining_bytes)
-		self.GroupData = GroupData(*unpacked_data)
+		self.GroupData = GROUPDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

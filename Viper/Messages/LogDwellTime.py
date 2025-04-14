@@ -14,6 +14,7 @@ class DwellInfo:
 	RegionY: "U32"
 	AvgAgentsInView: "U8"
 	AvgViewerFPS: "U8"
+DWELLINFO = DwellInfo
 
 
 class LogDwellTime(Message):
@@ -21,7 +22,7 @@ class LogDwellTime(Message):
 	absolute_id = 4294901778 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DwellInfo = DwellInfo(*((None,)*8))
+		self.DwellInfo = DWELLINFO(*((None,)*8))
 
 		if bytes_data is None:
 			return
@@ -29,7 +30,7 @@ class LogDwellTime(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","float","variable1","unsigned int32","unsigned int32","unsigned byte","unsigned byte",],remaining_bytes)
-		self.DwellInfo = DwellInfo(*unpacked_data)
+		self.DwellInfo = DWELLINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -10,6 +10,7 @@ class Info:
 	RegionHandle: "U64"
 	Position: "LLVector3"
 	LookAt: "LLVector3"
+INFO = Info
 
 
 class DataHomeLocationReply(Message):
@@ -17,7 +18,7 @@ class DataHomeLocationReply(Message):
 	absolute_id = 4294901828 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Info = Info(*((None,)*4))
+		self.Info = INFO(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +26,7 @@ class DataHomeLocationReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64","vector3","vector3",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

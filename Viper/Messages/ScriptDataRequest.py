@@ -9,6 +9,7 @@ class DataBlock:
 	Hash: "U64"
 	RequestType: "S8"
 	Request: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class ScriptDataRequest(Message):
@@ -16,7 +17,7 @@ class ScriptDataRequest(Message):
 	absolute_id = 4294902097 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = [DataBlock(*((None,)*3))]
+		self.DataBlock = [DATABLOCK(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -30,7 +31,7 @@ class ScriptDataRequest(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","signed byte","variable2",],remaining_bytes)
-			self.DataBlock.append(DataBlock(*unpacked_data))
+			self.DataBlock.append(DATABLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

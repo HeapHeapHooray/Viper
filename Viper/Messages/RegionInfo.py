@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class RegionInfo:
@@ -27,6 +28,7 @@ class RegionInfo:
 	RedirectGridY: "S32"
 	UseEstateSun: "BOOL"
 	SunHour: "F32"
+REGIONINFO = RegionInfo
 
 @dataclass
 class RegionInfo2:
@@ -35,10 +37,12 @@ class RegionInfo2:
 	MaxAgents32: "U32"
 	HardMaxAgents: "U32"
 	HardMaxObjects: "U32"
+REGIONINFO2 = RegionInfo2
 
 @dataclass
 class RegionInfo3:
 	RegionFlagsExtended: "U64"
+REGIONINFO3 = RegionInfo3
 
 @dataclass
 class RegionInfo5:
@@ -49,6 +53,7 @@ class RegionInfo5:
 	ChatNormalOffset: "F32"
 	ChatShoutOffset: "F32"
 	ChatFlags: "U32"
+REGIONINFO5 = RegionInfo5
 
 @dataclass
 class CombatSettings:
@@ -58,6 +63,7 @@ class CombatSettings:
 	RegenerationRate: "F32"
 	InvulnerabilyTime: "F32"
 	DamageLimit: "F32"
+COMBATSETTINGS = CombatSettings
 
 
 class RegionInfo(Message):
@@ -65,12 +71,12 @@ class RegionInfo(Message):
 	absolute_id = 4294901902 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.RegionInfo = RegionInfo(*((None,)*16))
-		self.RegionInfo2 = RegionInfo2(*((None,)*5))
-		self.RegionInfo3 = [RegionInfo3(*((None,)*1))]
-		self.RegionInfo5 = [RegionInfo5(*((None,)*7))]
-		self.CombatSettings = [CombatSettings(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.RegionInfo = REGIONINFO(*((None,)*16))
+		self.RegionInfo2 = REGIONINFO2(*((None,)*5))
+		self.RegionInfo3 = [REGIONINFO3(*((None,)*1))]
+		self.RegionInfo5 = [REGIONINFO5(*((None,)*7))]
+		self.CombatSettings = [COMBATSETTINGS(*((None,)*6))]
 
 		if bytes_data is None:
 			return
@@ -78,13 +84,13 @@ class RegionInfo(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","unsigned int32","unsigned int32","unsigned int32","unsigned byte","unsigned byte","float","float","float","float","float","signed int32","signed int32","signed int32","unsigned byte","float",],remaining_bytes)
-		self.RegionInfo = RegionInfo(*unpacked_data)
+		self.RegionInfo = REGIONINFO(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","variable1","unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-		self.RegionInfo2 = RegionInfo2(*unpacked_data)
+		self.RegionInfo2 = REGIONINFO2(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -93,7 +99,7 @@ class RegionInfo(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-			self.RegionInfo3.append(RegionInfo3(*unpacked_data))
+			self.RegionInfo3.append(REGIONINFO3(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -102,7 +108,7 @@ class RegionInfo(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["float","float","float","float","float","float","unsigned int32",],remaining_bytes)
-			self.RegionInfo5.append(RegionInfo5(*unpacked_data))
+			self.RegionInfo5.append(REGIONINFO5(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -111,7 +117,7 @@ class RegionInfo(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","float","float","float","float",],remaining_bytes)
-			self.CombatSettings.append(CombatSettings(*unpacked_data))
+			self.CombatSettings.append(COMBATSETTINGS(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

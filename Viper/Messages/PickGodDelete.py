@@ -8,11 +8,13 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
 	PickID: "LLUUID"
 	QueryID: "LLUUID"
+DATA = Data
 
 
 class PickGodDelete(Message):
@@ -20,8 +22,8 @@ class PickGodDelete(Message):
 	absolute_id = 4294901947 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = Data(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = DATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -29,10 +31,10 @@ class PickGodDelete(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

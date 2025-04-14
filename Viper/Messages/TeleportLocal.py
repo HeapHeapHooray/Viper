@@ -11,6 +11,7 @@ class Info:
 	Position: "LLVector3"
 	LookAt: "LLVector3"
 	TeleportFlags: "U32"
+INFO = Info
 
 
 class TeleportLocal(Message):
@@ -18,7 +19,7 @@ class TeleportLocal(Message):
 	absolute_id = 4294901824 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Info = Info(*((None,)*5))
+		self.Info = INFO(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -26,7 +27,7 @@ class TeleportLocal(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","vector3","vector3","unsigned int32",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

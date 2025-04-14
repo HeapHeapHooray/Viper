@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class HealthData:
 	Health: "F32"
+HEALTHDATA = HealthData
 
 
 class HealthMessage(Message):
@@ -14,7 +15,7 @@ class HealthMessage(Message):
 	absolute_id = 4294901898 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.HealthData = HealthData(*((None,)*1))
+		self.HealthData = HEALTHDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class HealthMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["float",],remaining_bytes)
-		self.HealthData = HealthData(*unpacked_data)
+		self.HealthData = HEALTHDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

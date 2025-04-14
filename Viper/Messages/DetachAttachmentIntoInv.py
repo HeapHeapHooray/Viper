@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class ObjectData:
 	AgentID: "LLUUID"
 	ItemID: "LLUUID"
+OBJECTDATA = ObjectData
 
 
 class DetachAttachmentIntoInv(Message):
@@ -15,7 +16,7 @@ class DetachAttachmentIntoInv(Message):
 	absolute_id = 4294902157 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ObjectData = ObjectData(*((None,)*2))
+		self.ObjectData = OBJECTDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class DetachAttachmentIntoInv(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

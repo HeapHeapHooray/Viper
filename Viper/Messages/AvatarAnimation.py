@@ -7,19 +7,23 @@ from dataclasses import dataclass
 @dataclass
 class Sender:
 	ID: "LLUUID"
+SENDER = Sender
 
 @dataclass
 class AnimationList:
 	AnimID: "LLUUID"
 	AnimSequenceID: "S32"
+ANIMATIONLIST = AnimationList
 
 @dataclass
 class AnimationSourceList:
 	ObjectID: "LLUUID"
+ANIMATIONSOURCELIST = AnimationSourceList
 
 @dataclass
 class PhysicalAvatarEventList:
 	TypeData: "Variable 1"
+PHYSICALAVATAREVENTLIST = PhysicalAvatarEventList
 
 
 class AvatarAnimation(Message):
@@ -27,10 +31,10 @@ class AvatarAnimation(Message):
 	absolute_id = 20 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Sender = Sender(*((None,)*1))
-		self.AnimationList = [AnimationList(*((None,)*2))]
-		self.AnimationSourceList = [AnimationSourceList(*((None,)*1))]
-		self.PhysicalAvatarEventList = [PhysicalAvatarEventList(*((None,)*1))]
+		self.Sender = SENDER(*((None,)*1))
+		self.AnimationList = [ANIMATIONLIST(*((None,)*2))]
+		self.AnimationSourceList = [ANIMATIONSOURCELIST(*((None,)*1))]
+		self.PhysicalAvatarEventList = [PHYSICALAVATAREVENTLIST(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -38,7 +42,7 @@ class AvatarAnimation(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.Sender = Sender(*unpacked_data)
+		self.Sender = SENDER(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -47,7 +51,7 @@ class AvatarAnimation(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32",],remaining_bytes)
-			self.AnimationList.append(AnimationList(*unpacked_data))
+			self.AnimationList.append(ANIMATIONLIST(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -56,7 +60,7 @@ class AvatarAnimation(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.AnimationSourceList.append(AnimationSourceList(*unpacked_data))
+			self.AnimationSourceList.append(ANIMATIONSOURCELIST(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -65,7 +69,7 @@ class AvatarAnimation(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-			self.PhysicalAvatarEventList.append(PhysicalAvatarEventList(*unpacked_data))
+			self.PhysicalAvatarEventList.append(PHYSICALAVATAREVENTLIST(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

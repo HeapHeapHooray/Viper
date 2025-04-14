@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	QueryID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class TransactionData:
 	TransactionID: "LLUUID"
+TRANSACTIONDATA = TransactionData
 
 @dataclass
 class QueryData:
@@ -28,6 +30,7 @@ class QueryData:
 	SnapshotID: "LLUUID"
 	Dwell: "F32"
 	Price: "S32"
+QUERYDATA = QueryData
 
 
 class PlacesReply(Message):
@@ -35,9 +38,9 @@ class PlacesReply(Message):
 	absolute_id = 4294901790 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.TransactionData = TransactionData(*((None,)*1))
-		self.QueryData = [QueryData(*((None,)*13))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.TransactionData = TRANSACTIONDATA(*((None,)*1))
+		self.QueryData = [QUERYDATA(*((None,)*13))]
 
 		if bytes_data is None:
 			return
@@ -45,10 +48,10 @@ class PlacesReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.TransactionData = TransactionData(*unpacked_data)
+		self.TransactionData = TRANSACTIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -57,7 +60,7 @@ class PlacesReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable1","signed int32","signed int32","unsigned byte","float","float","float","variable1","uuid","float","signed int32",],remaining_bytes)
-			self.QueryData.append(QueryData(*unpacked_data))
+			self.QueryData.append(QUERYDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

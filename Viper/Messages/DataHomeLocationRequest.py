@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class Info:
 	AgentID: "LLUUID"
 	KickedFromEstateID: "U32"
+INFO = Info
 
 @dataclass
 class AgentInfo:
 	AgentEffectiveMaturity: "U32"
+AGENTINFO = AgentInfo
 
 
 class DataHomeLocationRequest(Message):
@@ -19,8 +21,8 @@ class DataHomeLocationRequest(Message):
 	absolute_id = 4294901827 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Info = Info(*((None,)*2))
-		self.AgentInfo = AgentInfo(*((None,)*1))
+		self.Info = INFO(*((None,)*2))
+		self.AgentInfo = AGENTINFO(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -28,10 +30,10 @@ class DataHomeLocationRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-		self.AgentInfo = AgentInfo(*unpacked_data)
+		self.AgentInfo = AGENTINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class AgentInfo:
 	AgentID: "LLUUID"
+AGENTINFO = AgentInfo
 
 
 class SystemKickUser(Message):
@@ -14,7 +15,7 @@ class SystemKickUser(Message):
 	absolute_id = 4294901926 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentInfo = [AgentInfo(*((None,)*1))]
+		self.AgentInfo = [AGENTINFO(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +29,7 @@ class SystemKickUser(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.AgentInfo.append(AgentInfo(*unpacked_data))
+			self.AgentInfo.append(AGENTINFO(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

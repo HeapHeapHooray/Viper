@@ -8,11 +8,13 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ObjectData:
 	ObjectLocalID: "U32"
 	Scale: "LLVector3"
+OBJECTDATA = ObjectData
 
 
 class ObjectScale(Message):
@@ -20,8 +22,8 @@ class ObjectScale(Message):
 	absolute_id = 4294901852 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ObjectData = [ObjectData(*((None,)*2))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ObjectData = [OBJECTDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -29,7 +31,7 @@ class ObjectScale(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -38,7 +40,7 @@ class ObjectScale(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","vector3",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

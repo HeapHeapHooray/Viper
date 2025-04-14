@@ -9,6 +9,7 @@ class RequestData:
 	ReportType: "U32"
 	RequestFlags: "U32"
 	TotalObjectCount: "U32"
+REQUESTDATA = RequestData
 
 @dataclass
 class ReportData:
@@ -20,6 +21,7 @@ class ReportData:
 	Score: "F32"
 	TaskName: "Variable 1"
 	OwnerName: "Variable 1"
+REPORTDATA = ReportData
 
 
 class LandStatReply(Message):
@@ -27,8 +29,8 @@ class LandStatReply(Message):
 	absolute_id = 4294902182 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RequestData = RequestData(*((None,)*3))
-		self.ReportData = [ReportData(*((None,)*8))]
+		self.RequestData = REQUESTDATA(*((None,)*3))
+		self.ReportData = [REPORTDATA(*((None,)*8))]
 
 		if bytes_data is None:
 			return
@@ -36,7 +38,7 @@ class LandStatReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-		self.RequestData = RequestData(*unpacked_data)
+		self.RequestData = REQUESTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -45,7 +47,7 @@ class LandStatReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","uuid","float","float","float","float","variable1","variable1",],remaining_bytes)
-			self.ReportData.append(ReportData(*unpacked_data))
+			self.ReportData.append(REPORTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

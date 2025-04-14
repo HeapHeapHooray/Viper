@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class ObjectData:
 	ObjectID: "LLUUID"
 	DefaultPayPrice: "S32"
+OBJECTDATA = ObjectData
 
 @dataclass
 class ButtonData:
 	PayButton: "S32"
+BUTTONDATA = ButtonData
 
 
 class PayPriceReply(Message):
@@ -19,8 +21,8 @@ class PayPriceReply(Message):
 	absolute_id = 4294901922 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ObjectData = ObjectData(*((None,)*2))
-		self.ButtonData = [ButtonData(*((None,)*1))]
+		self.ObjectData = OBJECTDATA(*((None,)*2))
+		self.ButtonData = [BUTTONDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class PayPriceReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -37,7 +39,7 @@ class PayPriceReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32",],remaining_bytes)
-			self.ButtonData.append(ButtonData(*unpacked_data))
+			self.ButtonData.append(BUTTONDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

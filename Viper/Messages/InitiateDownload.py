@@ -7,11 +7,13 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class FileData:
 	SimFilename: "Variable 1"
 	ViewerFilename: "Variable 1"
+FILEDATA = FileData
 
 
 class InitiateDownload(Message):
@@ -19,8 +21,8 @@ class InitiateDownload(Message):
 	absolute_id = 4294902163 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.FileData = FileData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.FileData = FILEDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -28,10 +30,10 @@ class InitiateDownload(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","variable1",],remaining_bytes)
-		self.FileData = FileData(*unpacked_data)
+		self.FileData = FILEDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

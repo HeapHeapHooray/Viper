@@ -8,12 +8,14 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ChatData:
 	Message: "Variable 2"
 	Type: "U8"
 	Channel: "S32"
+CHATDATA = ChatData
 
 
 class ChatFromViewer(Message):
@@ -21,8 +23,8 @@ class ChatFromViewer(Message):
 	absolute_id = 4294901840 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ChatData = ChatData(*((None,)*3))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ChatData = CHATDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -30,10 +32,10 @@ class ChatFromViewer(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2","unsigned byte","signed int32",],remaining_bytes)
-		self.ChatData = ChatData(*unpacked_data)
+		self.ChatData = CHATDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

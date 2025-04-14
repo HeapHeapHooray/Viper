@@ -9,10 +9,12 @@ class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
 	QueryID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
 	Name: "Variable 1"
+DATA = Data
 
 
 class AvatarPickerRequest(Message):
@@ -20,8 +22,8 @@ class AvatarPickerRequest(Message):
 	absolute_id = 4294901786 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*3))
-		self.Data = Data(*((None,)*1))
+		self.AgentData = AGENTDATA(*((None,)*3))
+		self.Data = DATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -29,10 +31,10 @@ class AvatarPickerRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

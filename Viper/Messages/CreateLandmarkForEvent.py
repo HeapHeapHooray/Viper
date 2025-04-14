@@ -8,15 +8,18 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class EventData:
 	EventID: "U32"
+EVENTDATA = EventData
 
 @dataclass
 class InventoryBlock:
 	FolderID: "LLUUID"
 	Name: "Variable 1"
+INVENTORYBLOCK = InventoryBlock
 
 
 class CreateLandmarkForEvent(Message):
@@ -24,9 +27,9 @@ class CreateLandmarkForEvent(Message):
 	absolute_id = 4294902066 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.EventData = EventData(*((None,)*1))
-		self.InventoryBlock = InventoryBlock(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.EventData = EVENTDATA(*((None,)*1))
+		self.InventoryBlock = INVENTORYBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -34,13 +37,13 @@ class CreateLandmarkForEvent(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-		self.EventData = EventData(*unpacked_data)
+		self.EventData = EVENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1",],remaining_bytes)
-		self.InventoryBlock = InventoryBlock(*unpacked_data)
+		self.InventoryBlock = INVENTORYBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

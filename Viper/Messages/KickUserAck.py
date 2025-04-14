@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class UserInfo:
 	SessionID: "LLUUID"
 	Flags: "U32"
+USERINFO = UserInfo
 
 
 class KickUserAck(Message):
@@ -15,7 +16,7 @@ class KickUserAck(Message):
 	absolute_id = 4294901924 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.UserInfo = UserInfo(*((None,)*2))
+		self.UserInfo = USERINFO(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class KickUserAck(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.UserInfo = UserInfo(*unpacked_data)
+		self.UserInfo = USERINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

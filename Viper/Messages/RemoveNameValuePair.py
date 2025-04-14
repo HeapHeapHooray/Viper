@@ -7,10 +7,12 @@ from dataclasses import dataclass
 @dataclass
 class TaskData:
 	ID: "LLUUID"
+TASKDATA = TaskData
 
 @dataclass
 class NameValueData:
 	NVPair: "Variable 2"
+NAMEVALUEDATA = NameValueData
 
 
 class RemoveNameValuePair(Message):
@@ -18,8 +20,8 @@ class RemoveNameValuePair(Message):
 	absolute_id = 4294902090 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TaskData = TaskData(*((None,)*1))
-		self.NameValueData = [NameValueData(*((None,)*1))]
+		self.TaskData = TASKDATA(*((None,)*1))
+		self.NameValueData = [NAMEVALUEDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -27,7 +29,7 @@ class RemoveNameValuePair(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.TaskData = TaskData(*unpacked_data)
+		self.TaskData = TASKDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -36,7 +38,7 @@ class RemoveNameValuePair(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-			self.NameValueData.append(NameValueData(*unpacked_data))
+			self.NameValueData.append(NAMEVALUEDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

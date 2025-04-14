@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class ObjectData:
 	ObjectID: "LLUUID"
+OBJECTDATA = ObjectData
 
 
 class ClearFollowCamProperties(Message):
@@ -14,7 +15,7 @@ class ClearFollowCamProperties(Message):
 	absolute_id = 4294901920 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ObjectData = ObjectData(*((None,)*1))
+		self.ObjectData = OBJECTDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class ClearFollowCamProperties(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

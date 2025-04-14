@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class RegionInfo:
@@ -19,10 +20,12 @@ class RegionInfo:
 	PricePerMeter: "S32"
 	RedirectGridX: "S32"
 	RedirectGridY: "S32"
+REGIONINFO = RegionInfo
 
 @dataclass
 class RegionInfo2:
 	RegionFlagsExtended: "U64"
+REGIONINFO2 = RegionInfo2
 
 
 class GodUpdateRegionInfo(Message):
@@ -30,9 +33,9 @@ class GodUpdateRegionInfo(Message):
 	absolute_id = 4294901903 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.RegionInfo = RegionInfo(*((None,)*8))
-		self.RegionInfo2 = [RegionInfo2(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.RegionInfo = REGIONINFO(*((None,)*8))
+		self.RegionInfo2 = [REGIONINFO2(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -40,10 +43,10 @@ class GodUpdateRegionInfo(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","unsigned int32","unsigned int32","unsigned int32","float","signed int32","signed int32","signed int32",],remaining_bytes)
-		self.RegionInfo = RegionInfo(*unpacked_data)
+		self.RegionInfo = REGIONINFO(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -52,7 +55,7 @@ class GodUpdateRegionInfo(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-			self.RegionInfo2.append(RegionInfo2(*unpacked_data))
+			self.RegionInfo2.append(REGIONINFO2(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

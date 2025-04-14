@@ -14,6 +14,7 @@ class Info:
 	SeedCapability: "Variable 2"
 	SimAccess: "U8"
 	TeleportFlags: "U32"
+INFO = Info
 
 
 class TeleportFinish(Message):
@@ -21,7 +22,7 @@ class TeleportFinish(Message):
 	absolute_id = 4294901829 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Info = Info(*((None,)*8))
+		self.Info = INFO(*((None,)*8))
 
 		if bytes_data is None:
 			return
@@ -29,7 +30,7 @@ class TeleportFinish(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","unsigned int32","unsigned int16","unsigned int64","variable2","unsigned byte","unsigned int32",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

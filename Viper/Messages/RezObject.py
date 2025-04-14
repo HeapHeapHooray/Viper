@@ -9,6 +9,7 @@ class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
 	GroupID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class RezData:
@@ -24,6 +25,7 @@ class RezData:
 	GroupMask: "U32"
 	EveryoneMask: "U32"
 	NextOwnerMask: "U32"
+REZDATA = RezData
 
 @dataclass
 class InventoryData:
@@ -48,6 +50,7 @@ class InventoryData:
 	Description: "Variable 1"
 	CreationDate: "S32"
 	CRC: "U32"
+INVENTORYDATA = InventoryData
 
 
 class RezObject(Message):
@@ -55,9 +58,9 @@ class RezObject(Message):
 	absolute_id = 4294902053 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*3))
-		self.RezData = RezData(*((None,)*12))
-		self.InventoryData = InventoryData(*((None,)*21))
+		self.AgentData = AGENTDATA(*((None,)*3))
+		self.RezData = REZDATA(*((None,)*12))
+		self.InventoryData = INVENTORYDATA(*((None,)*21))
 
 		if bytes_data is None:
 			return
@@ -65,13 +68,13 @@ class RezObject(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte","vector3","vector3","uuid","unsigned byte","unsigned byte","unsigned byte","unsigned int32","unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-		self.RezData = RezData(*unpacked_data)
+		self.RezData = REZDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid","uuid","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned byte","uuid","signed byte","signed byte","unsigned int32","unsigned byte","signed int32","variable1","variable1","signed int32","unsigned int32",],remaining_bytes)
-		self.InventoryData = InventoryData(*unpacked_data)
+		self.InventoryData = INVENTORYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

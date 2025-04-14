@@ -21,12 +21,14 @@ class AgentData:
 	SysOS: "Variable 1"
 	SysCPU: "Variable 1"
 	SysGPU: "Variable 1"
+AGENTDATA = AgentData
 
 @dataclass
 class DownloadTotals:
 	World: "U32"
 	Objects: "U32"
 	Textures: "U32"
+DOWNLOADTOTALS = DownloadTotals
 
 @dataclass
 class NetStats:
@@ -34,6 +36,7 @@ class NetStats:
 	Packets: "U32"
 	Compressed: "U32"
 	Savings: "U32"
+NETSTATS = NetStats
 
 @dataclass
 class FailStats:
@@ -43,11 +46,13 @@ class FailStats:
 	FailedResends: "U32"
 	OffCircuit: "U32"
 	Invalid: "U32"
+FAILSTATS = FailStats
 
 @dataclass
 class MiscStats:
 	Type: "U32"
 	Value: "F64"
+MISCSTATS = MiscStats
 
 
 class ViewerStats(Message):
@@ -55,13 +60,13 @@ class ViewerStats(Message):
 	absolute_id = 4294901891 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*15))
-		self.DownloadTotals = DownloadTotals(*((None,)*3))
+		self.AgentData = AGENTDATA(*((None,)*15))
+		self.DownloadTotals = DOWNLOADTOTALS(*((None,)*3))
 		self.NetStats = []
 		for i in range(2):
-			self.NetStats.append(NetStats(*((None,)*4)))
-		self.FailStats = FailStats(*((None,)*6))
-		self.MiscStats = [MiscStats(*((None,)*2))]
+			self.NetStats.append(NETSTATS(*((None,)*4)))
+		self.FailStats = FAILSTATS(*((None,)*6))
+		self.MiscStats = [MISCSTATS(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -69,10 +74,10 @@ class ViewerStats(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","unsigned int32","float","float","float","unsigned byte","float","double","signed int32","unsigned int32","variable1","variable1","variable1",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-		self.DownloadTotals = DownloadTotals(*unpacked_data)
+		self.DownloadTotals = DOWNLOADTOTALS(*unpacked_data)
 
 		blocks_count = 2 # -- Fixed/constant Blocks length of 2. 
 
@@ -80,10 +85,10 @@ class ViewerStats(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-			self.NetStats.append(NetStats(*unpacked_data))
+			self.NetStats.append(NETSTATS(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-		self.FailStats = FailStats(*unpacked_data)
+		self.FailStats = FAILSTATS(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -92,7 +97,7 @@ class ViewerStats(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","double",],remaining_bytes)
-			self.MiscStats.append(MiscStats(*unpacked_data))
+			self.MiscStats.append(MISCSTATS(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

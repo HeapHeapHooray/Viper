@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class ImageID:
 	ID: "LLUUID"
+IMAGEID = ImageID
 
 
 class ImageNotInDatabase(Message):
@@ -14,7 +15,7 @@ class ImageNotInDatabase(Message):
 	absolute_id = 4294901846 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ImageID = ImageID(*((None,)*1))
+		self.ImageID = IMAGEID(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class ImageNotInDatabase(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.ImageID = ImageID(*unpacked_data)
+		self.ImageID = IMAGEID(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

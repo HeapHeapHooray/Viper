@@ -10,6 +10,7 @@ class AgentData:
 	ViewerCircuitCode: "U32"
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 
 class ChildAgentAlive(Message):
@@ -17,7 +18,7 @@ class ChildAgentAlive(Message):
 	absolute_id = 26 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*4))
+		self.AgentData = AGENTDATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +26,7 @@ class ChildAgentAlive(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int32","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

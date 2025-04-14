@@ -23,6 +23,7 @@ class Info:
 	PriceObjectScaleFactor: "F32"
 	PriceParcelRent: "S32"
 	PriceGroupCreate: "S32"
+INFO = Info
 
 
 class EconomyData(Message):
@@ -30,7 +31,7 @@ class EconomyData(Message):
 	absolute_id = 4294901785 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Info = Info(*((None,)*17))
+		self.Info = INFO(*((None,)*17))
 
 		if bytes_data is None:
 			return
@@ -38,7 +39,7 @@ class EconomyData(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","signed int32","float","signed int32","signed int32","signed int32","float","float","float","float","signed int32","signed int32",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

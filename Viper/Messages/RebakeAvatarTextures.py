@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class TextureData:
 	TextureID: "LLUUID"
+TEXTUREDATA = TextureData
 
 
 class RebakeAvatarTextures(Message):
@@ -14,7 +15,7 @@ class RebakeAvatarTextures(Message):
 	absolute_id = 4294901847 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TextureData = TextureData(*((None,)*1))
+		self.TextureData = TEXTUREDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +23,7 @@ class RebakeAvatarTextures(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.TextureData = TextureData(*unpacked_data)
+		self.TextureData = TEXTUREDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

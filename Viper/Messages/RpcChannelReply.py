@@ -9,6 +9,7 @@ class DataBlock:
 	TaskID: "LLUUID"
 	ItemID: "LLUUID"
 	ChannelID: "LLUUID"
+DATABLOCK = DataBlock
 
 
 class RpcChannelReply(Message):
@@ -16,7 +17,7 @@ class RpcChannelReply(Message):
 	absolute_id = 4294902174 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*3))
+		self.DataBlock = DATABLOCK(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +25,7 @@ class RpcChannelReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

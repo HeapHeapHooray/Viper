@@ -10,19 +10,23 @@ class AgentData:
 	SessionID: "LLUUID"
 	SerialNum: "U32"
 	Size: "LLVector3"
+AGENTDATA = AgentData
 
 @dataclass
 class WearableData:
 	CacheID: "LLUUID"
 	TextureIndex: "U8"
+WEARABLEDATA = WearableData
 
 @dataclass
 class ObjectData:
 	TextureEntry: "Variable 2"
+OBJECTDATA = ObjectData
 
 @dataclass
 class VisualParam:
 	ParamValue: "U8"
+VISUALPARAM = VisualParam
 
 
 class AgentSetAppearance(Message):
@@ -30,10 +34,10 @@ class AgentSetAppearance(Message):
 	absolute_id = 4294901844 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*4))
-		self.WearableData = [WearableData(*((None,)*2))]
-		self.ObjectData = ObjectData(*((None,)*1))
-		self.VisualParam = [VisualParam(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*4))
+		self.WearableData = [WEARABLEDATA(*((None,)*2))]
+		self.ObjectData = OBJECTDATA(*((None,)*1))
+		self.VisualParam = [VISUALPARAM(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -41,7 +45,7 @@ class AgentSetAppearance(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","vector3",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -50,10 +54,10 @@ class AgentSetAppearance(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte",],remaining_bytes)
-			self.WearableData.append(WearableData(*unpacked_data))
+			self.WearableData.append(WEARABLEDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -62,7 +66,7 @@ class AgentSetAppearance(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-			self.VisualParam.append(VisualParam(*unpacked_data))
+			self.VisualParam.append(VISUALPARAM(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

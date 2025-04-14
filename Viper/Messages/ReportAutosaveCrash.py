@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AutosaveData:
 	PID: "S32"
 	Status: "S32"
+AUTOSAVEDATA = AutosaveData
 
 
 class ReportAutosaveCrash(Message):
@@ -15,7 +16,7 @@ class ReportAutosaveCrash(Message):
 	absolute_id = 4294901888 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AutosaveData = AutosaveData(*((None,)*2))
+		self.AutosaveData = AUTOSAVEDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +24,7 @@ class ReportAutosaveCrash(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","signed int32",],remaining_bytes)
-		self.AutosaveData = AutosaveData(*unpacked_data)
+		self.AutosaveData = AUTOSAVEDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

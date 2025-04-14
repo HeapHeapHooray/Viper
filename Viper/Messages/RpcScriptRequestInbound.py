@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class TargetBlock:
 	GridX: "U32"
 	GridY: "U32"
+TARGETBLOCK = TargetBlock
 
 @dataclass
 class DataBlock:
@@ -16,6 +17,7 @@ class DataBlock:
 	ChannelID: "LLUUID"
 	IntValue: "U32"
 	StringValue: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class RpcScriptRequestInbound(Message):
@@ -23,8 +25,8 @@ class RpcScriptRequestInbound(Message):
 	absolute_id = 4294902175 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TargetBlock = TargetBlock(*((None,)*2))
-		self.DataBlock = DataBlock(*((None,)*5))
+		self.TargetBlock = TARGETBLOCK(*((None,)*2))
+		self.DataBlock = DATABLOCK(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -32,10 +34,10 @@ class RpcScriptRequestInbound(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32",],remaining_bytes)
-		self.TargetBlock = TargetBlock(*unpacked_data)
+		self.TargetBlock = TARGETBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","unsigned int32","variable2",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

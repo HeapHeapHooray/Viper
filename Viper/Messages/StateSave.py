@@ -8,10 +8,12 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class DataBlock:
 	Filename: "Variable 1"
+DATABLOCK = DataBlock
 
 
 class StateSave(Message):
@@ -19,8 +21,8 @@ class StateSave(Message):
 	absolute_id = 4294901887 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.DataBlock = DataBlock(*((None,)*1))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.DataBlock = DATABLOCK(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -28,10 +30,10 @@ class StateSave(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

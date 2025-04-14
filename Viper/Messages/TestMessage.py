@@ -7,12 +7,14 @@ from dataclasses import dataclass
 @dataclass
 class TestBlock1:
 	Test1: "U32"
+TESTBLOCK1 = TestBlock1
 
 @dataclass
 class NeighborBlock:
 	Test0: "U32"
 	Test1: "U32"
 	Test2: "U32"
+NEIGHBORBLOCK = NeighborBlock
 
 
 class TestMessage(Message):
@@ -20,10 +22,10 @@ class TestMessage(Message):
 	absolute_id = 4294901761 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TestBlock1 = TestBlock1(*((None,)*1))
+		self.TestBlock1 = TESTBLOCK1(*((None,)*1))
 		self.NeighborBlock = []
 		for i in range(4):
-			self.NeighborBlock.append(NeighborBlock(*((None,)*3)))
+			self.NeighborBlock.append(NEIGHBORBLOCK(*((None,)*3)))
 
 		if bytes_data is None:
 			return
@@ -31,7 +33,7 @@ class TestMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-		self.TestBlock1 = TestBlock1(*unpacked_data)
+		self.TestBlock1 = TESTBLOCK1(*unpacked_data)
 
 		blocks_count = 4 # -- Fixed/constant Blocks length of 4. 
 
@@ -39,7 +41,7 @@ class TestMessage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-			self.NeighborBlock.append(NeighborBlock(*unpacked_data))
+			self.NeighborBlock.append(NEIGHBORBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

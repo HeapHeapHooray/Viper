@@ -10,19 +10,23 @@ class Region:
 	RegionY: "U32"
 	RegionFlags: "U32"
 	ObjectCapacity: "U32"
+REGION = Region
 
 @dataclass
 class Stat:
 	StatID: "U32"
 	StatValue: "F32"
+STAT = Stat
 
 @dataclass
 class PidStat:
 	PID: "S32"
+PIDSTAT = PidStat
 
 @dataclass
 class RegionInfo:
 	RegionFlagsExtended: "U64"
+REGIONINFO = RegionInfo
 
 
 class SimStats(Message):
@@ -30,10 +34,10 @@ class SimStats(Message):
 	absolute_id = 4294901900 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Region = Region(*((None,)*4))
-		self.Stat = [Stat(*((None,)*2))]
-		self.PidStat = PidStat(*((None,)*1))
-		self.RegionInfo = [RegionInfo(*((None,)*1))]
+		self.Region = REGION(*((None,)*4))
+		self.Stat = [STAT(*((None,)*2))]
+		self.PidStat = PIDSTAT(*((None,)*1))
+		self.RegionInfo = [REGIONINFO(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -41,7 +45,7 @@ class SimStats(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","unsigned int32","unsigned int32",],remaining_bytes)
-		self.Region = Region(*unpacked_data)
+		self.Region = REGION(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -50,10 +54,10 @@ class SimStats(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","float",],remaining_bytes)
-			self.Stat.append(Stat(*unpacked_data))
+			self.Stat.append(STAT(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32",],remaining_bytes)
-		self.PidStat = PidStat(*unpacked_data)
+		self.PidStat = PIDSTAT(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -62,7 +66,7 @@ class SimStats(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-			self.RegionInfo.append(RegionInfo(*unpacked_data))
+			self.RegionInfo.append(REGIONINFO(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
@@ -21,6 +22,7 @@ class Data:
 	PosGlobal: "LLVector3d"
 	ClassifiedFlags: "U8"
 	PriceForListing: "S32"
+DATA = Data
 
 
 class ClassifiedInfoUpdate(Message):
@@ -28,8 +30,8 @@ class ClassifiedInfoUpdate(Message):
 	absolute_id = 4294901805 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = Data(*((None,)*10))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = DATA(*((None,)*10))
 
 		if bytes_data is None:
 			return
@@ -37,10 +39,10 @@ class ClassifiedInfoUpdate(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","variable1","variable2","uuid","unsigned int32","uuid","vector3d","unsigned byte","signed int32",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

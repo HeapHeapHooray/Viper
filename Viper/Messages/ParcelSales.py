@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class ParcelData:
 	ParcelID: "LLUUID"
 	BuyerID: "LLUUID"
+PARCELDATA = ParcelData
 
 
 class ParcelSales(Message):
@@ -15,7 +16,7 @@ class ParcelSales(Message):
 	absolute_id = 4294901986 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ParcelData = [ParcelData(*((None,)*2))]
+		self.ParcelData = [PARCELDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -29,7 +30,7 @@ class ParcelSales(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-			self.ParcelData.append(ParcelData(*unpacked_data))
+			self.ParcelData.append(PARCELDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

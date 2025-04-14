@@ -7,6 +7,7 @@ from dataclasses import dataclass
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
@@ -23,6 +24,7 @@ class Data:
 	PosGlobal: "LLVector3d"
 	SortOrder: "S32"
 	Enabled: "BOOL"
+DATA = Data
 
 
 class PickInfoReply(Message):
@@ -30,8 +32,8 @@ class PickInfoReply(Message):
 	absolute_id = 4294901944 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.Data = Data(*((None,)*13))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.Data = DATA(*((None,)*13))
 
 		if bytes_data is None:
 			return
@@ -39,10 +41,10 @@ class PickInfoReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned byte","uuid","variable1","variable2","uuid","variable1","variable1","variable1","vector3d","signed int32","unsigned byte",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

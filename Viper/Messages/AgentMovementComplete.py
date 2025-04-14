@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
@@ -15,10 +16,12 @@ class Data:
 	LookAt: "LLVector3"
 	RegionHandle: "U64"
 	Timestamp: "U32"
+DATA = Data
 
 @dataclass
 class SimData:
 	ChannelVersion: "Variable 2"
+SIMDATA = SimData
 
 
 class AgentMovementComplete(Message):
@@ -26,9 +29,9 @@ class AgentMovementComplete(Message):
 	absolute_id = 4294902010 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = Data(*((None,)*4))
-		self.SimData = SimData(*((None,)*1))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = DATA(*((None,)*4))
+		self.SimData = SIMDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -36,13 +39,13 @@ class AgentMovementComplete(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["vector3","vector3","unsigned int64","unsigned int32",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable2",],remaining_bytes)
-		self.SimData = SimData(*unpacked_data)
+		self.SimData = SIMDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

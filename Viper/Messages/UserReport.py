@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ReportData:
@@ -23,6 +24,7 @@ class ReportData:
 	Summary: "Variable 1"
 	Details: "Variable 2"
 	VersionString: "Variable 1"
+REPORTDATA = ReportData
 
 
 class UserReport(Message):
@@ -30,8 +32,8 @@ class UserReport(Message):
 	absolute_id = 4294901893 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ReportData = ReportData(*((None,)*12))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ReportData = REPORTDATA(*((None,)*12))
 
 		if bytes_data is None:
 			return
@@ -39,10 +41,10 @@ class UserReport(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned byte","vector3","unsigned byte","uuid","uuid","uuid","variable1","uuid","variable1","variable2","variable1",],remaining_bytes)
-		self.ReportData = ReportData(*unpacked_data)
+		self.ReportData = REPORTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

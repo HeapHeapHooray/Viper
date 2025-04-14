@@ -8,6 +8,7 @@ from dataclasses import dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	GroupID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
@@ -17,6 +18,7 @@ class Data:
 	Subject: "Variable 2"
 	HasAttachment: "BOOL"
 	AssetType: "U8"
+DATA = Data
 
 
 class GroupNoticesListReply(Message):
@@ -24,8 +26,8 @@ class GroupNoticesListReply(Message):
 	absolute_id = 4294901819 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Data = [Data(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Data = [DATA(*((None,)*6))]
 
 		if bytes_data is None:
 			return
@@ -33,7 +35,7 @@ class GroupNoticesListReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -42,7 +44,7 @@ class GroupNoticesListReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","variable2","variable2","unsigned byte","unsigned byte",],remaining_bytes)
-			self.Data.append(Data(*unpacked_data))
+			self.Data.append(DATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:
