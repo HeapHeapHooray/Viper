@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -11,11 +12,13 @@ class AgentData:
 	Flags: "U32"
 	EstateID: "U32"
 	Godlike: "BOOL"
+AGENTDATA = AgentData
 
 @dataclass
 class RequestData:
 	ItemType: "U32"
 	RegionHandle: "U64"
+REQUESTDATA = RequestData
 
 
 class MapItemRequest(Message):
@@ -23,8 +26,8 @@ class MapItemRequest(Message):
 	absolute_id = 4294902170 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*5))
-		self.RequestData = RequestData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*5))
+		self.RequestData = REQUESTDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -32,10 +35,10 @@ class MapItemRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","unsigned int32","unsigned byte",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int64",],remaining_bytes)
-		self.RequestData = RequestData(*unpacked_data)
+		self.RequestData = REQUESTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

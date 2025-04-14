@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ObjectData:
@@ -16,6 +18,7 @@ class ObjectData:
 	ParamInUse: "BOOL"
 	ParamSize: "U32"
 	ParamData: "Variable 1"
+OBJECTDATA = ObjectData
 
 
 class ObjectExtraParams(Message):
@@ -23,16 +26,16 @@ class ObjectExtraParams(Message):
 	absolute_id = 4294901859 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ObjectData = [ObjectData(*((None,)*5))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ObjectData = [OBJECTDATA(*((None,)*5))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -41,7 +44,7 @@ class ObjectExtraParams(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int16","unsigned byte","unsigned int32","variable1",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

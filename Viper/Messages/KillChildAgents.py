@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class IDBlock:
 	AgentID: "LLUUID"
+IDBLOCK = IDBlock
 
 
 class KillChildAgents(Message):
@@ -14,7 +16,7 @@ class KillChildAgents(Message):
 	absolute_id = 4294902002 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.IDBlock = IDBlock(*((None,)*1))
+		self.IDBlock = IDBLOCK(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +24,7 @@ class KillChildAgents(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.IDBlock = IDBlock(*unpacked_data)
+		self.IDBlock = IDBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

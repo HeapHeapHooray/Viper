@@ -2,16 +2,19 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class ObjectData:
 	ObjectID: "LLUUID"
+OBJECTDATA = ObjectData
 
 @dataclass
 class CameraProperty:
 	Type: "S32"
 	Value: "F32"
+CAMERAPROPERTY = CameraProperty
 
 
 class SetFollowCamProperties(Message):
@@ -19,8 +22,8 @@ class SetFollowCamProperties(Message):
 	absolute_id = 4294901919 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ObjectData = ObjectData(*((None,)*1))
-		self.CameraProperty = [CameraProperty(*((None,)*2))]
+		self.ObjectData = OBJECTDATA(*((None,)*1))
+		self.CameraProperty = [CAMERAPROPERTY(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +31,7 @@ class SetFollowCamProperties(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -37,7 +40,7 @@ class SetFollowCamProperties(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","float",],remaining_bytes)
-			self.CameraProperty.append(CameraProperty(*unpacked_data))
+			self.CameraProperty.append(CAMERAPROPERTY(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

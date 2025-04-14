@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 
 class UndoLand(Message):
@@ -15,7 +17,7 @@ class UndoLand(Message):
 	absolute_id = 4294901837 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class UndoLand(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

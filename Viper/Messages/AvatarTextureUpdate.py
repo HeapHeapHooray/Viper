@@ -2,22 +2,26 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	TexturesChanged: "BOOL"
+AGENTDATA = AgentData
 
 @dataclass
 class WearableData:
 	CacheID: "LLUUID"
 	TextureIndex: "U8"
 	HostName: "Variable 1"
+WEARABLEDATA = WearableData
 
 @dataclass
 class TextureData:
 	TextureID: "LLUUID"
+TEXTUREDATA = TextureData
 
 
 class AvatarTextureUpdate(Message):
@@ -25,17 +29,17 @@ class AvatarTextureUpdate(Message):
 	absolute_id = 4294901764 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.WearableData = [WearableData(*((None,)*3))]
-		self.TextureData = [TextureData(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.WearableData = [WEARABLEDATA(*((None,)*3))]
+		self.TextureData = [TEXTUREDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -44,7 +48,7 @@ class AvatarTextureUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte","variable1",],remaining_bytes)
-			self.WearableData.append(WearableData(*unpacked_data))
+			self.WearableData.append(WEARABLEDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -53,7 +57,7 @@ class AvatarTextureUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.TextureData.append(TextureData(*unpacked_data))
+			self.TextureData.append(TEXTUREDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

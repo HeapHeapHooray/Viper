@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -12,6 +13,7 @@ class TimeInfo:
 	SunDirection: "LLVector3"
 	SunPhase: "F32"
 	SunAngVelocity: "LLVector3"
+TIMEINFO = TimeInfo
 
 
 class SimulatorViewerTimeMessage(Message):
@@ -19,7 +21,7 @@ class SimulatorViewerTimeMessage(Message):
 	absolute_id = 4294901910 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TimeInfo = TimeInfo(*((None,)*6))
+		self.TimeInfo = TIMEINFO(*((None,)*6))
 
 		if bytes_data is None:
 			return
@@ -27,7 +29,7 @@ class SimulatorViewerTimeMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int32","unsigned int32","vector3","float","vector3",],remaining_bytes)
-		self.TimeInfo = TimeInfo(*unpacked_data)
+		self.TimeInfo = TIMEINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

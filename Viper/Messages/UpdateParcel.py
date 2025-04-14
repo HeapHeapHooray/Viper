@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -27,6 +28,7 @@ class ParcelData:
 	AuthorizedBuyerID: "LLUUID"
 	AllowPublish: "BOOL"
 	MaturePublish: "BOOL"
+PARCELDATA = ParcelData
 
 
 class UpdateParcel(Message):
@@ -34,15 +36,15 @@ class UpdateParcel(Message):
 	absolute_id = 4294901981 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ParcelData = ParcelData(*((None,)*21))
+		self.ParcelData = PARCELDATA(*((None,)*21))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64","uuid","unsigned byte","unsigned byte","variable1","variable1","variable1","float","float","signed int32","signed int32","unsigned byte","unsigned byte","unsigned byte","uuid","vector3","signed int32","uuid","unsigned byte","unsigned byte",],remaining_bytes)
-		self.ParcelData = ParcelData(*unpacked_data)
+		self.ParcelData = PARCELDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

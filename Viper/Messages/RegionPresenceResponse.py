@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -13,6 +14,7 @@ class RegionData:
 	RegionPort: "IPPORT"
 	ValidUntil: "F64"
 	Message: "Variable 1"
+REGIONDATA = RegionData
 
 
 class RegionPresenceResponse(Message):
@@ -20,12 +22,12 @@ class RegionPresenceResponse(Message):
 	absolute_id = 4294901776 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RegionData = [RegionData(*((None,)*7))]
+		self.RegionData = [REGIONDATA(*((None,)*7))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -34,7 +36,7 @@ class RegionPresenceResponse(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64","unsigned int32","unsigned int32","unsigned int16","double","variable1",],remaining_bytes)
-			self.RegionData.append(RegionData(*unpacked_data))
+			self.RegionData.append(REGIONDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

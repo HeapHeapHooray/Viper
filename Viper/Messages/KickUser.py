@@ -2,18 +2,21 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class TargetBlock:
 	TargetIP: "IPADDR"
 	TargetPort: "IPPORT"
+TARGETBLOCK = TargetBlock
 
 @dataclass
 class UserInfo:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
 	Reason: "Variable 2"
+USERINFO = UserInfo
 
 
 class KickUser(Message):
@@ -21,8 +24,8 @@ class KickUser(Message):
 	absolute_id = 4294901923 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TargetBlock = TargetBlock(*((None,)*2))
-		self.UserInfo = UserInfo(*((None,)*3))
+		self.TargetBlock = TARGETBLOCK(*((None,)*2))
+		self.UserInfo = USERINFO(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -30,10 +33,10 @@ class KickUser(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int16",],remaining_bytes)
-		self.TargetBlock = TargetBlock(*unpacked_data)
+		self.TargetBlock = TARGETBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","variable2",],remaining_bytes)
-		self.UserInfo = UserInfo(*unpacked_data)
+		self.UserInfo = USERINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

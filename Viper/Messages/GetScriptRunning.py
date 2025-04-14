@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class Script:
 	ObjectID: "LLUUID"
 	ItemID: "LLUUID"
+SCRIPT = Script
 
 
 class GetScriptRunning(Message):
@@ -15,7 +17,7 @@ class GetScriptRunning(Message):
 	absolute_id = 4294902003 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Script = Script(*((None,)*2))
+		self.Script = SCRIPT(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class GetScriptRunning(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.Script = Script(*unpacked_data)
+		self.Script = SCRIPT(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

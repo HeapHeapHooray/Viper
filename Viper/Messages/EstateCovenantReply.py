@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,6 +11,7 @@ class Data:
 	CovenantTimestamp: "U32"
 	EstateName: "Variable 1"
 	EstateOwnerID: "LLUUID"
+DATA = Data
 
 
 class EstateCovenantReply(Message):
@@ -17,7 +19,7 @@ class EstateCovenantReply(Message):
 	absolute_id = 4294901964 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*4))
+		self.Data = DATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +27,7 @@ class EstateCovenantReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","variable1","uuid",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

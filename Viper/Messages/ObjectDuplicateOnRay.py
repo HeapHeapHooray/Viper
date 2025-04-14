@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -17,10 +18,12 @@ class AgentData:
 	CopyRotates: "BOOL"
 	RayTargetID: "LLUUID"
 	DuplicateFlags: "U32"
+AGENTDATA = AgentData
 
 @dataclass
 class ObjectData:
 	ObjectLocalID: "U32"
+OBJECTDATA = ObjectData
 
 
 class ObjectDuplicateOnRay(Message):
@@ -28,16 +31,16 @@ class ObjectDuplicateOnRay(Message):
 	absolute_id = 4294901851 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*11))
-		self.ObjectData = [ObjectData(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*11))
+		self.ObjectData = [OBJECTDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","vector3","vector3","unsigned byte","unsigned byte","unsigned byte","unsigned byte","uuid","unsigned int32",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -46,7 +49,7 @@ class ObjectDuplicateOnRay(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class Packets:
 	ID: "U32"
+PACKETS = Packets
 
 
 class PacketAck(Message):
@@ -14,7 +16,7 @@ class PacketAck(Message):
 	absolute_id = 4294967291 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Packets = [Packets(*((None,)*1))]
+		self.Packets = [PACKETS(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class PacketAck(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-			self.Packets.append(Packets(*unpacked_data))
+			self.Packets.append(PACKETS(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

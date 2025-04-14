@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class MessageBlock:
@@ -16,6 +18,7 @@ class MessageBlock:
 	FromAgentName: "Variable 1"
 	Message: "Variable 2"
 	BinaryBucket: "Variable 2"
+MESSAGEBLOCK = MessageBlock
 
 
 class GroupNoticeAdd(Message):
@@ -23,8 +26,8 @@ class GroupNoticeAdd(Message):
 	absolute_id = 4294901821 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.MessageBlock = MessageBlock(*((None,)*6))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.MessageBlock = MESSAGEBLOCK(*((None,)*6))
 
 		if bytes_data is None:
 			return
@@ -32,10 +35,10 @@ class GroupNoticeAdd(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned byte","variable1","variable2","variable2",],remaining_bytes)
-		self.MessageBlock = MessageBlock(*unpacked_data)
+		self.MessageBlock = MESSAGEBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

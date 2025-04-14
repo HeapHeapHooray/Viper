@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class RequestingRegionData:
 	RegionHandle: "U64"
+REQUESTINGREGIONDATA = RequestingRegionData
 
 
 class NearestLandingRegionRequest(Message):
@@ -14,7 +16,7 @@ class NearestLandingRegionRequest(Message):
 	absolute_id = 4294901904 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RequestingRegionData = RequestingRegionData(*((None,)*1))
+		self.RequestingRegionData = REQUESTINGREGIONDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +24,7 @@ class NearestLandingRegionRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-		self.RequestingRegionData = RequestingRegionData(*unpacked_data)
+		self.RequestingRegionData = REQUESTINGREGIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

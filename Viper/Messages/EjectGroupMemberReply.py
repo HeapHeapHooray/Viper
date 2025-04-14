@@ -2,19 +2,23 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GroupData:
 	GroupID: "LLUUID"
+GROUPDATA = GroupData
 
 @dataclass
 class EjectData:
 	Success: "BOOL"
+EJECTDATA = EjectData
 
 
 class EjectGroupMemberReply(Message):
@@ -22,9 +26,9 @@ class EjectGroupMemberReply(Message):
 	absolute_id = 4294902106 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.GroupData = GroupData(*((None,)*1))
-		self.EjectData = EjectData(*((None,)*1))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.GroupData = GROUPDATA(*((None,)*1))
+		self.EjectData = EJECTDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -32,13 +36,13 @@ class EjectGroupMemberReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.GroupData = GroupData(*unpacked_data)
+		self.GroupData = GROUPDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.EjectData = EjectData(*unpacked_data)
+		self.EjectData = EJECTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

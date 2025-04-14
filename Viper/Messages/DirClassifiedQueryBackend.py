@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class QueryData:
@@ -17,6 +19,7 @@ class QueryData:
 	EstateID: "U32"
 	Godlike: "BOOL"
 	QueryStart: "S32"
+QUERYDATA = QueryData
 
 
 class DirClassifiedQueryBackend(Message):
@@ -24,19 +27,19 @@ class DirClassifiedQueryBackend(Message):
 	absolute_id = 4294901800 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.QueryData = QueryData(*((None,)*7))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.QueryData = QUERYDATA(*((None,)*7))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","unsigned int32","unsigned int32","unsigned int32","unsigned byte","signed int32",],remaining_bytes)
-		self.QueryData = QueryData(*unpacked_data)
+		self.QueryData = QUERYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

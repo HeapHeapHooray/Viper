@@ -2,20 +2,24 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AlertData:
 	Message: "Variable 1"
+ALERTDATA = AlertData
 
 @dataclass
 class AlertInfo:
 	Message: "Variable 1"
 	ExtraParams: "Variable 1"
+ALERTINFO = AlertInfo
 
 @dataclass
 class AgentInfo:
 	AgentID: "LLUUID"
+AGENTINFO = AgentInfo
 
 
 class AlertMessage(Message):
@@ -23,9 +27,9 @@ class AlertMessage(Message):
 	absolute_id = 4294901894 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AlertData = AlertData(*((None,)*1))
-		self.AlertInfo = [AlertInfo(*((None,)*2))]
-		self.AgentInfo = [AgentInfo(*((None,)*1))]
+		self.AlertData = ALERTDATA(*((None,)*1))
+		self.AlertInfo = [ALERTINFO(*((None,)*2))]
+		self.AgentInfo = [AGENTINFO(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -33,7 +37,7 @@ class AlertMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-		self.AlertData = AlertData(*unpacked_data)
+		self.AlertData = ALERTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -42,7 +46,7 @@ class AlertMessage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","variable1",],remaining_bytes)
-			self.AlertInfo.append(AlertInfo(*unpacked_data))
+			self.AlertInfo.append(ALERTINFO(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -51,7 +55,7 @@ class AlertMessage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.AgentInfo.append(AgentInfo(*unpacked_data))
+			self.AgentInfo.append(AGENTINFO(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,6 +11,7 @@ class AgentData:
 	SessionID: "LLUUID"
 	GroupID: "LLUUID"
 	TitleRoleID: "LLUUID"
+AGENTDATA = AgentData
 
 
 class GroupTitleUpdate(Message):
@@ -17,7 +19,7 @@ class GroupTitleUpdate(Message):
 	absolute_id = 4294902137 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*4))
+		self.AgentData = AGENTDATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +27,7 @@ class GroupTitleUpdate(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -12,6 +13,7 @@ class DataBlock:
 	GlobalY: "F64"
 	Time: "U32"
 	Message: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class LogTextMessage(Message):
@@ -19,12 +21,12 @@ class LogTextMessage(Message):
 	absolute_id = 4294902151 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = [DataBlock(*((None,)*6))]
+		self.DataBlock = [DATABLOCK(*((None,)*6))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -33,7 +35,7 @@ class LogTextMessage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","double","double","unsigned int32","variable2",],remaining_bytes)
-			self.DataBlock.append(DataBlock(*unpacked_data))
+			self.DataBlock.append(DATABLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

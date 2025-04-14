@@ -2,16 +2,19 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class Sender:
 	ID: "LLUUID"
+SENDER = Sender
 
 @dataclass
 class AnimationList:
 	AnimID: "LLUUID"
 	AnimSequenceID: "S32"
+ANIMATIONLIST = AnimationList
 
 
 class ObjectAnimation(Message):
@@ -19,8 +22,8 @@ class ObjectAnimation(Message):
 	absolute_id = 30 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Sender = Sender(*((None,)*1))
-		self.AnimationList = [AnimationList(*((None,)*2))]
+		self.Sender = SENDER(*((None,)*1))
+		self.AnimationList = [ANIMATIONLIST(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +31,7 @@ class ObjectAnimation(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.Sender = Sender(*unpacked_data)
+		self.Sender = SENDER(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -37,7 +40,7 @@ class ObjectAnimation(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32",],remaining_bytes)
-			self.AnimationList.append(AnimationList(*unpacked_data))
+			self.AnimationList.append(ANIMATIONLIST(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

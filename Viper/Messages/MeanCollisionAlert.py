@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -11,6 +12,7 @@ class MeanCollision:
 	Time: "U32"
 	Mag: "F32"
 	Type: "U8"
+MEANCOLLISION = MeanCollision
 
 
 class MeanCollisionAlert(Message):
@@ -18,12 +20,12 @@ class MeanCollisionAlert(Message):
 	absolute_id = 4294901896 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MeanCollision = [MeanCollision(*((None,)*5))]
+		self.MeanCollision = [MEANCOLLISION(*((None,)*5))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -32,7 +34,7 @@ class MeanCollisionAlert(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","float","unsigned byte",],remaining_bytes)
-			self.MeanCollision.append(MeanCollision(*unpacked_data))
+			self.MeanCollision.append(MEANCOLLISION(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

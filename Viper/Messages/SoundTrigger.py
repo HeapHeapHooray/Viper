@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -13,6 +14,7 @@ class SoundData:
 	Handle: "U64"
 	Position: "LLVector3"
 	Gain: "F32"
+SOUNDDATA = SoundData
 
 
 class SoundTrigger(Message):
@@ -20,7 +22,7 @@ class SoundTrigger(Message):
 	absolute_id = 29 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.SoundData = SoundData(*((None,)*7))
+		self.SoundData = SOUNDDATA(*((None,)*7))
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class SoundTrigger(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid","unsigned int64","vector3","float",],remaining_bytes)
-		self.SoundData = SoundData(*unpacked_data)
+		self.SoundData = SOUNDDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

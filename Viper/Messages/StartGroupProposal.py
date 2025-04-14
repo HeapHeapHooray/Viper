@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ProposalData:
@@ -16,6 +18,7 @@ class ProposalData:
 	Majority: "F32"
 	Duration: "S32"
 	ProposalText: "Variable 1"
+PROPOSALDATA = ProposalData
 
 
 class StartGroupProposal(Message):
@@ -23,19 +26,19 @@ class StartGroupProposal(Message):
 	absolute_id = 4294902123 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ProposalData = ProposalData(*((None,)*5))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ProposalData = PROPOSALDATA(*((None,)*5))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32","float","signed int32","variable1",],remaining_bytes)
-		self.ProposalData = ProposalData(*unpacked_data)
+		self.ProposalData = PROPOSALDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

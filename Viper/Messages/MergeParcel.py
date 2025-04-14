@@ -2,15 +2,18 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class MasterParcelData:
 	MasterID: "LLUUID"
+MASTERPARCELDATA = MasterParcelData
 
 @dataclass
 class SlaveParcelData:
 	SlaveID: "LLUUID"
+SLAVEPARCELDATA = SlaveParcelData
 
 
 class MergeParcel(Message):
@@ -18,8 +21,8 @@ class MergeParcel(Message):
 	absolute_id = 4294901983 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MasterParcelData = MasterParcelData(*((None,)*1))
-		self.SlaveParcelData = [SlaveParcelData(*((None,)*1))]
+		self.MasterParcelData = MASTERPARCELDATA(*((None,)*1))
+		self.SlaveParcelData = [SLAVEPARCELDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -27,7 +30,7 @@ class MergeParcel(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.MasterParcelData = MasterParcelData(*unpacked_data)
+		self.MasterParcelData = MASTERPARCELDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -36,7 +39,7 @@ class MergeParcel(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.SlaveParcelData.append(SlaveParcelData(*unpacked_data))
+			self.SlaveParcelData.append(SLAVEPARCELDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -17,6 +18,7 @@ class AgentData:
 	Msg: "Variable 2"
 	AllowPublish: "BOOL"
 	MaturePublish: "BOOL"
+AGENTDATA = AgentData
 
 
 class SendPostcard(Message):
@@ -24,7 +26,7 @@ class SendPostcard(Message):
 	absolute_id = 4294902172 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*11))
+		self.AgentData = AGENTDATA(*((None,)*11))
 
 		if bytes_data is None:
 			return
@@ -32,7 +34,7 @@ class SendPostcard(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","vector3d","variable1","variable1","variable1","variable1","variable2","unsigned byte","unsigned byte",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

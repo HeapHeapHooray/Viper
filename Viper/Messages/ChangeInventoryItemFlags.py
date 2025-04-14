@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class InventoryData:
 	ItemID: "LLUUID"
 	Flags: "U32"
+INVENTORYDATA = InventoryData
 
 
 class ChangeInventoryItemFlags(Message):
@@ -20,8 +23,8 @@ class ChangeInventoryItemFlags(Message):
 	absolute_id = 4294902031 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.InventoryData = [InventoryData(*((None,)*2))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.InventoryData = [INVENTORYDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -29,7 +32,7 @@ class ChangeInventoryItemFlags(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -38,7 +41,7 @@ class ChangeInventoryItemFlags(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-			self.InventoryData.append(InventoryData(*unpacked_data))
+			self.InventoryData.append(INVENTORYDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class Info:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+INFO = Info
 
 
 class TeleportCancel(Message):
@@ -15,7 +17,7 @@ class TeleportCancel(Message):
 	absolute_id = 4294901832 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Info = Info(*((None,)*2))
+		self.Info = INFO(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class TeleportCancel(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	TransactionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class FolderData:
@@ -15,6 +17,7 @@ class FolderData:
 	ParentID: "LLUUID"
 	Type: "S8"
 	Name: "Variable 1"
+FOLDERDATA = FolderData
 
 @dataclass
 class ItemData:
@@ -40,6 +43,7 @@ class ItemData:
 	Description: "Variable 1"
 	CreationDate: "S32"
 	CRC: "U32"
+ITEMDATA = ItemData
 
 
 class BulkUpdateInventory(Message):
@@ -47,17 +51,17 @@ class BulkUpdateInventory(Message):
 	absolute_id = 4294902041 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.FolderData = [FolderData(*((None,)*4))]
-		self.ItemData = [ItemData(*((None,)*22))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.FolderData = [FOLDERDATA(*((None,)*4))]
+		self.ItemData = [ITEMDATA(*((None,)*22))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -66,7 +70,7 @@ class BulkUpdateInventory(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","signed byte","variable1",],remaining_bytes)
-			self.FolderData.append(FolderData(*unpacked_data))
+			self.FolderData.append(FOLDERDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -75,7 +79,7 @@ class BulkUpdateInventory(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","uuid","uuid","uuid","uuid","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned byte","uuid","signed byte","signed byte","unsigned int32","unsigned byte","signed int32","variable1","variable1","signed int32","unsigned int32",],remaining_bytes)
-			self.ItemData.append(ItemData(*unpacked_data))
+			self.ItemData.append(ITEMDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class FrozenData:
 	Data: "BOOL"
+FROZENDATA = FrozenData
 
 
 class ViewerFrozenMessage(Message):
@@ -14,7 +16,7 @@ class ViewerFrozenMessage(Message):
 	absolute_id = 4294901897 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.FrozenData = FrozenData(*((None,)*1))
+		self.FrozenData = FROZENDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +24,7 @@ class ViewerFrozenMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte",],remaining_bytes)
-		self.FrozenData = FrozenData(*unpacked_data)
+		self.FrozenData = FROZENDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

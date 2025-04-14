@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class QueryData:
 	QueryID: "LLUUID"
+QUERYDATA = QueryData
 
 @dataclass
 class EventData:
 	Success: "BOOL"
 	RegionID: "LLUUID"
 	RegionPos: "LLVector3"
+EVENTDATA = EventData
 
 
 class EventLocationReply(Message):
@@ -20,19 +23,19 @@ class EventLocationReply(Message):
 	absolute_id = 4294902068 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.QueryData = QueryData(*((None,)*1))
-		self.EventData = EventData(*((None,)*3))
+		self.QueryData = QUERYDATA(*((None,)*1))
+		self.EventData = EVENTDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.QueryData = QueryData(*unpacked_data)
+		self.QueryData = QUERYDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","uuid","vector3",],remaining_bytes)
-		self.EventData = EventData(*unpacked_data)
+		self.EventData = EVENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

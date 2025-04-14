@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	GroupID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class TransactionData:
 	TransactionID: "LLUUID"
 	TotalNumItems: "U32"
+TRANSACTIONDATA = TransactionData
 
 @dataclass
 class ProposalData:
@@ -26,6 +29,7 @@ class ProposalData:
 	Majority: "F32"
 	Quorum: "S32"
 	ProposalText: "Variable 1"
+PROPOSALDATA = ProposalData
 
 
 class GroupActiveProposalItemReply(Message):
@@ -33,20 +37,20 @@ class GroupActiveProposalItemReply(Message):
 	absolute_id = 4294902120 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.TransactionData = TransactionData(*((None,)*2))
-		self.ProposalData = [ProposalData(*((None,)*10))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.TransactionData = TRANSACTIONDATA(*((None,)*2))
+		self.ProposalData = [PROPOSALDATA(*((None,)*10))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.TransactionData = TransactionData(*unpacked_data)
+		self.TransactionData = TRANSACTIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -55,7 +59,7 @@ class GroupActiveProposalItemReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","variable1","variable1","variable1","unsigned byte","variable1","float","signed int32","variable1",],remaining_bytes)
-			self.ProposalData.append(ProposalData(*unpacked_data))
+			self.ProposalData.append(PROPOSALDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

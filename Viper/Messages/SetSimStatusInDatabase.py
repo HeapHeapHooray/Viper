@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -14,6 +15,7 @@ class Data:
 	AgentCount: "S32"
 	TimeToLive: "S32"
 	Status: "Variable 1"
+DATA = Data
 
 
 class SetSimStatusInDatabase(Message):
@@ -21,7 +23,7 @@ class SetSimStatusInDatabase(Message):
 	absolute_id = 4294901782 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*8))
+		self.Data = DATA(*((None,)*8))
 
 		if bytes_data is None:
 			return
@@ -29,7 +31,7 @@ class SetSimStatusInDatabase(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","signed int32","signed int32","signed int32","signed int32","signed int32","variable1",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

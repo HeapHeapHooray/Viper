@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class EdgeData:
 	LayerType: "U8"
 	Direction: "U8"
 	LayerData: "Variable 2"
+EDGEDATA = EdgeData
 
 
 class EdgeDataPacket(Message):
@@ -16,15 +18,15 @@ class EdgeDataPacket(Message):
 	absolute_id = 24 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.EdgeData = EdgeData(*((None,)*3))
+		self.EdgeData = EDGEDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned byte","variable2",],remaining_bytes)
-		self.EdgeData = EdgeData(*unpacked_data)
+		self.EdgeData = EDGEDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

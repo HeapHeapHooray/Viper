@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class RegionData:
@@ -15,11 +17,13 @@ class RegionData:
 	SimPort: "IPPORT"
 	RegionHandle: "U64"
 	SeedCapability: "Variable 2"
+REGIONDATA = RegionData
 
 @dataclass
 class Info:
 	Position: "LLVector3"
 	LookAt: "LLVector3"
+INFO = Info
 
 
 class CrossedRegion(Message):
@@ -27,9 +31,9 @@ class CrossedRegion(Message):
 	absolute_id = 65287 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.RegionData = RegionData(*((None,)*4))
-		self.Info = Info(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.RegionData = REGIONDATA(*((None,)*4))
+		self.Info = INFO(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -37,13 +41,13 @@ class CrossedRegion(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int16","unsigned int64","variable2",],remaining_bytes)
-		self.RegionData = RegionData(*unpacked_data)
+		self.RegionData = REGIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["vector3","vector3",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

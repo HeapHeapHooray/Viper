@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class ParcelData:
 	ParcelID: "LLUUID"
 	NewName: "Variable 1"
+PARCELDATA = ParcelData
 
 
 class ParcelRename(Message):
@@ -15,7 +17,7 @@ class ParcelRename(Message):
 	absolute_id = 4294902162 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ParcelData = [ParcelData(*((None,)*2))]
+		self.ParcelData = [PARCELDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -29,7 +31,7 @@ class ParcelRename(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1",],remaining_bytes)
-			self.ParcelData.append(ParcelData(*unpacked_data))
+			self.ParcelData.append(PARCELDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

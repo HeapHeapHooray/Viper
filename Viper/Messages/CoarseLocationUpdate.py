@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,15 +10,18 @@ class Location:
 	X: "U8"
 	Y: "U8"
 	Z: "U8"
+LOCATION = Location
 
 @dataclass
 class Index:
 	You: "S16"
 	Prey: "S16"
+INDEX = Index
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 
 class CoarseLocationUpdate(Message):
@@ -25,9 +29,9 @@ class CoarseLocationUpdate(Message):
 	absolute_id = 65286 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Location = [Location(*((None,)*3))]
-		self.Index = Index(*((None,)*2))
-		self.AgentData = [AgentData(*((None,)*1))]
+		self.Location = [LOCATION(*((None,)*3))]
+		self.Index = INDEX(*((None,)*2))
+		self.AgentData = [AGENTDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -41,10 +45,10 @@ class CoarseLocationUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned byte","unsigned byte",],remaining_bytes)
-			self.Location.append(Location(*unpacked_data))
+			self.Location.append(LOCATION(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int16","signed int16",],remaining_bytes)
-		self.Index = Index(*unpacked_data)
+		self.Index = INDEX(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -53,7 +57,7 @@ class CoarseLocationUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.AgentData.append(AgentData(*unpacked_data))
+			self.AgentData.append(AGENTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

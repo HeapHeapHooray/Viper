@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class EventData:
@@ -23,6 +25,7 @@ class EventData:
 	SimName: "Variable 1"
 	GlobalPos: "LLVector3d"
 	EventFlags: "U32"
+EVENTDATA = EventData
 
 
 class EventInfoReply(Message):
@@ -30,8 +33,8 @@ class EventInfoReply(Message):
 	absolute_id = 4294901940 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.EventData = EventData(*((None,)*13))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.EventData = EVENTDATA(*((None,)*13))
 
 		if bytes_data is None:
 			return
@@ -39,10 +42,10 @@ class EventInfoReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","variable1","variable1","variable1","variable2","variable1","unsigned int32","unsigned int32","unsigned int32","unsigned int32","variable1","vector3d","unsigned int32",],remaining_bytes)
-		self.EventData = EventData(*unpacked_data)
+		self.EventData = EVENTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

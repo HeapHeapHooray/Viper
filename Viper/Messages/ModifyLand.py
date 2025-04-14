@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ModifyBlock:
@@ -15,6 +17,7 @@ class ModifyBlock:
 	BrushSize: "U8"
 	Seconds: "F32"
 	Height: "F32"
+MODIFYBLOCK = ModifyBlock
 
 @dataclass
 class ParcelData:
@@ -23,10 +26,12 @@ class ParcelData:
 	South: "F32"
 	East: "F32"
 	North: "F32"
+PARCELDATA = ParcelData
 
 @dataclass
 class ModifyBlockExtended:
 	BrushSize: "F32"
+MODIFYBLOCKEXTENDED = ModifyBlockExtended
 
 
 class ModifyLand(Message):
@@ -34,21 +39,21 @@ class ModifyLand(Message):
 	absolute_id = 4294901884 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ModifyBlock = ModifyBlock(*((None,)*4))
-		self.ParcelData = [ParcelData(*((None,)*5))]
-		self.ModifyBlockExtended = [ModifyBlockExtended(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ModifyBlock = MODIFYBLOCK(*((None,)*4))
+		self.ParcelData = [PARCELDATA(*((None,)*5))]
+		self.ModifyBlockExtended = [MODIFYBLOCKEXTENDED(*((None,)*1))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned byte","float","float",],remaining_bytes)
-		self.ModifyBlock = ModifyBlock(*unpacked_data)
+		self.ModifyBlock = MODIFYBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -57,7 +62,7 @@ class ModifyLand(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","float","float","float","float",],remaining_bytes)
-			self.ParcelData.append(ParcelData(*unpacked_data))
+			self.ParcelData.append(PARCELDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -66,7 +71,7 @@ class ModifyLand(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["float",],remaining_bytes)
-			self.ModifyBlockExtended.append(ModifyBlockExtended(*unpacked_data))
+			self.ModifyBlockExtended.append(MODIFYBLOCKEXTENDED(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

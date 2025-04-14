@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class CircuitCode:
 	Code: "U32"
 	SessionID: "LLUUID"
 	ID: "LLUUID"
+CIRCUITCODE = CircuitCode
 
 
 class UseCircuitCode(Message):
@@ -16,7 +18,7 @@ class UseCircuitCode(Message):
 	absolute_id = 4294901763 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.CircuitCode = CircuitCode(*((None,)*3))
+		self.CircuitCode = CIRCUITCODE(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +26,7 @@ class UseCircuitCode(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","uuid","uuid",],remaining_bytes)
-		self.CircuitCode = CircuitCode(*unpacked_data)
+		self.CircuitCode = CIRCUITCODE(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

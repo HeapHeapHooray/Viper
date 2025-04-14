@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -13,6 +14,7 @@ class AgentData:
 	IsTemporary: "BOOL"
 	IsPhantom: "BOOL"
 	CastsShadows: "BOOL"
+AGENTDATA = AgentData
 
 @dataclass
 class ExtraPhysics:
@@ -21,6 +23,7 @@ class ExtraPhysics:
 	Friction: "F32"
 	Restitution: "F32"
 	GravityMultiplier: "F32"
+EXTRAPHYSICS = ExtraPhysics
 
 
 class ObjectFlagUpdate(Message):
@@ -28,16 +31,16 @@ class ObjectFlagUpdate(Message):
 	absolute_id = 4294901854 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*7))
-		self.ExtraPhysics = [ExtraPhysics(*((None,)*5))]
+		self.AgentData = AGENTDATA(*((None,)*7))
+		self.ExtraPhysics = [EXTRAPHYSICS(*((None,)*5))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32","unsigned byte","unsigned byte","unsigned byte","unsigned byte",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -46,7 +49,7 @@ class ObjectFlagUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","float","float","float","float",],remaining_bytes)
-			self.ExtraPhysics.append(ExtraPhysics(*unpacked_data))
+			self.ExtraPhysics.append(EXTRAPHYSICS(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,6 +11,7 @@ class DataBlock:
 	TargetPort: "IPPORT"
 	TaskID: "LLUUID"
 	Flags: "U32"
+DATABLOCK = DataBlock
 
 
 class ScriptMailRegistration(Message):
@@ -17,7 +19,7 @@ class ScriptMailRegistration(Message):
 	absolute_id = 4294902178 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*4))
+		self.DataBlock = DATABLOCK(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +27,7 @@ class ScriptMailRegistration(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","unsigned int16","uuid","unsigned int32",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class ObjectData:
 	ID: "U32"
+OBJECTDATA = ObjectData
 
 
 class KillObject(Message):
@@ -14,7 +16,7 @@ class KillObject(Message):
 	absolute_id = 16 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ObjectData = [ObjectData(*((None,)*1))]
+		self.ObjectData = [OBJECTDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class KillObject(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

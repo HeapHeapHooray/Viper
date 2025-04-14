@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class DataBlock:
 	EndPointID: "LLUUID"
+DATABLOCK = DataBlock
 
 
 class DenyTrustedCircuit(Message):
@@ -14,7 +16,7 @@ class DenyTrustedCircuit(Message):
 	absolute_id = 4294902153 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*1))
+		self.DataBlock = DATABLOCK(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +24,7 @@ class DenyTrustedCircuit(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

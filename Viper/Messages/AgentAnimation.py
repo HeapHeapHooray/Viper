@@ -2,21 +2,25 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class AnimationList:
 	AnimID: "LLUUID"
 	StartAnim: "BOOL"
+ANIMATIONLIST = AnimationList
 
 @dataclass
 class PhysicalAvatarEventList:
 	TypeData: "Variable 1"
+PHYSICALAVATAREVENTLIST = PhysicalAvatarEventList
 
 
 class AgentAnimation(Message):
@@ -24,9 +28,9 @@ class AgentAnimation(Message):
 	absolute_id = 5 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.AnimationList = [AnimationList(*((None,)*2))]
-		self.PhysicalAvatarEventList = [PhysicalAvatarEventList(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.AnimationList = [ANIMATIONLIST(*((None,)*2))]
+		self.PhysicalAvatarEventList = [PHYSICALAVATAREVENTLIST(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -34,7 +38,7 @@ class AgentAnimation(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -43,7 +47,7 @@ class AgentAnimation(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte",],remaining_bytes)
-			self.AnimationList.append(AnimationList(*unpacked_data))
+			self.AnimationList.append(ANIMATIONLIST(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -52,7 +56,7 @@ class AgentAnimation(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1",],remaining_bytes)
-			self.PhysicalAvatarEventList.append(PhysicalAvatarEventList(*unpacked_data))
+			self.PhysicalAvatarEventList.append(PHYSICALAVATAREVENTLIST(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

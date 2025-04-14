@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class RequestImage:
@@ -16,6 +18,7 @@ class RequestImage:
 	DownloadPriority: "F32"
 	Packet: "U32"
 	Type: "U8"
+REQUESTIMAGE = RequestImage
 
 
 class RequestImage(Message):
@@ -23,8 +26,8 @@ class RequestImage(Message):
 	absolute_id = 8 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.RequestImage = [RequestImage(*((None,)*5))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.RequestImage = [REQUESTIMAGE(*((None,)*5))]
 
 		if bytes_data is None:
 			return
@@ -32,7 +35,7 @@ class RequestImage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -41,7 +44,7 @@ class RequestImage(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed byte","float","unsigned int32","unsigned byte",],remaining_bytes)
-			self.RequestImage.append(RequestImage(*unpacked_data))
+			self.RequestImage.append(REQUESTIMAGE(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

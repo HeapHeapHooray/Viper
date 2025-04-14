@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -17,6 +18,7 @@ class TransactionData:
 	GridX: "U32"
 	GridY: "U32"
 	FailureType: "U8"
+TRANSACTIONDATA = TransactionData
 
 
 class LogFailedMoneyTransaction(Message):
@@ -24,7 +26,7 @@ class LogFailedMoneyTransaction(Message):
 	absolute_id = 4294901780 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TransactionData = TransactionData(*((None,)*11))
+		self.TransactionData = TRANSACTIONDATA(*((None,)*11))
 
 		if bytes_data is None:
 			return
@@ -32,7 +34,7 @@ class LogFailedMoneyTransaction(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","signed int32","uuid","uuid","unsigned byte","signed int32","unsigned int32","unsigned int32","unsigned int32","unsigned byte",],remaining_bytes)
-		self.TransactionData = TransactionData(*unpacked_data)
+		self.TransactionData = TRANSACTIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class UserData:
 	IMViaEMail: "BOOL"
 	DirectoryVisibility: "Variable 1"
 	EMail: "Variable 2"
+USERDATA = UserData
 
 
 class UserInfoReply(Message):
@@ -20,8 +23,8 @@ class UserInfoReply(Message):
 	absolute_id = 4294902160 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.UserData = UserData(*((None,)*3))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.UserData = USERDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -29,10 +32,10 @@ class UserInfoReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","variable1","variable2",],remaining_bytes)
-		self.UserData = UserData(*unpacked_data)
+		self.UserData = USERDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -11,10 +12,12 @@ class Data:
 	ObjectName: "Variable 1"
 	ObjectOwner: "Variable 1"
 	Questions: "S32"
+DATA = Data
 
 @dataclass
 class Experience:
 	ExperienceID: "LLUUID"
+EXPERIENCE = Experience
 
 
 class ScriptQuestion(Message):
@@ -22,8 +25,8 @@ class ScriptQuestion(Message):
 	absolute_id = 4294901948 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*5))
-		self.Experience = Experience(*((None,)*1))
+		self.Data = DATA(*((None,)*5))
+		self.Experience = EXPERIENCE(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -31,10 +34,10 @@ class ScriptQuestion(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","variable1","variable1","signed int32",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.Experience = Experience(*unpacked_data)
+		self.Experience = EXPERIENCE(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

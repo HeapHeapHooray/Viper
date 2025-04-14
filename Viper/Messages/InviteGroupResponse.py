@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -11,10 +12,12 @@ class InviteData:
 	GroupID: "LLUUID"
 	RoleID: "LLUUID"
 	MembershipFee: "S32"
+INVITEDATA = InviteData
 
 @dataclass
 class GroupData:
 	GroupLimit: "S32"
+GROUPDATA = GroupData
 
 
 class InviteGroupResponse(Message):
@@ -22,8 +25,8 @@ class InviteGroupResponse(Message):
 	absolute_id = 4294902110 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.InviteData = InviteData(*((None,)*5))
-		self.GroupData = GroupData(*((None,)*1))
+		self.InviteData = INVITEDATA(*((None,)*5))
+		self.GroupData = GROUPDATA(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -31,10 +34,10 @@ class InviteGroupResponse(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid","signed int32",],remaining_bytes)
-		self.InviteData = InviteData(*unpacked_data)
+		self.InviteData = INVITEDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32",],remaining_bytes)
-		self.GroupData = GroupData(*unpacked_data)
+		self.GroupData = GROUPDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

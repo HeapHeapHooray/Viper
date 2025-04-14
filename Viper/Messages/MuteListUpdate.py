@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class MuteData:
 	AgentID: "LLUUID"
 	Filename: "Variable 1"
+MUTEDATA = MuteData
 
 
 class MuteListUpdate(Message):
@@ -15,7 +17,7 @@ class MuteListUpdate(Message):
 	absolute_id = 4294902078 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MuteData = MuteData(*((None,)*2))
+		self.MuteData = MUTEDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class MuteListUpdate(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1",],remaining_bytes)
-		self.MuteData = MuteData(*unpacked_data)
+		self.MuteData = MUTEDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

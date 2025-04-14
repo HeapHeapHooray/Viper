@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,16 +10,19 @@ class InfoBlock:
 	SourceID: "LLUUID"
 	DestID: "LLUUID"
 	TransactionID: "LLUUID"
+INFOBLOCK = InfoBlock
 
 @dataclass
 class InventoryBlock:
 	InventoryID: "LLUUID"
 	Type: "S8"
+INVENTORYBLOCK = InventoryBlock
 
 @dataclass
 class ValidationBlock:
 	NeedsValidation: "BOOL"
 	EstateID: "U32"
+VALIDATIONBLOCK = ValidationBlock
 
 
 class TransferInventory(Message):
@@ -26,17 +30,17 @@ class TransferInventory(Message):
 	absolute_id = 4294902055 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.InfoBlock = InfoBlock(*((None,)*3))
-		self.InventoryBlock = [InventoryBlock(*((None,)*2))]
-		self.ValidationBlock = ValidationBlock(*((None,)*2))
+		self.InfoBlock = INFOBLOCK(*((None,)*3))
+		self.InventoryBlock = [INVENTORYBLOCK(*((None,)*2))]
+		self.ValidationBlock = VALIDATIONBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid",],remaining_bytes)
-		self.InfoBlock = InfoBlock(*unpacked_data)
+		self.InfoBlock = INFOBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -45,10 +49,10 @@ class TransferInventory(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed byte",],remaining_bytes)
-			self.InventoryBlock.append(InventoryBlock(*unpacked_data))
+			self.InventoryBlock.append(INVENTORYBLOCK(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned int32",],remaining_bytes)
-		self.ValidationBlock = ValidationBlock(*unpacked_data)
+		self.ValidationBlock = VALIDATIONBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

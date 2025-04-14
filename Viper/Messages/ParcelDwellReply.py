@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Data:
 	LocalID: "S32"
 	ParcelID: "LLUUID"
 	Dwell: "F32"
+DATA = Data
 
 
 class ParcelDwellReply(Message):
@@ -20,8 +23,8 @@ class ParcelDwellReply(Message):
 	absolute_id = 4294901979 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.Data = Data(*((None,)*3))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.Data = DATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -29,10 +32,10 @@ class ParcelDwellReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","uuid","float",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

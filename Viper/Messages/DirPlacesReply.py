@@ -2,15 +2,18 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class QueryData:
 	QueryID: "LLUUID"
+QUERYDATA = QueryData
 
 @dataclass
 class QueryReplies:
@@ -19,10 +22,12 @@ class QueryReplies:
 	ForSale: "BOOL"
 	Auction: "BOOL"
 	Dwell: "F32"
+QUERYREPLIES = QueryReplies
 
 @dataclass
 class StatusData:
 	Status: "U32"
+STATUSDATA = StatusData
 
 
 class DirPlacesReply(Message):
@@ -30,18 +35,18 @@ class DirPlacesReply(Message):
 	absolute_id = 4294901795 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.QueryData = [QueryData(*((None,)*1))]
-		self.QueryReplies = [QueryReplies(*((None,)*5))]
-		self.StatusData = [StatusData(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.QueryData = [QUERYDATA(*((None,)*1))]
+		self.QueryReplies = [QUERYREPLIES(*((None,)*5))]
+		self.StatusData = [STATUSDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -50,7 +55,7 @@ class DirPlacesReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.QueryData.append(QueryData(*unpacked_data))
+			self.QueryData.append(QUERYDATA(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -59,7 +64,7 @@ class DirPlacesReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","unsigned byte","unsigned byte","float",],remaining_bytes)
-			self.QueryReplies.append(QueryReplies(*unpacked_data))
+			self.QueryReplies.append(QUERYREPLIES(*unpacked_data))
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -68,7 +73,7 @@ class DirPlacesReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32",],remaining_bytes)
-			self.StatusData.append(StatusData(*unpacked_data))
+			self.StatusData.append(STATUSDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

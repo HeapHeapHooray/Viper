@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class TaskData:
 	TaskID: "LLUUID"
 	AttachmentNeedsSave: "BOOL"
+TASKDATA = TaskData
 
 
 class AtomicPassObject(Message):
@@ -15,7 +17,7 @@ class AtomicPassObject(Message):
 	absolute_id = 28 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TaskData = TaskData(*((None,)*2))
+		self.TaskData = TASKDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class AtomicPassObject(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned byte",],remaining_bytes)
-		self.TaskData = TaskData(*unpacked_data)
+		self.TaskData = TASKDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

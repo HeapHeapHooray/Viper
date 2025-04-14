@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -16,6 +17,7 @@ class ChatData:
 	Radius: "F32"
 	SimAccess: "U8"
 	Message: "Variable 2"
+CHATDATA = ChatData
 
 
 class ChatPass(Message):
@@ -23,15 +25,15 @@ class ChatPass(Message):
 	absolute_id = 4294901999 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ChatData = ChatData(*((None,)*10))
+		self.ChatData = CHATDATA(*((None,)*10))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","vector3","uuid","uuid","variable1","unsigned byte","unsigned byte","float","unsigned byte","variable2",],remaining_bytes)
-		self.ChatData = ChatData(*unpacked_data)
+		self.ChatData = CHATDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

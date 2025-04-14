@@ -2,15 +2,18 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class QueryData:
 	QueryID: "LLUUID"
+QUERYDATA = QueryData
 
 @dataclass
 class QueryReplies:
@@ -18,6 +21,7 @@ class QueryReplies:
 	GroupName: "Variable 1"
 	Members: "S32"
 	SearchOrder: "F32"
+QUERYREPLIES = QueryReplies
 
 
 class DirGroupsReply(Message):
@@ -25,20 +29,20 @@ class DirGroupsReply(Message):
 	absolute_id = 4294901798 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.QueryData = QueryData(*((None,)*1))
-		self.QueryReplies = [QueryReplies(*((None,)*4))]
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.QueryData = QUERYDATA(*((None,)*1))
+		self.QueryReplies = [QUERYREPLIES(*((None,)*4))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.QueryData = QueryData(*unpacked_data)
+		self.QueryData = QUERYDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -47,7 +51,7 @@ class DirGroupsReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","signed int32","float",],remaining_bytes)
-			self.QueryReplies.append(QueryReplies(*unpacked_data))
+			self.QueryReplies.append(QUERYREPLIES(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

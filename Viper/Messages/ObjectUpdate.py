@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class RegionData:
 	RegionHandle: "U64"
 	TimeDilation: "U16"
+REGIONDATA = RegionData
 
 @dataclass
 class ObjectData:
@@ -57,6 +59,7 @@ class ObjectData:
 	JointType: "U8"
 	JointPivot: "LLVector3"
 	JointAxisOrAnchor: "LLVector3"
+OBJECTDATA = ObjectData
 
 
 class ObjectUpdate(Message):
@@ -64,16 +67,16 @@ class ObjectUpdate(Message):
 	absolute_id = 12 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RegionData = RegionData(*((None,)*2))
-		self.ObjectData = [ObjectData(*((None,)*46))]
+		self.RegionData = REGIONDATA(*((None,)*2))
+		self.ObjectData = [OBJECTDATA(*((None,)*46))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","unsigned int16",],remaining_bytes)
-		self.RegionData = RegionData(*unpacked_data)
+		self.RegionData = REGIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -82,7 +85,7 @@ class ObjectUpdate(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte","uuid","unsigned int32","unsigned byte","unsigned byte","unsigned byte","vector3","variable1","unsigned int32","unsigned int32","unsigned byte","unsigned byte","unsigned int16","unsigned int16","unsigned byte","unsigned byte","unsigned byte","unsigned byte","signed byte","signed byte","signed byte","signed byte","signed byte","unsigned byte","signed byte","unsigned int16","unsigned int16","unsigned int16","variable2","variable1","variable2","variable2","variable1","unsigned int32","variable1","variable1","variable1","uuid","uuid","float","unsigned byte","float","unsigned byte","vector3","vector3",],remaining_bytes)
-			self.ObjectData.append(ObjectData(*unpacked_data))
+			self.ObjectData.append(OBJECTDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class MapData:
 	RegionHandle: "U64"
 	Type: "S32"
 	MapImage: "LLUUID"
+MAPDATA = MapData
 
 
 class SimulatorSetMap(Message):
@@ -16,7 +18,7 @@ class SimulatorSetMap(Message):
 	absolute_id = 4294901766 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MapData = MapData(*((None,)*3))
+		self.MapData = MAPDATA(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +26,7 @@ class SimulatorSetMap(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","signed int32","uuid",],remaining_bytes)
-		self.MapData = MapData(*unpacked_data)
+		self.MapData = MAPDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

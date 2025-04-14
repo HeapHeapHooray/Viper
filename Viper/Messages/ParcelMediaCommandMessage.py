@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class CommandBlock:
 	Flags: "U32"
 	Command: "U32"
 	Time: "F32"
+COMMANDBLOCK = CommandBlock
 
 
 class ParcelMediaCommandMessage(Message):
@@ -16,7 +18,7 @@ class ParcelMediaCommandMessage(Message):
 	absolute_id = 4294902179 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.CommandBlock = CommandBlock(*((None,)*3))
+		self.CommandBlock = COMMANDBLOCK(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +26,7 @@ class ParcelMediaCommandMessage(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned int32","float",],remaining_bytes)
-		self.CommandBlock = CommandBlock(*unpacked_data)
+		self.CommandBlock = COMMANDBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

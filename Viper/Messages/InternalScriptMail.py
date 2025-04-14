@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,6 +11,7 @@ class DataBlock:
 	To: "LLUUID"
 	Subject: "Variable 1"
 	Body: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class InternalScriptMail(Message):
@@ -17,7 +19,7 @@ class InternalScriptMail(Message):
 	absolute_id = 65296 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*4))
+		self.DataBlock = DATABLOCK(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +27,7 @@ class InternalScriptMail(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid","variable1","variable2",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

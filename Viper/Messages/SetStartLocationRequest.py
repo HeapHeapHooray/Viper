@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class StartLocationData:
@@ -15,6 +17,7 @@ class StartLocationData:
 	LocationID: "U32"
 	LocationPos: "LLVector3"
 	LocationLookAt: "LLVector3"
+STARTLOCATIONDATA = StartLocationData
 
 
 class SetStartLocationRequest(Message):
@@ -22,19 +25,19 @@ class SetStartLocationRequest(Message):
 	absolute_id = 4294902084 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.StartLocationData = StartLocationData(*((None,)*4))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.StartLocationData = STARTLOCATIONDATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","unsigned int32","vector3","vector3",],remaining_bytes)
-		self.StartLocationData = StartLocationData(*unpacked_data)
+		self.StartLocationData = STARTLOCATIONDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -13,6 +14,7 @@ class DataBlock:
 	Subject: "Variable 1"
 	Data: "Variable 2"
 	MailFilter: "Variable 1"
+DATABLOCK = DataBlock
 
 
 class EmailMessageReply(Message):
@@ -20,7 +22,7 @@ class EmailMessageReply(Message):
 	absolute_id = 4294902096 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*7))
+		self.DataBlock = DATABLOCK(*((None,)*7))
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class EmailMessageReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","unsigned int32","variable1","variable1","variable2","variable1",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

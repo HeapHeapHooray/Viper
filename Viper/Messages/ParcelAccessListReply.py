@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,12 +11,14 @@ class Data:
 	SequenceID: "S32"
 	Flags: "U32"
 	LocalID: "S32"
+DATA = Data
 
 @dataclass
 class List:
 	ID: "LLUUID"
 	Time: "S32"
 	Flags: "U32"
+LIST = List
 
 
 class ParcelAccessListReply(Message):
@@ -23,16 +26,16 @@ class ParcelAccessListReply(Message):
 	absolute_id = 4294901976 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*4))
-		self.List = [List(*((None,)*3))]
+		self.Data = DATA(*((None,)*4))
+		self.List = [LIST(*((None,)*3))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32","unsigned int32","signed int32",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -41,7 +44,7 @@ class ParcelAccessListReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32","unsigned int32",],remaining_bytes)
-			self.List.append(List(*unpacked_data))
+			self.List.append(LIST(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

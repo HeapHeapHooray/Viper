@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class ParcelData:
@@ -17,6 +19,7 @@ class ParcelData:
 	East: "F32"
 	North: "F32"
 	SnapSelection: "BOOL"
+PARCELDATA = ParcelData
 
 
 class ParcelPropertiesRequest(Message):
@@ -24,19 +27,19 @@ class ParcelPropertiesRequest(Message):
 	absolute_id = 65291 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.ParcelData = ParcelData(*((None,)*6))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.ParcelData = PARCELDATA(*((None,)*6))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["signed int32","float","float","float","float","unsigned byte",],remaining_bytes)
-		self.ParcelData = ParcelData(*unpacked_data)
+		self.ParcelData = PARCELDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

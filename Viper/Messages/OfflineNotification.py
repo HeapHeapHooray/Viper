@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentBlock:
 	AgentID: "LLUUID"
+AGENTBLOCK = AgentBlock
 
 
 class OfflineNotification(Message):
@@ -14,7 +16,7 @@ class OfflineNotification(Message):
 	absolute_id = 4294902083 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentBlock = [AgentBlock(*((None,)*1))]
+		self.AgentBlock = [AGENTBLOCK(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class OfflineNotification(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.AgentBlock.append(AgentBlock(*unpacked_data))
+			self.AgentBlock.append(AGENTBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

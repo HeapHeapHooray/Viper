@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -12,6 +13,7 @@ class Data:
 	OwnerIsGroup: "BOOL"
 	Message: "Variable 1"
 	URL: "Variable 1"
+DATA = Data
 
 
 class LoadURL(Message):
@@ -19,7 +21,7 @@ class LoadURL(Message):
 	absolute_id = 4294901954 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = Data(*((None,)*6))
+		self.Data = DATA(*((None,)*6))
 
 		if bytes_data is None:
 			return
@@ -27,7 +29,7 @@ class LoadURL(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid","uuid","unsigned byte","variable1","variable1",],remaining_bytes)
-		self.Data = Data(*unpacked_data)
+		self.Data = DATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

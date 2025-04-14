@@ -2,22 +2,26 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class NotecardData:
 	NotecardItemID: "LLUUID"
 	ObjectID: "LLUUID"
+NOTECARDDATA = NotecardData
 
 @dataclass
 class InventoryData:
 	ItemID: "LLUUID"
 	FolderID: "LLUUID"
+INVENTORYDATA = InventoryData
 
 
 class CopyInventoryFromNotecard(Message):
@@ -25,20 +29,20 @@ class CopyInventoryFromNotecard(Message):
 	absolute_id = 4294902025 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.NotecardData = NotecardData(*((None,)*2))
-		self.InventoryData = [InventoryData(*((None,)*2))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.NotecardData = NOTECARDDATA(*((None,)*2))
+		self.InventoryData = [INVENTORYDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.NotecardData = NotecardData(*unpacked_data)
+		self.NotecardData = NOTECARDDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -47,7 +51,7 @@ class CopyInventoryFromNotecard(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-			self.InventoryData.append(InventoryData(*unpacked_data))
+			self.InventoryData.append(INVENTORYDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

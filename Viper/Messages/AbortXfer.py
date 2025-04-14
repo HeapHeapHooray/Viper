@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class XferID:
 	ID: "U64"
 	Result: "S32"
+XFERID = XferID
 
 
 class AbortXfer(Message):
@@ -15,7 +17,7 @@ class AbortXfer(Message):
 	absolute_id = 4294901917 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.XferID = XferID(*((None,)*2))
+		self.XferID = XFERID(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class AbortXfer(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64","signed int32",],remaining_bytes)
-		self.XferID = XferID(*unpacked_data)
+		self.XferID = XFERID(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

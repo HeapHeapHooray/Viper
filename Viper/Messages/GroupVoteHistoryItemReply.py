@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	GroupID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class TransactionData:
 	TransactionID: "LLUUID"
 	TotalNumItems: "U32"
+TRANSACTIONDATA = TransactionData
 
 @dataclass
 class HistoryItemData:
@@ -26,12 +29,14 @@ class HistoryItemData:
 	Majority: "F32"
 	Quorum: "S32"
 	ProposalText: "Variable 2"
+HISTORYITEMDATA = HistoryItemData
 
 @dataclass
 class VoteItem:
 	CandidateID: "LLUUID"
 	VoteCast: "Variable 1"
 	NumVotes: "S32"
+VOTEITEM = VoteItem
 
 
 class GroupVoteHistoryItemReply(Message):
@@ -39,24 +44,24 @@ class GroupVoteHistoryItemReply(Message):
 	absolute_id = 4294902122 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.TransactionData = TransactionData(*((None,)*2))
-		self.HistoryItemData = HistoryItemData(*((None,)*10))
-		self.VoteItem = [VoteItem(*((None,)*3))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.TransactionData = TRANSACTIONDATA(*((None,)*2))
+		self.HistoryItemData = HISTORYITEMDATA(*((None,)*10))
+		self.VoteItem = [VOTEITEM(*((None,)*3))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32",],remaining_bytes)
-		self.TransactionData = TransactionData(*unpacked_data)
+		self.TransactionData = TRANSACTIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable1","variable1","uuid","variable1","variable1","float","signed int32","variable2",],remaining_bytes)
-		self.HistoryItemData = HistoryItemData(*unpacked_data)
+		self.HistoryItemData = HISTORYITEMDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -65,7 +70,7 @@ class GroupVoteHistoryItemReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","signed int32",],remaining_bytes)
-			self.VoteItem.append(VoteItem(*unpacked_data))
+			self.VoteItem.append(VOTEITEM(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

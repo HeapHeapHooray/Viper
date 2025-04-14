@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class RequestData:
 	RequestID: "LLUUID"
 	AgentID: "LLUUID"
+REQUESTDATA = RequestData
 
 
 class LiveHelpGroupRequest(Message):
@@ -15,7 +17,7 @@ class LiveHelpGroupRequest(Message):
 	absolute_id = 4294902139 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RequestData = RequestData(*((None,)*2))
+		self.RequestData = REQUESTDATA(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class LiveHelpGroupRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.RequestData = RequestData(*unpacked_data)
+		self.RequestData = REQUESTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

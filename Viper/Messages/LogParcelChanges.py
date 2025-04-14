@@ -2,15 +2,18 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class RegionData:
 	RegionHandle: "U64"
+REGIONDATA = RegionData
 
 @dataclass
 class ParcelData:
@@ -20,6 +23,7 @@ class ParcelData:
 	ActualArea: "S32"
 	Action: "S8"
 	TransactionID: "LLUUID"
+PARCELDATA = ParcelData
 
 
 class LogParcelChanges(Message):
@@ -27,20 +31,20 @@ class LogParcelChanges(Message):
 	absolute_id = 4294901984 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.RegionData = RegionData(*((None,)*1))
-		self.ParcelData = [ParcelData(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.RegionData = REGIONDATA(*((None,)*1))
+		self.ParcelData = [PARCELDATA(*((None,)*6))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-		self.RegionData = RegionData(*unpacked_data)
+		self.RegionData = REGIONDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -49,7 +53,7 @@ class LogParcelChanges(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned byte","signed int32","signed byte","uuid",],remaining_bytes)
-			self.ParcelData.append(ParcelData(*unpacked_data))
+			self.ParcelData.append(PARCELDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

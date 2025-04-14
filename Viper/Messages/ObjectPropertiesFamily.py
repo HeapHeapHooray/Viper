@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -22,6 +23,7 @@ class ObjectData:
 	LastOwnerID: "LLUUID"
 	Name: "Variable 1"
 	Description: "Variable 1"
+OBJECTDATA = ObjectData
 
 
 class ObjectPropertiesFamily(Message):
@@ -29,15 +31,15 @@ class ObjectPropertiesFamily(Message):
 	absolute_id = 65290 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ObjectData = ObjectData(*((None,)*16))
+		self.ObjectData = OBJECTDATA(*((None,)*16))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","uuid","uuid","uuid","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned int32","signed int32","unsigned byte","signed int32","unsigned int32","uuid","variable1","variable1",],remaining_bytes)
-		self.ObjectData = ObjectData(*unpacked_data)
+		self.ObjectData = OBJECTDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

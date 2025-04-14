@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,11 +11,13 @@ class AgentData:
 	GroupID: "LLUUID"
 	RequestID: "LLUUID"
 	TotalPairs: "U32"
+AGENTDATA = AgentData
 
 @dataclass
 class MemberData:
 	RoleID: "LLUUID"
 	MemberID: "LLUUID"
+MEMBERDATA = MemberData
 
 
 class GroupRoleMembersReply(Message):
@@ -22,8 +25,8 @@ class GroupRoleMembersReply(Message):
 	absolute_id = 4294902134 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*4))
-		self.MemberData = [MemberData(*((None,)*2))]
+		self.AgentData = AGENTDATA(*((None,)*4))
+		self.MemberData = [MEMBERDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -31,7 +34,7 @@ class GroupRoleMembersReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","unsigned int32",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -40,7 +43,7 @@ class GroupRoleMembersReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-			self.MemberData.append(MemberData(*unpacked_data))
+			self.MemberData.append(MEMBERDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

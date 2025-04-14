@@ -2,16 +2,19 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Info:
 	TeleportFlags: "U32"
 	Message: "Variable 1"
+INFO = Info
 
 
 class TeleportProgress(Message):
@@ -19,8 +22,8 @@ class TeleportProgress(Message):
 	absolute_id = 4294901826 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*1))
-		self.Info = Info(*((None,)*2))
+		self.AgentData = AGENTDATA(*((None,)*1))
+		self.Info = INFO(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -28,10 +31,10 @@ class TeleportProgress(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","variable1",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

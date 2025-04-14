@@ -15,6 +15,7 @@ def block_definition(block):
     definition = f"""@dataclass\nclass {block.get_name()}:\n"""
     for variable in block.get_variables():
         definition = definition + f"""\t{variable.name}: "{variable.type}"\n"""
+    definition = definition + f"{block.get_name().upper()} = {block.get_name()}\n"
 
     return definition
 
@@ -32,7 +33,7 @@ def single_unpacking(block,unpacking_body):
     for variable in block.get_variables():
         block_unpack_types = block_unpack_types + f'"{type_mapping_dict[variable.type]}",'
     unpacking_body = unpacking_body + block_unpack_start + block_unpack_types + "],remaining_bytes)"
-    unpacking_body = unpacking_body + f"\n\t\tself.{block.get_name()} = {block.get_name()}(*unpacked_data)\n"
+    unpacking_body = unpacking_body + f"\n\t\tself.{block.get_name()} = {block.get_name().upper()}(*unpacked_data)\n"
     return unpacking_body
 
 def multiple_unpacking(block,unpacking_body):
@@ -41,13 +42,13 @@ def multiple_unpacking(block,unpacking_body):
     for variable in block.get_variables():
         block_unpack_types = block_unpack_types + f'"{type_mapping_dict[variable.type]}",'
     unpacking_body = unpacking_body+block_unpack_types+"],remaining_bytes)"
-    unpacking_body = unpacking_body+f"\n\t\t\tself.{block.get_name()}.append({block.get_name()}(*unpacked_data))\n"
+    unpacking_body = unpacking_body+f"\n\t\t\tself.{block.get_name()}.append({block.get_name().upper()}(*unpacked_data))\n"
 
     return unpacking_body
 def generate_message_class(message):
     info = """# This code is automatically generated for the Viper viewer project, and the generation code can be found at: https://github.com/HeapHeapHooray/Viper"""
     
-    imports = "from Message.Message import Message\nimport BytesUtils\nfrom dataclasses import dataclass"
+    imports = "from Message.Message import Message\nimport BytesUtils\nimport Utils\nfrom dataclasses import dataclass"
 
     blocks = message.get_message_blocks()
 
@@ -73,17 +74,19 @@ def generate_message_class(message):
             MultipleBlock = True
             amount = int(block.get_quantity().split(" ")[1])
         if VariableBlock:
-            init = init + f"\n\t\tself.{block.get_name()} = [{block.get_name()}(*((None,)*{len(block.get_variables())}))]"
+            init = init + f"\n\t\tself.{block.get_name()} = [{block.get_name().upper()}(*((None,)*{len(block.get_variables())}))]"
         elif MultipleBlock and amount:
             init = init + f"\n\t\tself.{block.get_name()} = []"
-            init = init + f"\n\t\tfor i in range({amount}):\n\t\t\tself.{block.get_name()}.append({block.get_name()}(*((None,)*{len(block.get_variables())})))"
+            init = init + f"\n\t\tfor i in range({amount}):\n\t\t\tself.{block.get_name()}.append({block.get_name().upper()}(*((None,)*{len(block.get_variables())})))"
         else:
-            init = init + f"\n\t\tself.{block.get_name()} = {block.get_name()}(*((None,)*{len(block.get_variables())}))"
+            init = init + f"\n\t\tself.{block.get_name()} = {block.get_name().upper()}(*((None,)*{len(block.get_variables())}))"
 
     # Return if bytes_data is None, i.e. there is nothing to load, and since everything is initialized to None we can return already.
     init = init + "\n\n\t\tif bytes_data is None:\n\t\t\treturn"
 
     unpacking_body = "\n\t\tremaining_bytes = bytes_data\n"
+    if message.get_message_encoding() == "Zerocoded":
+        unpacking_body = "\n\t\tremaining_bytes = Utils.zero_decode(bytes_data)\n"
     for block in blocks:
         amount = 0
         VariableBlock = False

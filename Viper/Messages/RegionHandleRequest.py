@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class RequestBlock:
 	RegionID: "LLUUID"
+REQUESTBLOCK = RequestBlock
 
 
 class RegionHandleRequest(Message):
@@ -14,7 +16,7 @@ class RegionHandleRequest(Message):
 	absolute_id = 4294902069 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RequestBlock = RequestBlock(*((None,)*1))
+		self.RequestBlock = REQUESTBLOCK(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -22,7 +24,7 @@ class RegionHandleRequest(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-		self.RequestBlock = RequestBlock(*unpacked_data)
+		self.RequestBlock = REQUESTBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

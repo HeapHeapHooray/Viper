@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,10 +11,12 @@ class TelehubBlock:
 	ObjectName: "Variable 1"
 	TelehubPos: "LLVector3"
 	TelehubRot: "LLQuaternion"
+TELEHUBBLOCK = TelehubBlock
 
 @dataclass
 class SpawnPointBlock:
 	SpawnPointPos: "LLVector3"
+SPAWNPOINTBLOCK = SpawnPointBlock
 
 
 class TelehubInfo(Message):
@@ -21,8 +24,8 @@ class TelehubInfo(Message):
 	absolute_id = 4294901770 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.TelehubBlock = TelehubBlock(*((None,)*4))
-		self.SpawnPointBlock = [SpawnPointBlock(*((None,)*1))]
+		self.TelehubBlock = TELEHUBBLOCK(*((None,)*4))
+		self.SpawnPointBlock = [SPAWNPOINTBLOCK(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -30,7 +33,7 @@ class TelehubInfo(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","vector3","unit_quaternion",],remaining_bytes)
-		self.TelehubBlock = TelehubBlock(*unpacked_data)
+		self.TelehubBlock = TELEHUBBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -39,7 +42,7 @@ class TelehubInfo(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["vector3",],remaining_bytes)
-			self.SpawnPointBlock.append(SpawnPointBlock(*unpacked_data))
+			self.SpawnPointBlock.append(SPAWNPOINTBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

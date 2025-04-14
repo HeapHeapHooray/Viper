@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -14,6 +15,7 @@ class ChatData:
 	Audible: "U8"
 	Position: "LLVector3"
 	Message: "Variable 2"
+CHATDATA = ChatData
 
 
 class ChatFromSimulator(Message):
@@ -21,7 +23,7 @@ class ChatFromSimulator(Message):
 	absolute_id = 4294901899 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ChatData = ChatData(*((None,)*8))
+		self.ChatData = CHATDATA(*((None,)*8))
 
 		if bytes_data is None:
 			return
@@ -29,7 +31,7 @@ class ChatFromSimulator(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid","uuid","unsigned byte","unsigned byte","unsigned byte","vector3","variable2",],remaining_bytes)
-		self.ChatData = ChatData(*unpacked_data)
+		self.ChatData = CHATDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

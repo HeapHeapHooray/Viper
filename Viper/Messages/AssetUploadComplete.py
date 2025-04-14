@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class AssetBlock:
 	UUID: "LLUUID"
 	Type: "S8"
 	Success: "BOOL"
+ASSETBLOCK = AssetBlock
 
 
 class AssetUploadComplete(Message):
@@ -16,7 +18,7 @@ class AssetUploadComplete(Message):
 	absolute_id = 4294902094 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AssetBlock = AssetBlock(*((None,)*3))
+		self.AssetBlock = ASSETBLOCK(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +26,7 @@ class AssetUploadComplete(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed byte","unsigned byte",],remaining_bytes)
-		self.AssetBlock = AssetBlock(*unpacked_data)
+		self.AssetBlock = ASSETBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

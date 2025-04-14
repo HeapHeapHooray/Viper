@@ -2,11 +2,13 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class RegionData:
 	RegionHandle: "U64"
+REGIONDATA = RegionData
 
 
 class CheckParcelAuctions(Message):
@@ -14,7 +16,7 @@ class CheckParcelAuctions(Message):
 	absolute_id = 4294901993 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.RegionData = [RegionData(*((None,)*1))]
+		self.RegionData = [REGIONDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -28,7 +30,7 @@ class CheckParcelAuctions(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-			self.RegionData.append(RegionData(*unpacked_data))
+			self.RegionData.append(REGIONDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

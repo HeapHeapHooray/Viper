@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,6 +11,7 @@ class SimulatorInfo:
 	SimName: "Variable 1"
 	EstateID: "U32"
 	SimAccess: "U8"
+SIMULATORINFO = SimulatorInfo
 
 
 class UpdateSimulator(Message):
@@ -17,7 +19,7 @@ class UpdateSimulator(Message):
 	absolute_id = 4294901777 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.SimulatorInfo = SimulatorInfo(*((None,)*4))
+		self.SimulatorInfo = SIMULATORINFO(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +27,7 @@ class UpdateSimulator(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","unsigned int32","unsigned byte",],remaining_bytes)
-		self.SimulatorInfo = SimulatorInfo(*unpacked_data)
+		self.SimulatorInfo = SIMULATORINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

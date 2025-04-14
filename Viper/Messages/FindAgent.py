@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,11 +10,13 @@ class AgentBlock:
 	Hunter: "LLUUID"
 	Prey: "LLUUID"
 	SpaceIP: "IPADDR"
+AGENTBLOCK = AgentBlock
 
 @dataclass
 class LocationBlock:
 	GlobalX: "F64"
 	GlobalY: "F64"
+LOCATIONBLOCK = LocationBlock
 
 
 class FindAgent(Message):
@@ -21,8 +24,8 @@ class FindAgent(Message):
 	absolute_id = 4294902016 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentBlock = AgentBlock(*((None,)*3))
-		self.LocationBlock = [LocationBlock(*((None,)*2))]
+		self.AgentBlock = AGENTBLOCK(*((None,)*3))
+		self.LocationBlock = [LOCATIONBLOCK(*((None,)*2))]
 
 		if bytes_data is None:
 			return
@@ -30,7 +33,7 @@ class FindAgent(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned int32",],remaining_bytes)
-		self.AgentBlock = AgentBlock(*unpacked_data)
+		self.AgentBlock = AGENTBLOCK(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -39,7 +42,7 @@ class FindAgent(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["double","double",],remaining_bytes)
-			self.LocationBlock.append(LocationBlock(*unpacked_data))
+			self.LocationBlock.append(LOCATIONBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

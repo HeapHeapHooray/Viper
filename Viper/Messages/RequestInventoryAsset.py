@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -10,6 +11,7 @@ class QueryData:
 	AgentID: "LLUUID"
 	OwnerID: "LLUUID"
 	ItemID: "LLUUID"
+QUERYDATA = QueryData
 
 
 class RequestInventoryAsset(Message):
@@ -17,7 +19,7 @@ class RequestInventoryAsset(Message):
 	absolute_id = 4294902042 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.QueryData = QueryData(*((None,)*4))
+		self.QueryData = QUERYDATA(*((None,)*4))
 
 		if bytes_data is None:
 			return
@@ -25,7 +27,7 @@ class RequestInventoryAsset(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid",],remaining_bytes)
-		self.QueryData = QueryData(*unpacked_data)
+		self.QueryData = QUERYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

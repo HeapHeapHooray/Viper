@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class FailureInfo:
 	ErrorMessage: "Variable 1"
 	AgentID: "LLUUID"
 	TransactionID: "LLUUID"
+FAILUREINFO = FailureInfo
 
 
 class FeatureDisabled(Message):
@@ -16,7 +18,7 @@ class FeatureDisabled(Message):
 	absolute_id = 4294901779 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.FailureInfo = FailureInfo(*((None,)*3))
+		self.FailureInfo = FAILUREINFO(*((None,)*3))
 
 		if bytes_data is None:
 			return
@@ -24,7 +26,7 @@ class FeatureDisabled(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","uuid","uuid",],remaining_bytes)
-		self.FailureInfo = FailureInfo(*unpacked_data)
+		self.FailureInfo = FAILUREINFO(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

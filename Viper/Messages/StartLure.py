@@ -2,21 +2,25 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Info:
 	LureType: "U8"
 	Message: "Variable 1"
+INFO = Info
 
 @dataclass
 class TargetData:
 	TargetID: "LLUUID"
+TARGETDATA = TargetData
 
 
 class StartLure(Message):
@@ -24,9 +28,9 @@ class StartLure(Message):
 	absolute_id = 4294901830 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Info = Info(*((None,)*2))
-		self.TargetData = [TargetData(*((None,)*1))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Info = INFO(*((None,)*2))
+		self.TargetData = [TARGETDATA(*((None,)*1))]
 
 		if bytes_data is None:
 			return
@@ -34,10 +38,10 @@ class StartLure(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","variable1",],remaining_bytes)
-		self.Info = Info(*unpacked_data)
+		self.Info = INFO(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -46,7 +50,7 @@ class StartLure(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid",],remaining_bytes)
-			self.TargetData.append(TargetData(*unpacked_data))
+			self.TargetData.append(TARGETDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

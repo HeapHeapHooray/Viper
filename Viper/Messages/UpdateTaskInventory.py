@@ -2,17 +2,20 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class UpdateData:
 	LocalID: "U32"
 	Key: "U8"
+UPDATEDATA = UpdateData
 
 @dataclass
 class InventoryData:
@@ -37,6 +40,7 @@ class InventoryData:
 	Description: "Variable 1"
 	CreationDate: "S32"
 	CRC: "U32"
+INVENTORYDATA = InventoryData
 
 
 class UpdateTaskInventory(Message):
@@ -44,23 +48,23 @@ class UpdateTaskInventory(Message):
 	absolute_id = 4294902046 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.UpdateData = UpdateData(*((None,)*2))
-		self.InventoryData = InventoryData(*((None,)*21))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.UpdateData = UPDATEDATA(*((None,)*2))
+		self.InventoryData = INVENTORYDATA(*((None,)*21))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int32","unsigned byte",],remaining_bytes)
-		self.UpdateData = UpdateData(*unpacked_data)
+		self.UpdateData = UPDATEDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","uuid","uuid","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned int32","unsigned byte","uuid","signed byte","signed byte","unsigned int32","unsigned byte","signed int32","variable1","variable1","signed int32","unsigned int32",],remaining_bytes)
-		self.InventoryData = InventoryData(*unpacked_data)
+		self.InventoryData = INVENTORYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

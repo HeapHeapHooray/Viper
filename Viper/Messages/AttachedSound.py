@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -11,6 +12,7 @@ class DataBlock:
 	OwnerID: "LLUUID"
 	Gain: "F32"
 	Flags: "U8"
+DATABLOCK = DataBlock
 
 
 class AttachedSound(Message):
@@ -18,7 +20,7 @@ class AttachedSound(Message):
 	absolute_id = 65293 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*5))
+		self.DataBlock = DATABLOCK(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -26,7 +28,7 @@ class AttachedSound(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","float","unsigned byte",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -11,6 +12,7 @@ class DataBlock:
 	ChannelID: "LLUUID"
 	IntValue: "U32"
 	StringValue: "Variable 2"
+DATABLOCK = DataBlock
 
 
 class RpcScriptReplyInbound(Message):
@@ -18,7 +20,7 @@ class RpcScriptReplyInbound(Message):
 	absolute_id = 4294902177 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.DataBlock = DataBlock(*((None,)*5))
+		self.DataBlock = DATABLOCK(*((None,)*5))
 
 		if bytes_data is None:
 			return
@@ -26,7 +28,7 @@ class RpcScriptReplyInbound(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","uuid","unsigned int32","variable2",],remaining_bytes)
-		self.DataBlock = DataBlock(*unpacked_data)
+		self.DataBlock = DATABLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

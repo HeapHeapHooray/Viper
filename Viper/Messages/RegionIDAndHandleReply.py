@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class ReplyBlock:
 	RegionID: "LLUUID"
 	RegionHandle: "U64"
+REPLYBLOCK = ReplyBlock
 
 
 class RegionIDAndHandleReply(Message):
@@ -15,7 +17,7 @@ class RegionIDAndHandleReply(Message):
 	absolute_id = 4294902070 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.ReplyBlock = ReplyBlock(*((None,)*2))
+		self.ReplyBlock = REPLYBLOCK(*((None,)*2))
 
 		if bytes_data is None:
 			return
@@ -23,7 +25,7 @@ class RegionIDAndHandleReply(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int64",],remaining_bytes)
-		self.ReplyBlock = ReplyBlock(*unpacked_data)
+		self.ReplyBlock = REPLYBLOCK(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

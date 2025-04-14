@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class GroupData:
@@ -19,6 +21,7 @@ class GroupData:
 	OpenEnrollment: "BOOL"
 	AllowPublish: "BOOL"
 	MaturePublish: "BOOL"
+GROUPDATA = GroupData
 
 
 class UpdateGroupInfo(Message):
@@ -26,19 +29,19 @@ class UpdateGroupInfo(Message):
 	absolute_id = 4294902101 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.GroupData = GroupData(*((None,)*8))
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.GroupData = GROUPDATA(*((None,)*8))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable2","unsigned byte","uuid","signed int32","unsigned byte","unsigned byte","unsigned byte",],remaining_bytes)
-		self.GroupData = GroupData(*unpacked_data)
+		self.GroupData = GROUPDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

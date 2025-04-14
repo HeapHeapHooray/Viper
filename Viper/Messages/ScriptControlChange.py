@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class Data:
 	TakeControls: "BOOL"
 	Controls: "U32"
 	PassToAgent: "BOOL"
+DATA = Data
 
 
 class ScriptControlChange(Message):
@@ -16,7 +18,7 @@ class ScriptControlChange(Message):
 	absolute_id = 4294901949 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.Data = [Data(*((None,)*3))]
+		self.Data = [DATA(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -30,7 +32,7 @@ class ScriptControlChange(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned int32","unsigned byte",],remaining_bytes)
-			self.Data.append(Data(*unpacked_data))
+			self.Data.append(DATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

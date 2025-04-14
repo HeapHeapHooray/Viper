@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -9,6 +10,7 @@ class UUIDNameBlock:
 	ID: "LLUUID"
 	FirstName: "Variable 1"
 	LastName: "Variable 1"
+UUIDNAMEBLOCK = UUIDNameBlock
 
 
 class UUIDNameReply(Message):
@@ -16,7 +18,7 @@ class UUIDNameReply(Message):
 	absolute_id = 4294901996 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.UUIDNameBlock = [UUIDNameBlock(*((None,)*3))]
+		self.UUIDNameBlock = [UUIDNAMEBLOCK(*((None,)*3))]
 
 		if bytes_data is None:
 			return
@@ -30,7 +32,7 @@ class UUIDNameReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","variable1","variable1",],remaining_bytes)
-			self.UUIDNameBlock.append(UUIDNameBlock(*unpacked_data))
+			self.UUIDNameBlock.append(UUIDNAMEBLOCK(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

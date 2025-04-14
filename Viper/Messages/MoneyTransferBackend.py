@@ -2,6 +2,7 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
@@ -19,6 +20,7 @@ class MoneyData:
 	GridX: "U32"
 	GridY: "U32"
 	Description: "Variable 1"
+MONEYDATA = MoneyData
 
 
 class MoneyTransferBackend(Message):
@@ -26,15 +28,15 @@ class MoneyTransferBackend(Message):
 	absolute_id = 4294902072 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.MoneyData = MoneyData(*((None,)*13))
+		self.MoneyData = MONEYDATA(*((None,)*13))
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","unsigned int32","uuid","uuid","unsigned byte","signed int32","unsigned byte","unsigned byte","signed int32","uuid","unsigned int32","unsigned int32","variable1",],remaining_bytes)
-		self.MoneyData = MoneyData(*unpacked_data)
+		self.MoneyData = MONEYDATA(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:

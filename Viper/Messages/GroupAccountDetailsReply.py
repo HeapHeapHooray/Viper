@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	GroupID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class MoneyData:
@@ -15,11 +17,13 @@ class MoneyData:
 	IntervalDays: "S32"
 	CurrentInterval: "S32"
 	StartDate: "Variable 1"
+MONEYDATA = MoneyData
 
 @dataclass
 class HistoryData:
 	Description: "Variable 1"
 	Amount: "S32"
+HISTORYDATA = HistoryData
 
 
 class GroupAccountDetailsReply(Message):
@@ -27,20 +31,20 @@ class GroupAccountDetailsReply(Message):
 	absolute_id = 4294902116 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.MoneyData = MoneyData(*((None,)*4))
-		self.HistoryData = [HistoryData(*((None,)*2))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.MoneyData = MONEYDATA(*((None,)*4))
+		self.HistoryData = [HISTORYDATA(*((None,)*2))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","signed int32","signed int32","variable1",],remaining_bytes)
-		self.MoneyData = MoneyData(*unpacked_data)
+		self.MoneyData = MONEYDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -49,7 +53,7 @@ class GroupAccountDetailsReply(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["variable1","signed int32",],remaining_bytes)
-			self.HistoryData.append(HistoryData(*unpacked_data))
+			self.HistoryData.append(HISTORYDATA(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

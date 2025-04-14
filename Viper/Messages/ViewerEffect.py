@@ -2,12 +2,14 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class AgentData:
 	AgentID: "LLUUID"
 	SessionID: "LLUUID"
+AGENTDATA = AgentData
 
 @dataclass
 class Effect:
@@ -17,6 +19,7 @@ class Effect:
 	Duration: "F32"
 	Color: "Fixed 4"
 	TypeData: "Variable 1"
+EFFECT = Effect
 
 
 class ViewerEffect(Message):
@@ -24,16 +27,16 @@ class ViewerEffect(Message):
 	absolute_id = 65297 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.AgentData = AgentData(*((None,)*2))
-		self.Effect = [Effect(*((None,)*6))]
+		self.AgentData = AGENTDATA(*((None,)*2))
+		self.Effect = [EFFECT(*((None,)*6))]
 
 		if bytes_data is None:
 			return
 
-		remaining_bytes = bytes_data
+		remaining_bytes = Utils.zero_decode(bytes_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid",],remaining_bytes)
-		self.AgentData = AgentData(*unpacked_data)
+		self.AgentData = AGENTDATA(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte"],remaining_bytes)
 		blocks_count = unpacked_data[0] # -- Variable Blocks length is encoded in the message as a single byte.
@@ -42,7 +45,7 @@ class ViewerEffect(Message):
 
 		for i in range(blocks_count):
 			unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["uuid","uuid","unsigned byte","float","unsigned int32","variable1",],remaining_bytes)
-			self.Effect.append(Effect(*unpacked_data))
+			self.Effect.append(EFFECT(*unpacked_data))
 
 
 	def convert_to_string(self) -> str:

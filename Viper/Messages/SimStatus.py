@@ -2,16 +2,19 @@
 
 from Message.Message import Message
 import BytesUtils
+import Utils
 from dataclasses import dataclass
 
 @dataclass
 class SimStatus:
 	CanAcceptAgents: "BOOL"
 	CanAcceptTasks: "BOOL"
+SIMSTATUS = SimStatus
 
 @dataclass
 class SimFlags:
 	Flags: "U64"
+SIMFLAGS = SimFlags
 
 
 class SimStatus(Message):
@@ -19,8 +22,8 @@ class SimStatus(Message):
 	absolute_id = 65292 # -- The Full ID of the message
 
 	def __init__(self,bytes_data: bytes):
-		self.SimStatus = SimStatus(*((None,)*2))
-		self.SimFlags = SimFlags(*((None,)*1))
+		self.SimStatus = SIMSTATUS(*((None,)*2))
+		self.SimFlags = SIMFLAGS(*((None,)*1))
 
 		if bytes_data is None:
 			return
@@ -28,10 +31,10 @@ class SimStatus(Message):
 		remaining_bytes = bytes_data
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned byte","unsigned byte",],remaining_bytes)
-		self.SimStatus = SimStatus(*unpacked_data)
+		self.SimStatus = SIMSTATUS(*unpacked_data)
 
 		unpacked_data,remaining_bytes = BytesUtils.unpack_bytes_little_endian(["unsigned int64",],remaining_bytes)
-		self.SimFlags = SimFlags(*unpacked_data)
+		self.SimFlags = SIMFLAGS(*unpacked_data)
 
 
 	def convert_to_string(self) -> str:
